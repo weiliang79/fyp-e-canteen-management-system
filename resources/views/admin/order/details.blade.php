@@ -182,7 +182,7 @@
                                                                         @else
 
                                                                         @if($payment->status === \App\Models\Payment::STATUS_SUCCESS)
-                                                                        @php $paymentMethod = auth()->guard('student')->user()->findPaymentMethod($payment->paymentDetailStripe->payment_method_id) @endphp
+                                                                        @php $paymentMethod = $order->student->findPaymentMethod($payment->paymentDetailStripe->payment_method_id) @endphp
 
                                                                         <li class="list-group-item d-flex justify-content-between">
                                                                               <p class="mb-1">Payment
