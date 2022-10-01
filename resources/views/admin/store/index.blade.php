@@ -19,6 +19,7 @@
                                                 <th>Food Seller Username</th>
                                                 <th>Store Name</th>
                                                 <th>Description</th>
+                                                <th>Action</th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -28,6 +29,9 @@
                                                 <td>{{ $store->user->username }}</td>
                                                 <td>{{ $store->name }}</td>
                                                 <td>{{ $store->description }}</td>
+                                                <td>
+                                                    <a class="btn btn-primary" href="{{ route('admin.store.details', ['store_id' => $store->id]) }}">Detail</a>
+                                                </td>
                                           </tr>
                                           @endforeach
                                     </tbody>

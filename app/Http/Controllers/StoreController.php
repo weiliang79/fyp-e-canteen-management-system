@@ -15,6 +15,12 @@ class StoreController extends Controller
         return view('admin.store.index', compact('stores'));
     }
 
+    public function adminDetails(Request $request){
+        $store = Store::find($request->store_id);
+
+        return view('admin.store.details', compact('store'));
+    }
+
     public function index(){
         $user = User::find(Auth::user()->id);
         if($user->isAdmin()){

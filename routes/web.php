@@ -165,6 +165,7 @@ Route::group(['middleware' => ['auth']], function () {
 
             // store
             Route::get('/admin/store', [StoreController::class, 'adminIndex'])->name('admin.store');
+            Route::get('/admin/store/{store_id}/details', [StoreController::class, 'adminDetails'])->name('admin.store.details');
 
             // menus - category
             Route::get('/admin/menus/category', [MenuController::class, 'categoryIndex'])->name('admin.menus.category');
