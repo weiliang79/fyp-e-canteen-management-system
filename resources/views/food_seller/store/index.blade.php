@@ -12,19 +12,27 @@
                         </div>
 
                         <div class="card-body">
-                              <div class="row">
-                                    <div class="col">
-                                          {{ $store->name }}
-                                    </div>
-                                    <div class="col d-flex justify-content-center">
-                                          <img src="{{ $store->logo_path }}" width="100px" height="100px">
-                                    </div>
-                              </div>
-                              <div class="row">
-                                    <div class="col">
-                                          {{ $store->description }}
-                                    </div>
-                              </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-8">
+
+                                    <ul class="list-group">
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <p class="mb-0">Store Name</p>
+                                            <p class="mb-0">{{ $store->name }}</p>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <p class="mb-0">Description</p>
+                                            <p class="mb-0">{{ $store->description }}</p>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <p class="mb-0">Store Logo</p>
+                                            <img src="{{ $store->logo_path ? asset($store->logo_path) : asset('/storage/defaults/store.png') }}" alt="" style="width: 60px">
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
                         </div>
                   </div>
             </div>
