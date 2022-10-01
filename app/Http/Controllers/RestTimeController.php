@@ -22,18 +22,21 @@ class RestTimeController extends Controller
     public function update(Request $request){
 
         $request->validate([
-            'day_id' => 'required|array',
-            'start_time' => 'required|array',
-            'end_time' => 'required|array',
+            'start_time.*' => 'required',
+            'end_time.*' => 'required',
+        ],
+        [
+            'start_time.*' => 'The start time field is required.',
+            'end_time.*' => 'The end time field is required.',
         ]);
 
-        $id = $request->id ? $request->id : array();
+        $id = $request->rest_time_id ?: array();
 
         for($i = 0; $i < count($request->day_id); $i++){
-            
-            if(isset($id[$i])){
-                //update the rest time details
 
+            if(isset($id[$i])){
+
+                //update the rest time details
                 RestTime::find($id[$i])->update([
                     'day_id' => $request->day_id[$i],
                     'start_time' => $request->start_time[$i],
@@ -54,8 +57,16 @@ class RestTimeController extends Controller
                 array_push($id, $rest->id);
             }
 
-            //delete the record if not inside id array
-            RestTime::whereNotIn('id', $id)->delete();
+        }
+
+        //delete the record if not inside id array
+        $needDeteteIds = RestTime::whereNotIn('id', $id)->pluck('id')->toArray();
+
+        if(count($needDeteteIds) !== 0){
+            foreach ($needDeteteIds as $id) {
+                RestTime::find($id)->students()->detach();
+            }
+            RestTime::whereIn('id', $needDeteteIds)->delete();
         }
 
         return redirect()->route('admin.user_management')->with('swal-success', 'Rest Time update successful.');
