@@ -66,6 +66,7 @@
                               <table class="dataTable table table-striped" style="width: 100%;">
                                     <thead>
                                           <tr>
+                                                <th>Student Number</th>
                                                 <th>Name</th>
                                                 <th>Username</th>
                                                 <th>Email</th>
@@ -79,6 +80,7 @@
                                     <tbody>
                                           @foreach($students as $student)
                                           <tr>
+                                                <td>@if($student->is_a_sandbox_student) <i class="fa-solid fa-flask fa-fw"></i> @endif{{ $student->student_number }}</td>
                                                 <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                                                 <td>{{ $student->username }}</td>
                                                 <td>{{ $student->email }}</td>

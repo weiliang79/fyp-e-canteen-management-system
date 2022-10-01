@@ -17,7 +17,7 @@
                                           <ul class="list-group">
                                                 <li class="list-group-item d-flex justify-content-between">
                                                       <p class="mb-0">Student Number</p>
-                                                      <p class="mb-0">{{ $order->student->student_number }}</p>
+                                                      <p class="mb-0">@if($order->student->is_a_sandbox_student) <i class="fa-solid fa-flask fa-fw"></i> @endif{{ $order->student->student_number }}</p>
                                                 </li>
                                                 <li class="list-group-item d-flex justify-content-between">
                                                       <p class="mb-0">Student Name</p>
@@ -42,7 +42,7 @@
                                           <ul class="list-group">
                                                 <li class="list-group-item d-flex justify-content-between">
                                                       <p class="mb-0">Order ID</p>
-                                                      <p class="mb-0">{{ $order->id }}</p>
+                                                      <p class="mb-0">@if($order->is_sandbox_order) <i class="fa-solid fa-flask fa-fw"></i> @endif{{ $order->id }}</p>
                                                 </li>
 
                                                 <li class="list-group-item d-flex justify-content-between">

@@ -27,7 +27,7 @@
                                     <tbody>
                                           @foreach($orders as $order)
                                           <tr>
-                                                <td>{{ $order->student->student_number }}</td>
+                                                <td>@if($order->is_sandbox_order) <i class="fa-solid fa-flask fa-fw"></i> @endif{{ $order->student->student_number }}</td>
                                                 <td>{{ $order->student->first_name }} {{ $order->student->last_name }}</td>
                                                 <td>{{ $order->pick_up_start->format('Y/m/d h:ia') }} to {{ $order->pick_up_end->format('Y/m/d h:ia') }}</td>
                                                 <td>{{ $order->total_price }}</td>
