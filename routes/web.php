@@ -160,8 +160,8 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/admin/user_management/student/delete', [UserManagementController::class, 'deleteStudent'])->name('admin.user_management.student.delete');
 
             // user management - student - rest time
-            Route::get('/admin/user_management/student/rest_time', [RestTimeController::class, 'index'])->name('admin.user_management.student.rest_time');
-            Route::post('/admin/user_management/student/rest_time/update', [RestTimeController::class, 'update'])->name('admin.user_management.student.rest_time.update');
+            Route::get('/admin/user_management/rest_time', [RestTimeController::class, 'index'])->name('admin.user_management.student.rest_time');
+            Route::post('/admin/user_management/rest_time/update', [RestTimeController::class, 'update'])->name('admin.user_management.student.rest_time.update');
 
             // store
             Route::get('/admin/store', [StoreController::class, 'adminIndex'])->name('admin.store');
