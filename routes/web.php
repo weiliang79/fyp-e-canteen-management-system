@@ -165,7 +165,7 @@ Route::group(['middleware' => ['auth']], function () {
 
             // store
             Route::get('/admin/store', [StoreController::class, 'adminIndex'])->name('admin.store');
-            
+
             // menus - category
             Route::get('/admin/menus/category', [MenuController::class, 'categoryIndex'])->name('admin.menus.category');
             Route::get('/admin/menus/category/create', [MenuController::class, 'showCategoryCreateForm'])->name('admin.menus.category.create');
@@ -174,9 +174,13 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/admin/menus/category/update', [MenuController::class, 'updateCategory'])->name('admin.menus.category.update');
             Route::post('/admin/menus/category/delete', [MenuController::class, 'deleteCategory'])->name('admin.menus.category.delete');
 
+            // menus - product list
+            Route::get('/admin/menus/list', [MenuController::class, 'productIndex'])->name('admin.menus.list');
+            Route::get('/admin/menus/list/{product_id}/details', [MenuController::class, 'productDetails'])->name('admin.menus.list.details');
+
             // order
             Route::get('/admin/order', [OrderController::class, 'adminIndex'])->name('admin.order');
-            Route::get('/admin/order/{order_id}', [OrderController::class, 'adminOrderDetails'])->name('admin.order.details');
+            Route::get('/admin/order/{order_id}/details', [OrderController::class, 'adminOrderDetails'])->name('admin.order.details');
 
             // payment - general
             Route::get('/admin/payment/general', [PaymentController::class, 'index'])->name('admin.payment.general');

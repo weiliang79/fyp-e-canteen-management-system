@@ -82,6 +82,7 @@
                                                                         <th>Option</th>
                                                                         <th>Notes</th>
                                                                         <th>Price({{ config('payment.currency_symbol') }})</th>
+                                                                        <th>Action</th>
                                                                   </tr>
                                                             </thead>
                                                             <tbody>
@@ -99,6 +100,9 @@
                                                                         </td>
                                                                         <td>{{ $detail->notes ?: 'None' }}</td>
                                                                         <td>{{ $detail->price }}</td>
+                                                                        <td>
+                                                                            <a class="btn btn-primary" href="{{ route('admin.menus.list.details', ['product_id' => $detail->product->id]) }}">Product Detail</a>
+                                                                        </td>
                                                                   </tr>
                                                                   @endforeach
                                                             </tbody>

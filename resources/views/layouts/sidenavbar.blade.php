@@ -37,7 +37,7 @@
                                     <a class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.menus.category') ? 'active' : 'link-dark' }} mx-4" href="{{ route('admin.menus.category') }}">Product Category</a>
                               </li>
                               <li>
-                                    <a class="nav-link link-dark mx-4" href="#">Product List</a>
+                                    <a class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.menus.list') ? 'active' : 'link-dark' }} mx-4" href="{{ route('admin.menus.list') }}">Product List</a>
                               </li>
                         </ul>
                   </div>

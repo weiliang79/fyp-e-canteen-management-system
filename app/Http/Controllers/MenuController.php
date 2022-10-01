@@ -83,6 +83,9 @@ class MenuController extends Controller
         $user = User::find(Auth::user()->id);
 
         if ($user->isAdmin()) {
+            $products = Product::all();
+
+            return view('admin.menus.list.index', compact('products'));
         } else {
 
             if ($user->store()->count() == 0) {
@@ -93,6 +96,12 @@ class MenuController extends Controller
 
             return view('food_seller.menus.product.index', compact('products'));
         }
+    }
+
+    public function productDetails(Request $request){
+        $product = Product::find($request->product_id);
+
+        return view('admin.menus.list.details', compact('product'));
     }
 
     public function showProductCreateForm()
@@ -200,8 +209,8 @@ class MenuController extends Controller
 
         $optionsId = $request->optionId ? $request->optionId : array();
         $optionDetailId = $request->optionDetailId ? $request->optionDetailId : array();
-        
-        // check if user has input any option name, 
+
+        // check if user has input any option name,
         // update or create the options and optionDetails which has record or no record first,
         // then delete the options and optionDetails which id not inside optionsId and optionDetailId,
         // else will delete all the options and optionDetails related to the product
@@ -275,7 +284,7 @@ class MenuController extends Controller
             for($i = 0; $i < count($optionDetailId); $i++){
                 $productOptions[$i]->optionDetails()->whereNotIn('id', $optionDetailId[$i])->delete();
             }
-            
+
             $options = $product->productOptions()->whereNotIn('id', $optionsId)->get();
             foreach($options as $option){
                 $option->optionDetails()->delete();
@@ -291,7 +300,7 @@ class MenuController extends Controller
                 $option->delete();
             }
         }
-        
+
         return redirect()->route('food_seller.menus.product')->with('swal-success', 'Product info update successful.');
     }
 
