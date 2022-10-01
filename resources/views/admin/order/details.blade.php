@@ -211,7 +211,7 @@
 
                               <div class="row mb-0">
                                     <div class="col-md-8 offset-md-3">
-                                          <a class="btn btn-primary" href="{{ route('admin.order') }}">Back</a>
+                                          <a class="btn btn-primary" href="{{ route('admin.order') }}">Back to Order List</a>
                                     </div>
                               </div>
 

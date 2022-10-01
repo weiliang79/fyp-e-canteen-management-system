@@ -18,6 +18,7 @@
                                     <img class="card-img-top menu-card-img" src="{{ $product->media_path ? asset($product->media_path) : asset('storage/defaults/product.png') }}" alt="{{ $product->name }}" title="{{ $product->description }}">
                                 </div>
                             </div>
+
                             <div class="col-5">
                                 <ul class="list-group">
                                     <li class="list-group-item d-flex justify-content-between">
@@ -155,7 +156,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-3">
-                                <a class="btn btn-primary" href="{{ route('admin.menus.list') }}">Back</a>
+                                <a class="btn btn-primary" href="{{ route('admin.menus.list') }}">Back to Product list</a>
                             </div>
                         </div>
 
