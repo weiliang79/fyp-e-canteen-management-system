@@ -121,7 +121,7 @@
                   </div>
             </li>
             <li class="nav-item">
-                  <a href="#" class="nav-link link-dark">
+                  <a href="{{ route('food_seller.order') }}" class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'food_seller.order') ? 'active' : 'link-dark' }}">
                         <i class="fa-solid fa-list-check"></i>
                         Orders
                   </a>

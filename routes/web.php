@@ -230,6 +230,10 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/food_seller/menus/product/update', [MenuController::class, 'updateProduct'])->name('food_seller.menus.product.update');
             Route::post('/food_seller/menus/product/delete', [MenuController::class, 'deleteProduct'])->name('food_seller.menus.product.delete');
 
+            // orders
+            Route::get('/food_seller/order', [OrderController::class, 'foodSellerIndex'])->name('food_seller.order');
+            Route::get('/food_seller/order/{order_id}/details', [OrderController::class, 'foodSellerDetails'])->name('food_seller.order.details');
+
             // media manager
             Route::get('/food_seller/media_manager', [MediaController::class, 'index'])->name('food_seller.media_manager');
         });
