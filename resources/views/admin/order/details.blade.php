@@ -51,7 +51,7 @@
                                                 </li>
                                                 <li class="list-group-item d-flex justify-content-between">
                                                       <p class="mb-0">Amount</p>
-                                                      <p class="mb-0">{{ $order->total_price }}</p>
+                                                      <p class="mb-0">{{ config('payment.currency_symbol') }}{{ $order->total_price }}</p>
                                                 </li>
                                                 <li class="list-group-item d-flex justify-content-between">
                                                       <p class="mb-0">Status</p>
