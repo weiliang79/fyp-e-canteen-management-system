@@ -22,6 +22,7 @@
                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                                       <div>
                                                             <input class="form-check-input me-1" type="checkbox" name="stores[]" value="{{ $store->id }}" {{ Request::get('stores') ? (in_array($store->id, Request::get('stores')) ? 'checked' : '') : '' }}>
+                                                            <img src="{{ $store->logo_path ? asset($store->logo_path) : asset('/storage/defaults/store.png') }}" alt="{{ $store->name }}" title="{{ $store->description }}" style="width: 20px; height: 20px;">
                                                             {{ $store->name }}
                                                       </div>
                                                       <span class="badge bg-primary rounded-pill">{{ $store->products()->count() }}</span>
@@ -64,7 +65,10 @@
 
                               @foreach($allStores as $store)
                               <div class="container-fluid mb-3">
-                                    <h5>{{ $store->name }}</h5>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ $store->logo_path ? asset($store->logo_path) : asset('/storage/defaults/store.png') }}" alt="{{ $store->name }}" title="{{ $store->description }}" style="width: 35px; height: 35px;">
+                                        <h5 class="mb-0 ms-2">{{ $store->name }}</h5>
+                                    </div>
                                     @if($products->contains('store_id', $store->id))
                                     <div class="row row-cols-auto">
 
