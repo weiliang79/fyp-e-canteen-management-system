@@ -18,6 +18,9 @@
                                           <h6>Store</h6>
 
                                           <ul class="list-group">
+                                                @if($allStores->count() == 0)
+                                                    <p class="mb-0 text-warning"><i class="fa-solid fa-triangle-exclamation"></i> Currently, this system has no stores.</p>
+                                                @else
                                                 @foreach($allStores as $store)
                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                                       <div>
@@ -28,6 +31,7 @@
                                                       <span class="badge bg-primary rounded-pill">{{ $store->products()->count() }}</span>
                                                 </li>
                                                 @endforeach
+                                               @endif
                                           </ul>
                                     </div>
 
@@ -35,6 +39,9 @@
                                           <h6>Category</h6>
 
                                           <ul class="list-group">
+                                                @if($allStores->count() == 0)
+                                                    <p class="mb-0 text-warning"><i class="fa-solid fa-triangle-exclamation"></i> Currently, this system has no any food categories.</p>
+                                                @else
                                                 @foreach($allCategories as $category)
                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                                       <div>
@@ -44,6 +51,7 @@
                                                       <span class="badge bg-primary rounded-pill">{{ $category->products()->count() }}</span>
                                                 </li>
                                                 @endforeach
+                                                @endif
                                           </ul>
                                     </div>
 
@@ -63,6 +71,9 @@
 
                         <div class="card-body">
 
+                              @if($allStores->count() == 0)
+                                <p class="mb-0 text-warning text-center"><i class="fa-solid fa-triangle-exclamation"></i> Currently, this system has no stores.</p>
+                              @else
                               @foreach($allStores as $store)
                               <div class="container-fluid mb-3">
                                     <div class="d-flex align-items-center">
@@ -97,7 +108,7 @@
 
                               </div>
                               @endforeach
-
+                              @endif
                         </div>
                   </div>
             </div>
