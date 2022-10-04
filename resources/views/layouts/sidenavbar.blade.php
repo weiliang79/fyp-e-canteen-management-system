@@ -89,6 +89,12 @@
                         Media Manager
                   </a>
             </li>
+            <li class="nav-item">
+                  <a href="{{ route('admin.pos_settings') }}" class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.pos_settings') ? 'active' : 'link-dark' }}">
+                        <i class="fa-solid fa-cash-register"></i>
+                        POS Settings
+                  </a>
+            </li>
             @endcan
 
             @can('isFoodSeller')

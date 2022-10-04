@@ -13,6 +13,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\POSSettingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestTimeController;
 use App\Http\Controllers\StoreController;
@@ -197,6 +198,10 @@ Route::group(['middleware' => ['auth']], function () {
 
             // media manager
             Route::get('/admin/media_manager', [MediaController::class, 'index'])->name('admin.media_manager');
+
+            // POS settings
+            Route::get('/admin/pos_settings', [POSSettingController::class, 'index'])->name('admin.pos_settings');
+            Route::post('/admin/pos_settings/store', [POSSettingController::class, 'store'])->name('admin.pos_settings.store');
         });
     });
 
