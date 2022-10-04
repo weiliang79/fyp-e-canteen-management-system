@@ -6,6 +6,7 @@ use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 
 class StudentSeeder extends Seeder
 {
@@ -18,7 +19,7 @@ class StudentSeeder extends Seeder
         ],
         3 => [
             11, 12, 13
-        ], 
+        ],
         4 => [
             16, 17, 18
         ],
@@ -36,7 +37,7 @@ class StudentSeeder extends Seeder
         ],
         3 => [
             14, 15
-        ], 
+        ],
         4 => [
             19, 20
         ],
@@ -60,30 +61,33 @@ class StudentSeeder extends Seeder
             'is_a_sandbox_student' => true,
         ]);
 
-        foreach(StudentSeeder::MORNING_CLASS_REST_TIME as $restTimes){
-            $student->restTimes()->attach($restTimes);
+        if(App::environment(['local', 'testing'])){
+            foreach(StudentSeeder::MORNING_CLASS_REST_TIME as $restTimes){
+                $student->restTimes()->attach($restTimes);
+            }
+
+            // student1
+            $student = Student::factory()->create([
+                'username' => 'student1',
+                'email' => 'student1@isp.com',
+                'email_verified_at' => Carbon::now(),
+            ]);
+
+            foreach(StudentSeeder::MORNING_CLASS_REST_TIME as $restTimes){
+                $student->restTimes()->attach($restTimes);
+            }
+
+            // student2
+            $student = Student::factory()->create([
+                'username' => 'student2',
+                'email' => null,
+                'email_verified_at' => null,
+            ]);
+
+            foreach(StudentSeeder::AFTERNOON_CLASS_REST_TIME as $restTimes){
+                $student->restTimes()->attach($restTimes);
+            }
         }
 
-        // student1
-        $student = Student::factory()->create([
-            'username' => 'student1',
-            'email' => 'student1@isp.com',
-            'email_verified_at' => Carbon::now(),
-        ]);
-
-        foreach(StudentSeeder::MORNING_CLASS_REST_TIME as $restTimes){
-            $student->restTimes()->attach($restTimes);
-        }
-
-        // student2
-        $student = Student::factory()->create([
-            'username' => 'student2',
-            'email' => null,
-            'email_verified_at' => null,
-        ]);
-
-        foreach(StudentSeeder::AFTERNOON_CLASS_REST_TIME as $restTimes){
-            $student->restTimes()->attach($restTimes);
-        }
     }
 }

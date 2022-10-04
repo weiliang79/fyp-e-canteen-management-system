@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\RestTime;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 
 class RestTimeSeeder extends Seeder
 {
@@ -15,194 +16,198 @@ class RestTimeSeeder extends Seeder
      */
     public function run()
     {
-        // Monday rest time
-        // Morning classes
-        RestTime::create([
-            'day_id' => 1,
-            'start_time' => '6:00 AM',
-            'end_time' => '7:10 AM',
-            'description' => 'Rest time for morning classes before class start in Monday.',
-        ]);
 
-        RestTime::create([
-            'day_id' => 1,
-            'start_time' => '10:00 AM',
-            'end_time' => '10:20 AM',
-            'description' => 'Rest time for morning classes in Monday.',
-        ]);
+        if(App::environment(['local', 'testing'])){
+            // Monday rest time
+            // Morning classes
+            RestTime::create([
+                'day_id' => 1,
+                'start_time' => '6:00 AM',
+                'end_time' => '7:10 AM',
+                'description' => 'Rest time for morning classes before class start in Monday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 1,
-            'start_time' => '1:00 PM',
-            'end_time' => '6:00 PM',
-            'description' => 'Rest time for morning classes after class end in Monday.',
-        ]);
+            RestTime::create([
+                'day_id' => 1,
+                'start_time' => '10:00 AM',
+                'end_time' => '10:20 AM',
+                'description' => 'Rest time for morning classes in Monday.',
+            ]);
 
-        // Afternoon classes
-        RestTime::create([
-            'day_id' => 1,
-            'start_time' => '6:00 AM',
-            'end_time' => '1:00 PM',
-            'description' => 'Rest time for afternoon classes before class start in Monday.',
-        ]);
+            RestTime::create([
+                'day_id' => 1,
+                'start_time' => '1:00 PM',
+                'end_time' => '6:00 PM',
+                'description' => 'Rest time for morning classes after class end in Monday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 1,
-            'start_time' => '3:00 PM',
-            'end_time' => '3:20 PM',
-            'description' => 'Rest time for afternoon classes in Monday.',
-        ]);
+            // Afternoon classes
+            RestTime::create([
+                'day_id' => 1,
+                'start_time' => '6:00 AM',
+                'end_time' => '1:00 PM',
+                'description' => 'Rest time for afternoon classes before class start in Monday.',
+            ]);
 
-        // Tuesday rest time
-        // Morning classes
-        RestTime::create([
-            'day_id' => 2,
-            'start_time' => '6:00 AM',
-            'end_time' => '7:10 AM',
-            'description' => 'Rest time for morning classes before class start in Tuesday.',
-        ]);
+            RestTime::create([
+                'day_id' => 1,
+                'start_time' => '3:00 PM',
+                'end_time' => '3:20 PM',
+                'description' => 'Rest time for afternoon classes in Monday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 2,
-            'start_time' => '10:00 AM',
-            'end_time' => '10:20 AM',
-            'description' => 'Rest time for morning classes in Tuesday.',
-        ]);
+            // Tuesday rest time
+            // Morning classes
+            RestTime::create([
+                'day_id' => 2,
+                'start_time' => '6:00 AM',
+                'end_time' => '7:10 AM',
+                'description' => 'Rest time for morning classes before class start in Tuesday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 2,
-            'start_time' => '1:00 PM',
-            'end_time' => '6:00 PM',
-            'description' => 'Rest time for morning classes after class end in Tuesday.',
-        ]);
+            RestTime::create([
+                'day_id' => 2,
+                'start_time' => '10:00 AM',
+                'end_time' => '10:20 AM',
+                'description' => 'Rest time for morning classes in Tuesday.',
+            ]);
 
-        // Afternoon classes
-        RestTime::create([
-            'day_id' => 2,
-            'start_time' => '6:00 AM',
-            'end_time' => '1:00 PM',
-            'description' => 'Rest time for afternoon classes before class start in Tuesday.',
-        ]);
+            RestTime::create([
+                'day_id' => 2,
+                'start_time' => '1:00 PM',
+                'end_time' => '6:00 PM',
+                'description' => 'Rest time for morning classes after class end in Tuesday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 2,
-            'start_time' => '3:00 PM',
-            'end_time' => '3:20 PM',
-            'description' => 'Rest time for afternoon classes in Tuesday.',
-        ]);
+            // Afternoon classes
+            RestTime::create([
+                'day_id' => 2,
+                'start_time' => '6:00 AM',
+                'end_time' => '1:00 PM',
+                'description' => 'Rest time for afternoon classes before class start in Tuesday.',
+            ]);
 
-        // Wednesday rest time
-        // Morning classes
-        RestTime::create([
-            'day_id' => 3,
-            'start_time' => '6:00 AM',
-            'end_time' => '7:10 AM',
-            'description' => 'Rest time for morning classes before class start in Wednesday.',
-        ]);
+            RestTime::create([
+                'day_id' => 2,
+                'start_time' => '3:00 PM',
+                'end_time' => '3:20 PM',
+                'description' => 'Rest time for afternoon classes in Tuesday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 3,
-            'start_time' => '10:00 AM',
-            'end_time' => '10:20 AM',
-            'description' => 'Rest time for morning classes in Wednesday.',
-        ]);
+            // Wednesday rest time
+            // Morning classes
+            RestTime::create([
+                'day_id' => 3,
+                'start_time' => '6:00 AM',
+                'end_time' => '7:10 AM',
+                'description' => 'Rest time for morning classes before class start in Wednesday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 1,
-            'start_time' => '1:00 PM',
-            'end_time' => '6:00 PM',
-            'description' => 'Rest time for morning classes after class end in Wednesday.',
-        ]);
+            RestTime::create([
+                'day_id' => 3,
+                'start_time' => '10:00 AM',
+                'end_time' => '10:20 AM',
+                'description' => 'Rest time for morning classes in Wednesday.',
+            ]);
 
-        // Afternoon classes
-        RestTime::create([
-            'day_id' => 3,
-            'start_time' => '6:00 AM',
-            'end_time' => '1:00 PM',
-            'description' => 'Rest time for afternoon classes before class start in Wednesday.',
-        ]);
+            RestTime::create([
+                'day_id' => 1,
+                'start_time' => '1:00 PM',
+                'end_time' => '6:00 PM',
+                'description' => 'Rest time for morning classes after class end in Wednesday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 3,
-            'start_time' => '3:00 PM',
-            'end_time' => '3:20 PM',
-            'description' => 'Rest time for afternoon classes in Wednesday.',
-        ]);
+            // Afternoon classes
+            RestTime::create([
+                'day_id' => 3,
+                'start_time' => '6:00 AM',
+                'end_time' => '1:00 PM',
+                'description' => 'Rest time for afternoon classes before class start in Wednesday.',
+            ]);
 
-        // Thursday rest time
-        // Morning classes
-        RestTime::create([
-            'day_id' => 4,
-            'start_time' => '6:00 AM',
-            'end_time' => '7:10 AM',
-            'description' => 'Rest time for morning classes before class start in Thursday.',
-        ]);
+            RestTime::create([
+                'day_id' => 3,
+                'start_time' => '3:00 PM',
+                'end_time' => '3:20 PM',
+                'description' => 'Rest time for afternoon classes in Wednesday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 4,
-            'start_time' => '10:00 AM',
-            'end_time' => '10:20 AM',
-            'description' => 'Rest time for morning classes in Thursday.',
-        ]);
+            // Thursday rest time
+            // Morning classes
+            RestTime::create([
+                'day_id' => 4,
+                'start_time' => '6:00 AM',
+                'end_time' => '7:10 AM',
+                'description' => 'Rest time for morning classes before class start in Thursday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 4,
-            'start_time' => '1:00 PM',
-            'end_time' => '6:00 PM',
-            'description' => 'Rest time for morning classes after class end in Thursday.',
-        ]);
+            RestTime::create([
+                'day_id' => 4,
+                'start_time' => '10:00 AM',
+                'end_time' => '10:20 AM',
+                'description' => 'Rest time for morning classes in Thursday.',
+            ]);
 
-        // Afternoon classes
-        RestTime::create([
-            'day_id' => 4,
-            'start_time' => '6:00 AM',
-            'end_time' => '1:00 PM',
-            'description' => 'Rest time for afternoon classes before class start in Thursday.',
-        ]);
+            RestTime::create([
+                'day_id' => 4,
+                'start_time' => '1:00 PM',
+                'end_time' => '6:00 PM',
+                'description' => 'Rest time for morning classes after class end in Thursday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 4,
-            'start_time' => '3:00 PM',
-            'end_time' => '3:20 PM',
-            'description' => 'Rest time for afternoon classes in Thursday.',
-        ]);
+            // Afternoon classes
+            RestTime::create([
+                'day_id' => 4,
+                'start_time' => '6:00 AM',
+                'end_time' => '1:00 PM',
+                'description' => 'Rest time for afternoon classes before class start in Thursday.',
+            ]);
 
-        // Friday rest time
-        // Morning classes
-        RestTime::create([
-            'day_id' => 5,
-            'start_time' => '6:00 AM',
-            'end_time' => '7:10 AM',
-            'description' => 'Rest time for morning classes before class start in Friday.',
-        ]);
+            RestTime::create([
+                'day_id' => 4,
+                'start_time' => '3:00 PM',
+                'end_time' => '3:20 PM',
+                'description' => 'Rest time for afternoon classes in Thursday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 5,
-            'start_time' => '10:00 AM',
-            'end_time' => '10:20 AM',
-            'description' => 'Rest time for morning classes in Friday.',
-        ]);
+            // Friday rest time
+            // Morning classes
+            RestTime::create([
+                'day_id' => 5,
+                'start_time' => '6:00 AM',
+                'end_time' => '7:10 AM',
+                'description' => 'Rest time for morning classes before class start in Friday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 5,
-            'start_time' => '1:00 PM',
-            'end_time' => '6:00 PM',
-            'description' => 'Rest time for morning classes after class end in Friday.',
-        ]);
+            RestTime::create([
+                'day_id' => 5,
+                'start_time' => '10:00 AM',
+                'end_time' => '10:20 AM',
+                'description' => 'Rest time for morning classes in Friday.',
+            ]);
 
-        // Afternoon classes
-        RestTime::create([
-            'day_id' => 5,
-            'start_time' => '6:00 AM',
-            'end_time' => '1:00 PM',
-            'description' => 'Rest time for afternoon classes before class start in Friday.',
-        ]);
+            RestTime::create([
+                'day_id' => 5,
+                'start_time' => '1:00 PM',
+                'end_time' => '6:00 PM',
+                'description' => 'Rest time for morning classes after class end in Friday.',
+            ]);
 
-        RestTime::create([
-            'day_id' => 5,
-            'start_time' => '3:00 PM',
-            'end_time' => '3:20 PM',
-            'description' => 'Rest time for afternoon classes in Friday.',
-        ]);
+            // Afternoon classes
+            RestTime::create([
+                'day_id' => 5,
+                'start_time' => '6:00 AM',
+                'end_time' => '1:00 PM',
+                'description' => 'Rest time for afternoon classes before class start in Friday.',
+            ]);
+
+            RestTime::create([
+                'day_id' => 5,
+                'start_time' => '3:00 PM',
+                'end_time' => '3:20 PM',
+                'description' => 'Rest time for afternoon classes in Friday.',
+            ]);
+        }
+
     }
 }
