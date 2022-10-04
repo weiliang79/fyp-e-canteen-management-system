@@ -27,14 +27,15 @@ class DatabaseSeeder extends Seeder
         ]);*/
 
         $this->call([
-            RoleSeeder::class, 
-            UserSeeder::class, 
-            RestTimeSeeder::class, 
+            RoleSeeder::class,
+            UserSeeder::class,
+            RestTimeSeeder::class,
             StudentSeeder::class,
             ProductCategorySeeder::class,
             ProductSeeder::class,
             PaymentTypeSeeder::class,
             POSSettingsSeeder::class,
+            OrderSeeder::class,
         ]);
     }
 }

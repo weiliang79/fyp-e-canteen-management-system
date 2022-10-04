@@ -146,57 +146,61 @@
                                                             <div class="col-6">
                                                                   <ul class="list-group">
                                                                         @if($payment->payment_type_id == \App\Models\PaymentType::PAYMENT_2C2P)
-                                                                        <li class="list-group-item d-flex justify-content-between">
+                                                                            @if($payment->payment_detail_2c2p_id !== null)
+                                                                                <li class="list-group-item d-flex justify-content-between">
 
-                                                                              <p class="mb-1">Invoice No</p>
-                                                                              <p class="mb-1">
-                                                                                    {{ $payment->paymentDetail2c2p->invoice_no }}
-                                                                              </p>
-                                                                        </li>
-                                                                        <li class="list-group-item d-flex justify-content-between">
-                                                                              <p class="mb-1">Transaction Time</p>
-                                                                              <p class="mb-1">
-                                                                                    {{ $payment->paymentDetail2c2p->transaction_time->format('Y-m-d H:i A') }}
-                                                                              </p>
-                                                                        </li>
-                                                                        <li class="list-group-item d-flex justify-content-between">
-                                                                              <p class="mb-1">Agent Code</p>
-                                                                              <p class="mb-1">
-                                                                                    {{ $payment->paymentDetail2c2p->agent_code ?: 'None' }}
-                                                                              </p>
-                                                                        </li>
-                                                                        <li class="list-group-item d-flex justify-content-between">
-                                                                              <p class="mb-1">Channel Code</p>
-                                                                              <p class="mb-1">
-                                                                                    {{ $payment->paymentDetail2c2p->channel_code ?: 'None' }}
-                                                                              </p>
-                                                                        </li>
-                                                                        <li class="list-group-item d-flex justify-content-between">
-                                                                              <p class="mb-1">Reference No</p>
-                                                                              <p class="mb-1">
-                                                                                    {{ $payment->paymentDetail2c2p->reference_no ?: 'None' }}
-                                                                              </p>
-                                                                        </li>
-                                                                        <li class="list-group-item d-flex justify-content-between">
-                                                                              <p class="mb-1">Transaction Reference</p>
-                                                                              <p class="mb-1">
-                                                                                    {{ $payment->paymentDetail2c2p->tran_ref ?: 'None' }}
-                                                                              </p>
-                                                                        </li>
+                                                                                      <p class="mb-1">Invoice No</p>
+                                                                                      <p class="mb-1">
+                                                                                            {{ $payment->paymentDetail2c2p->invoice_no }}
+                                                                                      </p>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between">
+                                                                                      <p class="mb-1">Transaction Time</p>
+                                                                                      <p class="mb-1">
+                                                                                            {{ $payment->paymentDetail2c2p->transaction_time->format('Y-m-d H:i A') }}
+                                                                                      </p>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between">
+                                                                                      <p class="mb-1">Agent Code</p>
+                                                                                      <p class="mb-1">
+                                                                                            {{ $payment->paymentDetail2c2p->agent_code ?: 'None' }}
+                                                                                      </p>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between">
+                                                                                      <p class="mb-1">Channel Code</p>
+                                                                                      <p class="mb-1">
+                                                                                            {{ $payment->paymentDetail2c2p->channel_code ?: 'None' }}
+                                                                                      </p>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between">
+                                                                                      <p class="mb-1">Reference No</p>
+                                                                                      <p class="mb-1">
+                                                                                            {{ $payment->paymentDetail2c2p->reference_no ?: 'None' }}
+                                                                                      </p>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between">
+                                                                                      <p class="mb-1">Transaction Reference</p>
+                                                                                      <p class="mb-1">
+                                                                                            {{ $payment->paymentDetail2c2p->tran_ref ?: 'None' }}
+                                                                                      </p>
+                                                                                </li>
+                                                                            @endif
                                                                         @else
 
                                                                         @if($payment->status === \App\Models\Payment::STATUS_SUCCESS)
-                                                                        @php $paymentMethod = $order->student->findPaymentMethod($payment->paymentDetailStripe->payment_method_id) @endphp
+                                                                            @if($payment->payment_detail_stripe_id !== null)
+                                                                                @php $paymentMethod = $order->student->findPaymentMethod($payment->paymentDetailStripe->payment_method_id) @endphp
 
-                                                                        <li class="list-group-item d-flex justify-content-between">
-                                                                              <p class="mb-1">Payment
-                                                                                    Processing Method</p>
-                                                                              <p class="mb-1">{{ $paymentMethod->type }} - {{ $paymentMethod->card->brand }}</p>
-                                                                        </li>
-                                                                        <li class="list-group-item d-flex justify-content-between">
-                                                                              <p class="mb-1">Transaction Time</p>
-                                                                              <p class="mb-1">{{ \Carbon\Carbon::createFromTimestamp($paymentMethod->created)->format('Y-m-d H:i A') }}</p>
-                                                                        </li>
+                                                                                <li class="list-group-item d-flex justify-content-between">
+                                                                                      <p class="mb-1">Payment
+                                                                                            Processing Method</p>
+                                                                                      <p class="mb-1">{{ $paymentMethod->type }} - {{ $paymentMethod->card->brand }}</p>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between">
+                                                                                      <p class="mb-1">Transaction Time</p>
+                                                                                      <p class="mb-1">{{ \Carbon\Carbon::createFromTimestamp($paymentMethod->created)->format('Y-m-d H:i A') }}</p>
+                                                                                </li>
+                                                                              @endif
                                                                         @endif
 
                                                                         @endif
