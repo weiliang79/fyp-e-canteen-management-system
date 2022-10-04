@@ -64,7 +64,7 @@
                                     <div class="list-group">
                                           <div class="list-group-item">
                                                 <label class="form-control-label" for="">Rest Time to Pick-Up</label>
-                                                <select class="form-control" name="restTime" id="">
+                                                <select class="form-control" name="restTime" id="" @if(count($restDates) == 0) disabled @endif>
                                                       @foreach($restDates as $key => $value)
                                                       <option value="{{ $key }}">{{ $value }}</option>
                                                       @endforeach
@@ -80,7 +80,7 @@
                               </div>
 
                               <div class="card-footer">
-                                    <button class="btn btn-primary" @if($carts->count() == 0 || (config('payment.maintenance_mode') && !Auth::guard('student')->user()->is_a_sandbox_student)) disabled @endif>Procced to Checkout</button>
+                                    <button class="btn btn-primary" @if($carts->count() == 0 || (config('payment.maintenance_mode') && !Auth::guard('student')->user()->is_a_sandbox_student) || count($restDates) == 0) disabled @endif>Procced to Checkout</button>
                                     @if($carts->count() == 0)
                                     <div class="text-danger mt-2">
                                           <i class="fa-solid fa-circle-exclamation fa-lg"></i> The cart was empty.
@@ -89,6 +89,11 @@
                                     <div class="text-danger mt-2">
                                           <i class="fa-solid fa-circle-exclamation fa-lg"></i> Currently checkout services are unavailable.
                                     </div>
+                                    @endif
+                                    @if(count($restDates) == 0)
+                                      <div class="text-danger mt-2">
+                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> Current Student haven't assigned any rest time. Please contact Administrator for further assist.
+                                      </div>
                                     @endif
                               </div>
 
