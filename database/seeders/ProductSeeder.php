@@ -50,6 +50,26 @@ class ProductSeeder extends Seeder
                 'extra_price' => 2,
             ]);
 
+            $option = $product->productOptions()->create([
+                'name' => 'Meat',
+                'description' => 'Meat of burger',
+            ]);
+
+            $option->optionDetails()->create([
+                'name' => 'None',
+                'extra_price' => 0,
+            ]);
+
+            $option->optionDetails()->create([
+                'name' => 'Pork',
+                'extra_price' => 2,
+            ]);
+
+            $option->optionDetails()->create([
+                'name' => 'Beef',
+                'extra_price' => 3,
+            ]);
+
             $product = Product::factory()->create([
                 'name' => 'Cheeseburger',
                 'description' => 'This is cheeseburger.',
