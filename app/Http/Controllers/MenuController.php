@@ -132,8 +132,6 @@ class MenuController extends Controller
             ]
         );
 
-        dd($request);
-
         $user = User::find(Auth::user()->id);
 
         $product = Product::create([
