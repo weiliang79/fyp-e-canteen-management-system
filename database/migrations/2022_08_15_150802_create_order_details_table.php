@@ -20,6 +20,7 @@ return new class extends Migration
             $table->json('product_options');
             $table->decimal('price');
             $table->text('notes')->nullable();
+            $table->boolean('is_pickup')->default(false);
             $table->timestamps();
             $table->softDeletes();
 
