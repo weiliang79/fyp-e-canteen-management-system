@@ -71,7 +71,7 @@ class UserManagementController extends Controller
     public function saveStudent(Request $request){
 
         $request->validate([
-            'student_number' => 'required|numeric|gt:0',
+            'student_number' => 'required|numeric|gt:0|unique:students,student_number',
             'first_name' => 'required',
             'last_name' => 'required',
             'username' => 'required',
