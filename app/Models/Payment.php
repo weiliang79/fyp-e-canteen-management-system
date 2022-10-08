@@ -44,12 +44,22 @@ class Payment extends Model
     }
 
     public function getStatusString(){
-        switch($this->status){
-            case Payment::STATUS_PENDING: return 'Payment Pending';
-            case Payment::STATUS_FAILURE: return 'Payment Failure';
-            case Payment::STATUS_ABORT: return 'Payment Abort';
-            case Payment::STATUS_SUCCESS: return 'Payment Success';
-        }
+        return match ($this->status) {
+            Payment::STATUS_PENDING => 'Payment Pending',
+            Payment::STATUS_FAILURE => 'Payment Failure',
+            Payment::STATUS_ABORT => 'Payment Abort',
+            Payment::STATUS_SUCCESS => 'Payment Success',
+            default => 'Undefined',
+        };
+    }
+
+    public function getPaymentTypeString(){
+        return match ($this->payment_type_id) {
+            PaymentType::PAYMENT_2C2P => '2C2P',
+            PaymentType::PAYMENT_STRIPE => 'Stripe',
+            PaymentType::PAYMENT_CASH => 'Cash',
+            default => 'Undefined',
+        };
     }
 
 }

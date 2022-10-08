@@ -128,7 +128,7 @@
                                                                   <ul class="list-group">
                                                                         <li class="list-group-item d-flex justify-content-between">
                                                                               <p class="mb-1">Payment Type</p>
-                                                                              <p class="mb-1">{{ $payment->payment_type_id == \App\Models\PaymentType::PAYMENT_2C2P ? '2C2P' : 'Stripe' }}</p>
+                                                                              <p class="mb-1">{{ $payment->getPaymentTypeString() }}</p>
                                                                         </li>
                                                                         <li class="list-group-item d-flex justify-content-between">
                                                                               <p class="fw-bold mb-1">Amount</p>

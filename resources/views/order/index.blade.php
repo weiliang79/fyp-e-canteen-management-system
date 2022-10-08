@@ -29,11 +29,11 @@
 
                                                         <div class="d-flex justify-content-between mx-4"
                                                              style="width: 100%;">
-                                                            <div>Pick Up
+                                                            <div class="align-items-start">Pick Up
                                                                 Time: {{ $orders[$i]->pick_up_start->format('Y-m-d H:i A') }}
                                                                 to {{ $orders[$i]->pick_up_end->format('Y-m-d H:i A') }}</div>
-                                                            <div>{{ config('payment.currency_symbol') }}{{ $orders[$i]->total_price }}</div>
-                                                            <div class="{{ $orders[$i]->status == \App\Models\Order::PAYMENT_FAILURE ? 'text-danger' : '' }}{{ $orders[$i]->status == \App\Models\Order::PAYMENT_SUCCESS ? 'text-success' : '' }}">
+                                                            <div class="align-items-center ms-5">{{ config('payment.currency_symbol') }}{{ $orders[$i]->total_price }}</div>
+                                                            <div class="align-items-end ms-auto {{ $orders[$i]->status == \App\Models\Order::PAYMENT_FAILURE ? 'text-danger' : '' }}{{ $orders[$i]->status == \App\Models\Order::PAYMENT_SUCCESS ? 'text-success' : '' }}">
                                                                 {{ $orders[$i]->getStatusString() }}
                                                             </div>
                                                         </div>
@@ -70,6 +70,7 @@
                                                                         <th>
                                                                             Price({{ config('payment.currency_symbol') }})
                                                                         </th>
+                                                                        <th>Status</th>
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -86,6 +87,7 @@
                                                                             </td>
                                                                             <td>{{ $detail->notes ? $detail->notes : 'None' }}</td>
                                                                             <td>{{ $detail->price }}</td>
+                                                                            <td>{{ $detail->is_pickup ? 'Picked Up' : 'Not Pick Up' }}</td>
                                                                         </tr>
                                                                     @endforeach
                                                                     </tbody>
@@ -108,7 +110,7 @@
                                                                             <ul class="list-group">
                                                                                 <li class="list-group-item d-flex justify-content-between">
                                                                                     <p class="mb-1">Payment Type</p>
-                                                                                    <p class="mb-1">{{ $payment->payment_type_id == \App\Models\PaymentType::PAYMENT_2C2P ? '2C2P' : 'Stripe' }}</p>
+                                                                                    <p class="mb-1">{{ $payment->getPaymentTypeString() }}</p>
                                                                                 </li>
                                                                                 <li class="list-group-item d-flex justify-content-between">
                                                                                     <p class="fw-bold mb-1">Amount</p>
@@ -163,7 +165,7 @@
                                                                                             {{ $payment->paymentDetail2c2p->tran_ref ?: 'None' }}
                                                                                         </p>
                                                                                     </li>
-                                                                                @else
+                                                                                @elseif($payment->payment_type_id == \App\Models\PaymentType::PAYMENT_STRIPE)
 
                                                                                     @if($payment->status === \App\Models\Payment::STATUS_SUCCESS)
                                                                                         @php $paymentMethod = auth()->guard('student')->user()->findPaymentMethod($payment->paymentDetailStripe->payment_method_id) @endphp
