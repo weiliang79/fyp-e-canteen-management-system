@@ -66,27 +66,74 @@ class StudentSeeder extends Seeder
                 $student->restTimes()->attach($restTimes);
             }
 
-            // student1
-            $student = Student::factory()->create([
-                'username' => 'student1',
-                'email' => 'student1@isp.com',
-                'email_verified_at' => Carbon::now(),
-            ]);
+            if(App::environment(['local'])){
+                // student1
+                $student = Student::factory()->create([
+                    'username' => 'student1',
+                    'email' => 'student1@isp.com',
+                    'email_verified_at' => Carbon::now(),
+                ]);
 
-            foreach(StudentSeeder::MORNING_CLASS_REST_TIME as $restTimes){
-                $student->restTimes()->attach($restTimes);
+                foreach(StudentSeeder::MORNING_CLASS_REST_TIME as $restTimes){
+                    $student->restTimes()->attach($restTimes);
+                }
+
+                // student2
+                $student = Student::factory()->create([
+                    'username' => 'student2',
+                    'email' => null,
+                    'email_verified_at' => null,
+                ]);
+
+                foreach(StudentSeeder::AFTERNOON_CLASS_REST_TIME as $restTimes){
+                    $student->restTimes()->attach($restTimes);
+                }
+            } else if(App::environment(['testing'])){
+                // student1
+                $student = Student::factory()->create([
+                    'username' => 'student1',
+                    'email' => 'student1@isp.com',
+                    'email_verified_at' => Carbon::now(),
+                ]);
+
+                foreach(StudentSeeder::MORNING_CLASS_REST_TIME as $restTimes){
+                    $student->restTimes()->attach($restTimes);
+                }
+
+                // student2
+                $student = Student::factory()->create([
+                    'username' => 'student2',
+                    'email' => 'student2@isp.com',
+                    'email_verified_at' => Carbon::now(),
+                ]);
+
+                foreach(StudentSeeder::AFTERNOON_CLASS_REST_TIME as $restTimes){
+                    $student->restTimes()->attach($restTimes);
+                }
+
+                // student3
+                $student = Student::factory()->create([
+                    'username' => 'student3',
+                    'email' => 'student3@isp.com',
+                    'email_verified_at' => Carbon::now(),
+                ]);
+
+                foreach(StudentSeeder::MORNING_CLASS_REST_TIME as $restTimes){
+                    $student->restTimes()->attach($restTimes);
+                }
+
+                // student4
+                $student = Student::factory()->create([
+                    'username' => 'student4',
+                    'email' => null,
+                    'email_verified_at' => null,
+                ]);
+
+                foreach(StudentSeeder::AFTERNOON_CLASS_REST_TIME as $restTimes){
+                    $student->restTimes()->attach($restTimes);
+                }
             }
 
-            // student2
-            $student = Student::factory()->create([
-                'username' => 'student2',
-                'email' => null,
-                'email_verified_at' => null,
-            ]);
-
-            foreach(StudentSeeder::AFTERNOON_CLASS_REST_TIME as $restTimes){
-                $student->restTimes()->attach($restTimes);
-            }
         }
 
     }
