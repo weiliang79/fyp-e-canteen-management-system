@@ -38,7 +38,7 @@
                                                       {{ __('Error: Unknown Id') }}
                                                       @endif
                                                 </td>
-                                                <td>{{ $user->email }}</td>
+                                                <td>{{ $user->email ?: 'None' }}</td>
                                                 <td>{{ $user->created_at->format('Y/m/d h:ia') }}</td>
                                                 <td>{{ $user->updated_at->format('Y/m/d h:ia') }}</td>
                                                 <td><button type="button" class="btn btn-danger" onclick="promptDeleteWarning(this)" data-user-id="{{ $user->id }}">Delete</button></td>
@@ -83,9 +83,9 @@
                                                 <td>@if($student->is_a_sandbox_student) <i class="fa-solid fa-flask fa-fw"></i> @endif{{ $student->student_number }}</td>
                                                 <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                                                 <td>{{ $student->username }}</td>
-                                                <td>{{ $student->email }}</td>
-                                                <td>{{ $student->phone }}</td>
-                                                <td>{{ $student->address }}</td>
+                                                <td>{{ $student->email ?: 'None' }}</td>
+                                                <td>{{ $student->phone ?: 'None' }}</td>
+                                                <td>{{ $student->address ?: 'None' }}</td>
                                                 <td>{{ $student->created_at }}</td>
                                                 <td>{{ $student->updated_at }}</td>
                                                 <td>
