@@ -3,7 +3,7 @@
             <a class="navbar-brand" href="{{ Route('landing') }}">{{ config('app.name', 'Laravel') }}</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <!-- Left Side Of Navbar -->
                   <ul class="navbar-nav mr-auto">
@@ -24,13 +24,20 @@
                               </a>
 
                               <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('admin.profile') }}">
+                                    <a class="dropdown-item" href="{{ auth()->user()->isAdmin() ? route('admin.home') : route('food_seller.home') }}">
+                                        <i class="fa-solid fa-house"></i>
+                                        {{ __('Home') }}
+                                    </a>
+
+                                    <a class="dropdown-item" href="{{ auth()->user()->isAdmin() ? route('admin.profile') : route('food_seller.profile') }}">
+                                          <i class="fa-solid fa-user"></i>
                                           {{ __('Profile') }}
                                     </a>
 
                                     <hr class="dropdown-divider">
 
                                     <a class="dropdown-item" href="{{ route('logout') }}">
+                                          <i class="fa-solid fa-right-from-bracket"></i>
                                           {{ __('Logout') }}
                                     </a>
 
