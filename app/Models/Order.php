@@ -49,13 +49,22 @@ class Order extends Model
     }
 
     public function getStatusString(){
-        switch($this->status){
-            case Order::PAYMENT_PENDING: return 'Payment Pending';
-            case Order::PAYMENT_FAILURE: return 'Payment Failure';
-            case Order::PAYMENT_SUCCESS: return 'Payment Success';
-            case Order::PICKUP_PARTIALLY: return 'Partially Picked Up';
-            case Order::PICKUP_ALL: return 'All Picked Up';
-            default: return 'Undefined';
-        }
+        return match ($this->status) {
+            Order::PAYMENT_PENDING => 'Payment Pending',
+            Order::PAYMENT_FAILURE => 'Payment Failure',
+            Order::PAYMENT_SUCCESS => 'Payment Success',
+            Order::PICKUP_PARTIALLY => 'Partially Picked Up',
+            Order::PICKUP_ALL => 'All Picked Up',
+            default => 'Undefined',
+        };
+    }
+
+    public function getStatusBg(){
+        return match ($this->status) {
+            Order::PAYMENT_PENDING, Order::PICKUP_PARTIALLY => 'bg-warning',
+            Order::PAYMENT_FAILURE => 'bg-error',
+            Order::PAYMENT_SUCCESS, Order::PICKUP_ALL => 'bg-success',
+            default => '',
+        };
     }
 }

@@ -33,8 +33,10 @@
                                                                 Time: {{ $orders[$i]->pick_up_start->format('Y-m-d H:i A') }}
                                                                 to {{ $orders[$i]->pick_up_end->format('Y-m-d H:i A') }}</div>
                                                             <div class="align-items-center ms-5">{{ config('payment.currency_symbol') }}{{ $orders[$i]->total_price }}</div>
-                                                            <div class="align-items-end ms-auto {{ $orders[$i]->status == \App\Models\Order::PAYMENT_FAILURE ? 'text-danger' : '' }}{{ $orders[$i]->status == \App\Models\Order::PAYMENT_SUCCESS ? 'text-success' : '' }}">
-                                                                {{ $orders[$i]->getStatusString() }}
+                                                            <div class="align-items-end ms-auto">
+                                                                <span class="badge {{ $orders[$i]->getStatusBg() }}" style="font-size:0.8rem;">
+                                                                    {{ $orders[$i]->getStatusString() }}
+                                                                </span>
                                                             </div>
                                                         </div>
 
@@ -119,7 +121,9 @@
                                                                                 <li class="list-group-item d-flex justify-content-between">
                                                                                     <p class="mb-1">Status</p>
                                                                                     <p class="mb-1">
-                                                                                        {{ $payment->getStatusString() }}
+                                                                                        <span class="badge {{ $payment->getStatusBg() }}" style="font-size:0.8rem;">
+                                                                                            {{ $payment->getStatusString() }}
+                                                                                        </span>
                                                                                     </p>
                                                                                 </li>
                                                                             </ul>
