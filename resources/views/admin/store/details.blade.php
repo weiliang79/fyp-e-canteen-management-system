@@ -27,7 +27,7 @@
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <p class="mb-0">Description</p>
-                                        <p class="mb-0">{{ $store->description }}</p>
+                                        <p class="mb-0">{{ $store->description ?: 'None' }}</p>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <p class="mb-0">Food Seller Name</p>
@@ -67,7 +67,11 @@
                                                         <td>{{ $product->name }}</td>
                                                         <td>{{ $product->description }}</td>
                                                         <td>{{ $product->price }}</td>
-                                                        <td>{{ $product->status ? 'Available' : 'Not Available' }}</td>
+                                                        <td>
+                                                            <span class="badge {{ $product->status ? 'bg-success' : 'bg-error' }}" style="font-size: 0.8rem;">
+                                                                {{ $product->status ? 'Available' : 'Not Available' }}
+                                                            </span>
+                                                        </td>
                                                         <td>
                                                             <a class="btn btn-primary" href="{{ route('admin.menus.list.details', ['product_id' => $product->id]) }}">Detail</a>
                                                         </td>

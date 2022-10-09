@@ -28,7 +28,7 @@
                                                 <td>{{ $store->user->first_name }} {{ $store->user->last_name }}</td>
                                                 <td>{{ $store->user->username }}</td>
                                                 <td>{{ $store->name }}</td>
-                                                <td>{{ $store->description }}</td>
+                                                <td>{{ $store->description ?: 'None' }}</td>
                                                 <td>
                                                     <a class="btn btn-primary" href="{{ route('admin.store.details', ['store_id' => $store->id]) }}">Detail</a>
                                                 </td>
