@@ -78,7 +78,7 @@
                   </a>
             </li>
             <li class="nav-item">
-                  <a href="#" class="nav-link link-dark">
+                  <a href="{{ route('admin.reports') }}" class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.reports') ? 'active' : 'link-dark' }}">
                         <i class="fa-solid fa-file-pen"></i>
                         Reports
                   </a>

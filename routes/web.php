@@ -15,6 +15,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\POSSettingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RestTimeController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\studentAuth\StudentLoginController;
@@ -196,6 +197,9 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/admin/payment/stripe', [PaymentController::class, 'indexStripe'])->name('admin.payment.stripe');
             Route::post('/admin/payment/stripe/save', [PaymentController::class, 'saveStripe'])->name('admin.payment.stripe.save');
 
+            // reports
+            Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.reports');
+
             // media manager
             Route::get('/admin/media_manager', [MediaController::class, 'index'])->name('admin.media_manager');
 
@@ -254,7 +258,20 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('/test', function () {
-    $now = Carbon::now();
-    $test = Carbon::now()->addHours(2);
-    dd($now, $test, $test->gt($now));
+    $end = Carbon::today()->startOfMonth();
+    $start = Carbon::today()->addYears(-3)->startOfMonth();
+
+    while($start->lt($end)){
+        echo $start->year . ' ' . $start->englishMonth . ' ' . $start->day . '<br>';
+
+        for($i = 0; $i < 10; $i++){
+            $temp = $start->copy();
+            $temp->addDays(rand(0, 27));
+            echo $temp->format('Y-m-d h:ia') . '<br>';
+        }
+
+        $start->addMonth();
+    }
+
+    dd($start, $end);
 });
