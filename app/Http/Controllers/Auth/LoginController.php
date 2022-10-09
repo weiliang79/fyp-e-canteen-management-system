@@ -52,6 +52,21 @@ class LoginController extends Controller
     }
 
     /**
+     * Show the application's login form.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showLoginForm()
+    {
+        if(Auth::guard('student')->check()){
+            return redirect()->back()->with('swal-warning', 'To view the page, please logout and login with the designated account.');
+        } else if (Auth::guard('web')->check()) {
+            return redirect()->back()->with('swal-warning', 'You had already logged in.');
+        }
+        return view('auth.login');
+    }
+
+    /**
      * The user has been authenticated.
      *
      * @param  \Illuminate\Http\Request  $request

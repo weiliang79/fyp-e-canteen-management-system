@@ -30,6 +30,11 @@ class StudentLoginController extends Controller
      */
     public function showLoginForm()
     {
+        if(Auth::guard('student')->check()){
+            return redirect()->route('landing')->with('swal-warning', 'You had already logged in.');
+        } else if (Auth::guard('web')->check()) {
+            return redirect()->route('landing')->with('swal-warning', 'To view the page, please logout and login with the designated account.');
+        }
         return view('auth.student.login');
     }
 
