@@ -55,7 +55,7 @@
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <p class="mb-0">Status</p>
-                                        <p class="mb-0">{{ $order->getStatusString() }}</p>
+                                        <p class="mb-0 badge {{ $order->getStatusBg() }}" style="font-size: 0.8rem;">{{ $order->getStatusString() }}</p>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <p class="mb-0">Created At</p>
@@ -82,6 +82,7 @@
                                                 <th>Option</th>
                                                 <th>Notes</th>
                                                 <th>Price({{ config('payment.currency_symbol') }})</th>
+                                                <th>Status</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -99,6 +100,11 @@
                                                     </td>
                                                     <td>{{ $detail->notes ?: 'None' }}</td>
                                                     <td>{{ $detail->price }}</td>
+                                                    <td>
+                                                        <span class="badge {{ $detail->is_pickup ? 'bg-success' : 'bg-error' }}" style="font-size: 0.8rem">
+                                                            {{ $detail->is_pickup ? 'Picked Up' : 'Not Pick Up' }}
+                                                        </span>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                             </tbody>

@@ -29,7 +29,11 @@
                                                 <td>{{ $product->name }}</td>
                                                 <td>{{ $product->productCategory->name }}</td>
                                                 <td>{{ $product->price }}</td>
-                                                <td>{{ $product->status ? 'Available' : 'Not Available' }}</td>
+                                                <td>
+                                                    <span class="badge {{ $product->status ? 'bg-success' : 'bg-error' }}" style="font-size: 0.8rem;">
+                                                        {{ $product->status ? 'Available' : 'Not Available' }}
+                                                    </span>
+                                                </td>
                                                 <td>
                                                       <a class="btn btn-primary" href="{{ route('food_seller.menus.product.edit', ['id' => $product->id]) }}">Edit</a>
                                                       <button class="btn btn-danger" type="button" onclick="promptDeleteWarning(this)" data-id="{{ $product->id }}">Delete</button>
