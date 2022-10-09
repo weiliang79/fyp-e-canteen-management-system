@@ -212,31 +212,32 @@
                             return data;
                         },
                     }).then((swalResult) => {
-                        console.log(swalResult.value);
 
-                        axios.post(
-                            '{{ route("student.menus.add_cart") }}',
-                            swalResult.value
+                        if(swalResult.isConfirmed){
+                            axios.post(
+                                '{{ route("student.menus.add_cart") }}',
+                                swalResult.value
                             )
-                            .then(function (response1) {
-                                SwalWithBootstrap.fire({
-                                    title: 'Success',
-                                    html: response1.data,
-                                    icon: 'success',
-                                }).then((result) => {
-                                    window.location.reload();
+                                .then(function (response1) {
+                                    SwalWithBootstrap.fire({
+                                        title: 'Success',
+                                        html: response1.data,
+                                        icon: 'success',
+                                    }).then((result) => {
+                                        window.location.reload();
+                                    });
+                                })
+                                .catch(function (error1) {
+                                    console.log(error1);
+                                    SwalWithBootstrap.fire({
+                                        title: 'Error',
+                                        html: error1.message,
+                                        icon: 'error',
+                                    }).then((result) => {
+                                        window.location.reload();
+                                    });
                                 });
-                            })
-                            .catch(function (error1) {
-                                console.log(error1);
-                                SwalWithBootstrap.fire({
-                                    title: 'Error',
-                                    html: error1.message,
-                                    icon: 'error',
-                                }).then((result) => {
-                                    window.location.reload();
-                                });
-                            });
+                        }
 
                     });
                 })
