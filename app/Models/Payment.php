@@ -56,7 +56,7 @@ class Payment extends Model
     public function getStatusBg(){
         return match ($this->status) {
             Payment::STATUS_PENDING => 'bg-warning',
-            Payment::STATUS_FAILURE, Payment::STATUS_ABORT => 'bg-error',
+            Payment::STATUS_FAILURE, Payment::STATUS_ABORT => 'bg-danger',
             Payment::STATUS_SUCCESS => 'bg-success',
             default => '',
         };

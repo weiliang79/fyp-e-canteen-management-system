@@ -62,7 +62,7 @@ class Order extends Model
     public function getStatusBg(){
         return match ($this->status) {
             Order::PAYMENT_PENDING, Order::PICKUP_PARTIALLY => 'bg-warning',
-            Order::PAYMENT_FAILURE => 'bg-error',
+            Order::PAYMENT_FAILURE => 'bg-danger',
             Order::PAYMENT_SUCCESS, Order::PICKUP_ALL => 'bg-success',
             default => '',
         };
