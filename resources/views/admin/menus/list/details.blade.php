@@ -43,7 +43,11 @@
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <p class="mb-0">Status</p>
-                                        <p class="mb-0">{{ $product->status ? 'Available' : 'Not Available' }}</p>
+                                        <p class="mb-0">
+                                            <span class="badge {{ $product->status ? 'bg-success' : 'bg-error' }}" style="font-size: 0.8rem;">
+                                                {{ $product->status ? 'Available' : 'Not Available' }}
+                                            </span>
+                                        </p>
                                     </li>
                                 </ul>
                             </div>
@@ -138,7 +142,11 @@
                                                         <td>{{ $orderDetail->order->student->first_name }} {{ $orderDetail->order->student->last_name }}</td>
                                                         <td>{{ $orderDetail->order->pick_up_start->format('Y/m/d h:ia') }} to {{ $orderDetail->order->pick_up_end->format('Y/m/d h:ia') }}</td>
                                                         <td>{{ $orderDetail->order->total_price }}</td>
-                                                        <td>{{ $orderDetail->order->getStatusString() }}</td>
+                                                        <td>
+                                                            <span class="badge {{ $orderDetail->order->getStatusBg() }}" style="font-size: 0.6rem;">
+                                                                {{ $orderDetail->order->getStatusString() }}
+                                                            </span>
+                                                        </td>
                                                         <td>{{ $orderDetail->order->created_at->format('Y/m/d h:ia') }}</td>
                                                         <td>
                                                             <a class="btn btn-primary" href="{{ route('admin.order.details', ['order_id' => $orderDetail->order->id]) }}">Detail</a>
