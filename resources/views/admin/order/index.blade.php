@@ -31,7 +31,11 @@
                                                 <td>{{ $order->student->first_name }} {{ $order->student->last_name }}</td>
                                                 <td>{{ $order->pick_up_start->format('Y/m/d h:ia') }} to {{ $order->pick_up_end->format('Y/m/d h:ia') }}</td>
                                                 <td>{{ $order->total_price }}</td>
-                                                <td>{{ $order->getStatusString() }}</td>
+                                                <td>
+                                                    <span class="badge {{ $order->getStatusBg() }}" style="font-size: 0.8rem;">
+                                                        {{ $order->getStatusString() }}
+                                                    </span>
+                                                </td>
                                                 <td>{{ $order->created_at->format('Y/m/d h:ia') }}</td>
                                                 <td>
                                                       <a class="btn btn-primary" href="{{ route('admin.order.details', ['order_id' => $order->id]) }}">Details</a>
