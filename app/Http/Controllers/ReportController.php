@@ -93,13 +93,21 @@ class ReportController extends Controller
                     'data' => $countData,
                 ], [
                     'type' => 'line',
-                    'label' => 'Order Sales',
+                    'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
                     'backgroundColor' => 'rgb(11, 94, 215)',
                     'borderColor' => 'rgb(11, 94, 215)',
                     'data' => $salesData,
                 ]],
                 'labels' => $label,
             ],
+            'options' => [
+                'plugins' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Monthly Sales in ' . $date->format('Y'),
+                    ]
+                ]
+            ]
         ];
 
         return $result;
