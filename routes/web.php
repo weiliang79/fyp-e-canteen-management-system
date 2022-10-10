@@ -199,6 +199,7 @@ Route::group(['middleware' => ['auth']], function () {
 
             // reports
             Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.reports');
+            Route::get('/admin/reports/get_data', [ReportController::class, 'getData'])->name('admin.reports.get_data');
 
             // media manager
             Route::get('/admin/media_manager', [MediaController::class, 'index'])->name('admin.media_manager');
@@ -258,20 +259,40 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('/test', function () {
-    $end = Carbon::today()->startOfMonth();
-    $start = Carbon::today()->addYears(-3)->startOfMonth();
+    $date = Carbon::now()->startOfYear();
+    $label = [];
+    $countData = [];
+    $salesData = [];
+    $tempStart = $date->copy();
 
-    while($start->lt($end)){
-        echo $start->year . ' ' . $start->englishMonth . ' ' . $start->day . '<br>';
+    while($tempStart->month <= 12 && $tempStart->year <= $date->year){
+        $tempEnd = $tempStart->copy();
+        $tempEnd->endOfMonth();
+        array_push($label, $tempStart->englishMonth);
+        $count = \App\Models\Order::whereBetween('created_at', [$tempStart, $tempEnd])->count();
+        $sales = \App\Models\Order::whereBetween('created_at', [$tempStart, $tempEnd])->sum('total_price');
+        array_push($countData, $count);
+        array_push($salesData, $sales);
 
-        for($i = 0; $i < 10; $i++){
-            $temp = $start->copy();
-            $temp->addDays(rand(0, 27));
-            echo $temp->format('Y-m-d h:ia') . '<br>';
-        }
-
-        $start->addMonth();
+        $tempStart->addMonth();
     }
 
-    dd($start, $end);
+    $result = [
+        'data' => [
+            'datasets' => [[
+                'type' => 'line',
+                'label' => 'Order count',
+                'backgroundColor' => 'rgb(255, 99, 132)',
+                'borderColor' => 'rgb(255, 99, 132)',
+                'data' => $countData,
+            ], [
+                'type' => 'line',
+                'label' => 'Order Sales',
+                'data' => $salesData,
+            ]],
+            'labels' => $label,
+        ],
+    ];
+
+    dd($label, $countData, $salesData, json_encode($result));
 });
