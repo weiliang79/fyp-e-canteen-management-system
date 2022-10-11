@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LandingDesign;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
     public function index(){
-        return view('landing');
+        $design = LandingDesign::first();
+        return view('landing', compact('design'));
     }
 }

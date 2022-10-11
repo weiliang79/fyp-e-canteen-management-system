@@ -200,7 +200,9 @@ Route::group(['middleware' => ['auth']], function () {
 
             // design
             Route::get('/admin/design/landing', [DesignController::class, 'landingIndex'])->name('admin.design.landing');
-            
+            Route::post('/admin/design/landing/update', [DesignController::class, 'landingUpdate'])->name('admin.design.landing.update');
+            Route::get('/admin/design/information', [DesignController::class, 'informationIndex'])->name('admin.design.information');
+
             // reports
             Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.reports');
             Route::get('/admin/reports/get_data', [ReportController::class, 'getData'])->name('admin.reports.get_data');
