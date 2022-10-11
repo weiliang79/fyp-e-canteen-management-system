@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App;
 use App\Models\Setting;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
@@ -36,5 +37,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         Cashier::useCustomerModel(Student::class);
+
+        Paginator::useBootstrap();
     }
 }
