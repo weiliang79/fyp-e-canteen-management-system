@@ -71,11 +71,18 @@
                         </ul>
                   </div>
             </li>
-            <li class="nav-item">
-                  <a href="#" class="nav-link link-dark">
+            <li class="nav-item dropdown">
+                  <a href="#" class="nav-link dropdown-toggle link-dark" id="designDropdown" data-bs-toggle="collapse" data-bs-target="#design-collapse" aria-expanded="false">
                         <i class="fa-solid fa-ruler-combined"></i>
                         Design
                   </a>
+                  <div class="collapse {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.design') ? 'show' : '' }}" id="design-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                              <li>
+                                    <a class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.design.landing') ? 'active' : 'link-dark' }} mx-4" href="{{ route('admin.design.landing') }}">Landing</a>
+                              </li>
+                        </ul>
+                  </div>
             </li>
             <li class="nav-item">
                   <a href="{{ route('admin.reports') }}" class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.reports') ? 'active' : 'link-dark' }}">

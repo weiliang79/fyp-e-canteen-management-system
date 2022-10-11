@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DesignController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\MediaController;
@@ -197,6 +198,9 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/admin/payment/stripe', [PaymentController::class, 'indexStripe'])->name('admin.payment.stripe');
             Route::post('/admin/payment/stripe/save', [PaymentController::class, 'saveStripe'])->name('admin.payment.stripe.save');
 
+            // design
+            Route::get('/admin/design/landing', [DesignController::class, 'landingIndex'])->name('admin.design.landing');
+            
             // reports
             Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.reports');
             Route::get('/admin/reports/get_data', [ReportController::class, 'getData'])->name('admin.reports.get_data');
