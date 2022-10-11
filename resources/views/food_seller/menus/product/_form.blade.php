@@ -123,6 +123,13 @@
                   </div>
             </div>
 
+            {{-- image preview --}}
+            <div class="row mb-3 justify-content-center">
+                  <div class="col-1 " id="holder">
+
+                  </div>
+            </div>
+
             <div class="row mb-3">
                   <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Status') }}</label>
 
