@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LandingDesign extends Model
+class InformationPageDesign extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -15,8 +16,7 @@ class LandingDesign extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'banner_path',
-        'slogan',
-        'description',
+        'title',
+        'content',
     ];
 }
