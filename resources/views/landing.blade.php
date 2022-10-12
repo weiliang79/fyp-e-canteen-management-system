@@ -15,11 +15,15 @@
             </div>
       </div>
 
+      @if($design !== null)
+      @if($design->description !== null)
       <div class="row my-4">
             <div class="col">
                 {!! $design !== null ? $design->description : '' !!}
             </div>
       </div>
+      @endif
+      @endif
 </div>
 
 @endsection
