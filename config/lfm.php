@@ -58,6 +58,8 @@ return [
                 'image/pjpeg',
                 'image/png',
                 'image/gif',
+                'image/x-icon',
+                'image/vnd.microsoft.icon',
             ],
         ],
         /*'image' => [
@@ -124,7 +126,7 @@ return [
      */
 
     // If true, image thumbnails would be created during upload
-    'should_create_thumbnails' => true,
+    'should_create_thumbnails' => false,
 
     'thumb_folder_name'        => 'thumbs',
 
@@ -156,6 +158,7 @@ return [
         'jpg'  => 'JPEG Image',
         'jpeg' => 'JPEG Image',
         'png'  => 'PNG Image',
+        'ico'  => 'Icon',
         'ppt'  => 'Microsoft PowerPoint',
         'pptx' => 'Microsoft PowerPoint',
     ],
