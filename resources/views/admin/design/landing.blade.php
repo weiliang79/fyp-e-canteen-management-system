@@ -32,7 +32,7 @@
                                                     <i class="fa-solid fa-chalkboard fa-fw"></i>
                                                 </div>
 
-                                                <input id="banner_path" class="form-control @error('banner_path') is-invalid @enderror" type="text" name="banner_path" value="{{ old('banner_path', $design ? $design->banner_path : '') }}" placeholder="Banner Image Path">
+                                                <input id="banner_path" class="form-control @error('banner_path') is-invalid @enderror" type="text" name="banner_path" value="{{ old('banner_path', $design ? Request::root() . '/' . $design->banner_path : '') }}" placeholder="Banner Image Path">
                                                 <button class="btn btn-primary" id="lfm" data-input="banner_path" data-preview="holder">Choose Image</button>
 
                                                 @error('banner_path')
