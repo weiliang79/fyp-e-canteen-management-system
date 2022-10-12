@@ -44,6 +44,7 @@ use Carbon\Carbon;
 */
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+Route::get('/information/{id}/{title}', [LandingController::class, 'information'])->name('landing.information');
 
 //Auth::routes();       //laravel UI default routes
 
@@ -202,6 +203,10 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/admin/design/landing', [DesignController::class, 'landingIndex'])->name('admin.design.landing');
             Route::post('/admin/design/landing/update', [DesignController::class, 'landingUpdate'])->name('admin.design.landing.update');
             Route::get('/admin/design/information', [DesignController::class, 'informationIndex'])->name('admin.design.information');
+            Route::get('/admin/design/information/create', [DesignController::class, 'showInformationCreateForm'])->name('admin.design.information.create');
+            Route::post('/admin/design/information/store', [DesignController::class, 'storeInformation'])->name('admin.design.information.store');
+            Route::get('/admin/design/information/{id}/edit', [DesignController::class, 'showInformationEditForm'])->name('admin.design.information.edit');
+            Route::post('/admin/design/information/{id}/update', [DesignController::class, 'updateInformation'])->name('admin.design.information.update');
 
             // reports
             Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.reports');

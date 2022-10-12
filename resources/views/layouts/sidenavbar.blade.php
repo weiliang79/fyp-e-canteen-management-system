@@ -79,7 +79,10 @@
                   <div class="collapse {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.design') ? 'show' : '' }}" id="design-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                               <li>
-                                    <a class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.design.landing') ? 'active' : 'link-dark' }} mx-4" href="{{ route('admin.design.landing') }}">Landing</a>
+                                    <a class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.design.landing') ? 'active' : 'link-dark' }} mx-4" href="{{ route('admin.design.landing') }}">Landing Page</a>
+                              </li>
+                              <li>
+                                    <a class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.design.information') ? 'active' : 'link-dark' }} mx-4" href="{{ route('admin.design.information') }}">Information Page</a>
                               </li>
                         </ul>
                   </div>

@@ -8,8 +8,23 @@
                   <!-- Left Side Of Navbar -->
                   <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                              <a class="nav-link" href="{{ Route('student.menus') }}">Menu</a>
+                              <a id="InformationBarDropdown" class="nav-link" href="{{ Route('student.menus') }}">Menu</a>
                         </li>
+                        @if(\App\Models\InformationPageDesign::all()->count() !== 0)
+                        <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    Information
+                              </a>
+
+                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="InformationBarDropdown">
+                                    @foreach(\App\Models\InformationPageDesign::all() as $info)
+                                    <a class="dropdown-item" href="{{ route('landing.information', ['id' => $info->id, 'title' => $info->title]) }}">
+                                          {{ $info->title }}
+                                    </a>
+                                    @endforeach
+                              </div>
+                        </li>
+                        @endif
                   </ul>
 
                   <!-- Right Side Of Navbar -->
