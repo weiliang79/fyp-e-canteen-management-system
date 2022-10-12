@@ -50,7 +50,6 @@ class StoreController extends Controller
 
         $request->validate([
             'store_name' => 'required',
-            'logo_path' => 'nullable|url',
         ]);
 
         $user = User::find(Auth::user()->id);
@@ -64,7 +63,7 @@ class StoreController extends Controller
         } else {
             $store = $user->store;
             $store->name = $request->store_name;
-            $store->logo_path = $request->logo_path;
+            $store->logo_path = $request->logo_path ? substr(parse_url($request->logo_path, PHP_URL_PATH), 1) : null;
             $store->description = $request->description;
             $store->save();
         }
