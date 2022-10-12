@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             PaymentTypeSeeder::class,
             POSSettingsSeeder::class,
             OrderSeeder::class,
+            InformationDesignSeeder::class,
         ]);
     }
 }
