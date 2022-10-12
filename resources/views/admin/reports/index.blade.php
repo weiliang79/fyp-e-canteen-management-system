@@ -35,23 +35,43 @@
                         </div>
                     </div>
 
-                    <div class="row row-cols-2">
-                        <div id="year_monthlySalesCol" class="col" hidden>
-                            <canvas id="year_monthlySalesChart"></canvas>
+                    <div id="yearly" hidden>
+                        <div class="row justify-content-center mb-4">
+                            <div class="col-6">
+                                <canvas id="year_monthlySalesChart"></canvas>
+                            </div>
                         </div>
-                        <div id="year_storeSalesCol" class="col" hidden>
-                            <canvas id="year_storesSalesChart"></canvas>
+
+                        <div class="row justify-content-center mb-4">
+                            <div class="col-6">
+                                <canvas id="year_storesSalesChart"></canvas>
+                            </div>
                         </div>
-                        <div id="year_productCategoriesSalesCol" class="col" hidden>
-                            <canvas id="year_productCategoriesSalesChart"></canvas>
+
+                        <div class="row justify-content-center mb-4">
+                            <div class="col-6">
+                                <canvas id="year_productCategoriesSalesChart"></canvas>
+                            </div>
                         </div>
-                        <div id="month_productCategoriesSalesCol" class="col" hidden>
-                            <canvas id="month_productCategoriesSalesChart"></canvas>
-                        </div>
-                        <div id="month_storesSalesCol" class="col" hidden>
-                            <canvas id="month_storesSalesChart"></canvas>
-                        </div>
+
                     </div>
+
+                    <div id="monthly" hidden>
+
+                        <div class="row justify-content-center mb-4">
+                            <div class="col-6">
+                                <canvas id="month_storesSalesChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center mb-4">
+                            <div class="col-6">
+                                <canvas id="month_productCategoriesSalesChart"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -59,11 +79,7 @@
 </div>
 
 <script>
-    let year_monthlySalesCol = document.getElementById('year_monthlySalesCol'),
-        year_storeSalesCol = document.getElementById('year_storeSalesCol'),
-        year_productCategoriesSalesCol = document.getElementById('year_productCategoriesSalesCol'),
-        month_productCategoriesSalesCol = document.getElementById('month_productCategoriesSalesCol'),
-        month_storesSalesCol = document.getElementById('month_storesSalesCol');
+    let yearly = document.getElementById('yearly'), monthly = document.getElementById('monthly');
 
     let year_monthlySalesChart = null,
         year_storeSalesChart = null,
@@ -122,19 +138,13 @@
     }
 
     function showYearChart() {
-        year_monthlySalesCol.hidden = false;
-        year_storeSalesCol.hidden = false;
-        year_productCategoriesSalesCol.hidden = false;
-        month_productCategoriesSalesCol.hidden = true;
-        month_storesSalesCol.hidden = true;
+        yearly.hidden = false;
+        monthly.hidden = true;
     }
 
     function showMonthChart() {
-        year_monthlySalesCol.hidden = true;
-        year_storeSalesCol.hidden = true;
-        year_productCategoriesSalesCol.hidden = true;
-        month_productCategoriesSalesCol.hidden = false;
-        month_storesSalesCol.hidden = false;
+        yearly.hidden = true;
+        monthly.hidden = false;
     }
 </script>
 

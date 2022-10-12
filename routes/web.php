@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\controllers\studentAuth;
 use App\Http\Controllers\StudentMenuController;
 use App\Http\Controllers\StudentProfileController;
+use App\Models\OrderDetail;
 use App\Models\PaymentDetail2c2p;
 use App\Models\Student;
 use App\Models\User;
@@ -272,7 +273,5 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('/test', function () {
-    $date = Carbon::now()->startOfYear();
-    $end = Carbon::now()->endOfYear();
-    dd($date, $end);
+    dd(Product::withCount('orderDetails')->get());
 });
