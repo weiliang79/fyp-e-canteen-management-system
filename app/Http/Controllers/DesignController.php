@@ -2,12 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GeneralDesign;
 use App\Models\InformationPageDesign;
 use App\Models\LandingDesign;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class DesignController extends Controller
 {
+
+    public function generalIndex () {
+        $designs = GeneralDesign::all();
+        return view('admin.design.general', compact('designs'));
+    }
+
+    public function updateGeneral(Request $request) {
+        $split = explode('.', parse_url($request->app_icon_path, PHP_URL_PATH));
+
+        if($request->app_icon_path !== null) {
+            if(end($split) !== 'ico'){
+                throw ValidationException::withMessages([
+                    'app_icon_path' => 'The file must be in .ico type.',
+                ]);
+            }
+            
+            $design = GeneralDesign::firstOrCreate(['name' => 'app_icon']);
+            $design->path = substr(parse_url($request->app_icon_path, PHP_URL_PATH), 1);
+            $design->save();
+        } else {
+            $design = GeneralDesign::firstOrCreate(['name' => 'app_icon']);
+            $design->path = null;
+            $design->save();
+        }
+
+        return redirect()->route('admin.design.general')->with('swal-success', 'General Design updated successful.');
+    }
+
     public function landingIndex () {
         $design = LandingDesign::first();
         return view('admin.design.landing', compact('design'));

@@ -200,6 +200,8 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/admin/payment/stripe/save', [PaymentController::class, 'saveStripe'])->name('admin.payment.stripe.save');
 
             // design
+            Route::get('/admin/design/general', [DesignController::class, 'generalIndex'])->name('admin.design.general');
+            Route::post('/admin/design/general/update', [DesignController::class, 'updateGeneral'])->name('admin.design.general.update');
             Route::get('/admin/design/landing', [DesignController::class, 'landingIndex'])->name('admin.design.landing');
             Route::post('/admin/design/landing/update', [DesignController::class, 'landingUpdate'])->name('admin.design.landing.update');
             Route::get('/admin/design/information', [DesignController::class, 'informationIndex'])->name('admin.design.information');

@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="shortcut icon" href="{{ \App\Models\GeneralDesign::where('name', 'app_icon')->count() !== 0 ? (\App\Models\GeneralDesign::where('name', 'app_icon')->first()->path !== null ? asset('/' . \App\Models\GeneralDesign::where('name', 'app_icon')->first()->path) : asset('/storage/defaults/favicon.ico') ) : asset('/storage/defaults/favicon.ico') }}" type="image/x-icon">
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

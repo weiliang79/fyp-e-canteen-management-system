@@ -10,6 +10,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <link rel="shortcut icon" href="{{ \App\Models\GeneralDesign::where('name', 'app_icon')->count() !== 0 ? (\App\Models\GeneralDesign::where('name', 'app_icon')->first()->path !== null ? asset('/' . \App\Models\GeneralDesign::where('name', 'app_icon')->first()->path) : asset('/storage/defaults/favicon.ico') ) : asset('/storage/defaults/favicon.ico') }}" type="image/x-icon">
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
