@@ -41,6 +41,7 @@
                                                 </span>
                                                 @enderror
                                             </div>
+                                            <small class="form-text text-muted">*The Image will be decrease brightness by 50% at Landing Page.</small>
                                         </div>
                                     </div>
 
