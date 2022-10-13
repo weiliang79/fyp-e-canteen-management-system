@@ -54,6 +54,12 @@
                             </div>
                         </div>
 
+                        <div class="row justify-content-center mb-4">
+                            <div class="col-6">
+                                <canvas id="year_topProductsSalesChart"></canvas>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div id="monthly" hidden>
@@ -67,6 +73,12 @@
                         <div class="row justify-content-center mb-4">
                             <div class="col-6">
                                 <canvas id="month_productCategoriesSalesChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center mb-4">
+                            <div class="col-6">
+                                <canvas id="month_topProductsSalesChart"></canvas>
                             </div>
                         </div>
 
@@ -84,8 +96,10 @@
     let year_monthlySalesChart = null,
         year_storeSalesChart = null,
         year_productCategoriesSalesChart = null,
+        year_topProductsSalesChart = null,
         month_productCategoriesSalesChart = null,
-        month_storesSalesChart = null;
+        month_storesSalesChart = null,
+        month_topProductsSalesChart = null;
 
     function getData() {
         console.log('getting data...');
@@ -103,10 +117,19 @@
                     year_monthlySalesChart = new Chart(document.getElementById('year_monthlySalesChart'), response.data.monthlySales);
                     year_storeSalesChart = new Chart(document.getElementById('year_storesSalesChart'), response.data.storesSales);
                     year_productCategoriesSalesChart = new Chart(document.getElementById('year_productCategoriesSalesChart'), response.data.productCategoriesSales);
+
+                    if(response.data.topProductsSales !== null){
+                        year_topProductsSalesChart = new Chart(document.getElementById('year_topProductsSalesChart'), response.data.topProductsSales);
+                    }
+
                 } else {
                     showMonthChart();
                     month_productCategoriesSalesChart = new Chart(document.getElementById('month_productCategoriesSalesChart'), response.data.productCategoriesSales);
                     month_storesSalesChart = new Chart(document.getElementById('month_storesSalesChart'), response.data.storesSales);
+
+                    if(response.data.topProductsSales !== null){
+                        month_topProductsSalesChart = new Chart(document.getElementById('month_topProductsSalesChart'), response.data.topProductsSales);
+                    }
                 }
 
             })
@@ -128,12 +151,20 @@
             year_productCategoriesSalesChart.destroy();
         }
 
+        if (year_topProductsSalesChart !== null) {
+            year_topProductsSalesChart.destroy();
+        }
+
         if (month_productCategoriesSalesChart !== null) {
             month_productCategoriesSalesChart.destroy();
         }
 
         if (month_storesSalesChart !== null) {
             month_storesSalesChart.destroy();
+        }
+
+        if (month_topProductsSalesChart !== null) {
+            month_topProductsSalesChart.destroy();
         }
     }
 

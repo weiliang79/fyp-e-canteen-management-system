@@ -258,6 +258,10 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/food_seller/order', [OrderController::class, 'foodSellerIndex'])->name('food_seller.order');
             Route::get('/food_seller/order/{order_id}/details', [OrderController::class, 'foodSellerDetails'])->name('food_seller.order.details');
 
+            // reports
+            Route::get('/food_seller/reports', [ReportController::class, 'index'])->name('food_seller.reports');
+            Route::get('/food_seller/reports/get_data', [ReportController::class, 'getData'])->name('food_seller.reports.get_data');
+
             // media manager
             Route::get('/food_seller/media_manager', [MediaController::class, 'index'])->name('food_seller.media_manager');
         });
@@ -273,5 +277,8 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('/test', function () {
-    dd(Product::withCount('orderDetails')->get());
+    $start = Carbon::now()->startOfMonth();
+    dd($start->endOfDay());
+
+
 });

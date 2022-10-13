@@ -146,7 +146,7 @@
                   </a>
             </li>
             <li class="nav-item">
-                  <a href="#" class="nav-link link-dark">
+                  <a href="{{ route('food_seller.reports') }}" class="nav-link {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'food_seller.reports') ? 'active' : 'link-dark' }}">
                         <i class="fa-solid fa-file-pen"></i>
                         Reports
                   </a>
