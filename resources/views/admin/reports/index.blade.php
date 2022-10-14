@@ -391,7 +391,7 @@
             }
         }
 
-        pdfMake.createPdf(dd).open();
+        pdfMake.createPdf(dd).download(result.appName + ' - ' + result.title);
 
     }
 
