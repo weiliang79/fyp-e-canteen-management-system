@@ -43,7 +43,7 @@ window.$ = jQuery;
 import DataTable from 'datatables.net-bs5';
 DataTable(window, window.$);
 
-//sweetalert2
+// sweetalert2
 import Swal from 'sweetalert2';
 window.Swal = Swal;
 
@@ -64,7 +64,7 @@ window.flatpickr = flatpickr;
 import {loadStripe} from "@stripe/stripe-js";
 window.loadStripe = loadStripe;
 
-//dateFormat
+// dateFormat
 import dateFormat from 'dateformat';
 window.dateFormat = dateFormat;
 
@@ -72,3 +72,11 @@ window.dateFormat = dateFormat;
 import {Chart, registerables} from 'chart.js';
 Chart.register(...registerables);
 window.Chart = Chart;
+
+// pdfmake
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import pdfSize from 'pdfmake/src/standardPageSizes';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+window.pdfMake = pdfMake;
+window.pdfSize = pdfSize;

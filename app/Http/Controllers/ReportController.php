@@ -17,7 +17,7 @@ class ReportController extends Controller
     public function index()
     {
 
-        if(Auth::user()->isAdmin()){
+        if (Auth::user()->isAdmin()) {
             $startDate = Order::orderBy('created_at', 'asc')->first()->created_at->firstOfMonth();
             $endDate = Order::orderBy('created_at', 'desc')->first()->created_at->firstOfMonth();
 
@@ -74,7 +74,6 @@ class ReportController extends Controller
 
             return view('food_seller.reports.index', compact('list'));
         }
-
     }
 
     public function getData(Request $request)
@@ -88,7 +87,7 @@ class ReportController extends Controller
         $reportDate = Carbon::createFromTimestamp($split[1]);
 
 
-        if(Auth::user()->isAdmin()){
+        if (Auth::user()->isAdmin()) {
 
             if ($split[0] === 'year') {
                 $monthlySales = $this->generateAdminMonthlySaleByYear($reportDate);
@@ -99,6 +98,8 @@ class ReportController extends Controller
                 return response()->json([
                     'message' => 'success',
                     'type' => 'year',
+                    'appName' => config('app.name'),
+                    'title' => 'Yearly Sales Report in ' . $reportDate->format('Y'),
                     'monthlySales' => $monthlySales,
                     'storesSales' => $storesSales,
                     'productCategoriesSales' => $productCategoriesSales,
@@ -112,15 +113,16 @@ class ReportController extends Controller
                 return response()->json([
                     'message' => 'success',
                     'type' => 'month',
+                    'appName' => config('app.name'),
+                    'title' => 'Monthly Sales Report in ' . $reportDate->format('Y F'),
                     'productCategoriesSales' => $productCategoriesSales,
                     'storesSales' => $storesSales,
                     'topProductsSales' => $topProductsSales,
                 ]);
             }
-
         } else {
             $store = User::find(Auth::user()->id)->store;
-            if($split[0] === 'year'){
+            if ($split[0] === 'year') {
                 $monthlySales = $this->generateFoodSellerMonthySalesByYear($reportDate, $store);
                 $productSales = $this->generateFoodSellerProductSalesByYear($reportDate, $store);
 
@@ -130,7 +132,6 @@ class ReportController extends Controller
                     'monthlySales' => $monthlySales,
                     'productSales' => $productSales,
                 ]);
-
             } else {
                 $dailySales = $this->generateFoodSellerDailySalesByMonth($reportDate, $store);
                 $productSales = $this->generateFoodSellerProductSalesByMonth($reportDate, $store);
@@ -145,7 +146,6 @@ class ReportController extends Controller
 
             return response()->json('test');
         }
-
     }
 
     private function generateAdminMonthlySaleByYear($date)
@@ -153,7 +153,10 @@ class ReportController extends Controller
         $label = [];
         $countData = [];
         $salesData = [];
+        $tableRow = [];
         $tempStart = $date->copy();
+
+        array_push($tableRow, ['Month', 'Order Count', 'Order Sales(' . config('payment.currency_symbol') . ')']);
 
         while ($tempStart->month <= 12 && $tempStart->year <= $date->year) {
             $tempEnd = $tempStart->copy();
@@ -163,35 +166,39 @@ class ReportController extends Controller
             $sales = \App\Models\Order::whereBetween('created_at', [$tempStart, $tempEnd])->sum('total_price');
             array_push($countData, $count);
             array_push($salesData, $sales);
+            array_push($tableRow, [$tempStart->englishMonth, $count, $sales]);
 
             $tempStart->addMonth();
         }
 
         $result = [
-            'data' => [
-                'datasets' => [[
-                    'type' => 'line',
-                    'label' => 'Order count',
-                    'backgroundColor' => 'rgb(255, 99, 132)',
-                    'borderColor' => 'rgb(255, 99, 132)',
-                    'data' => $countData,
-                ], [
-                    'type' => 'line',
-                    'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
-                    'backgroundColor' => 'rgb(11, 94, 215)',
-                    'borderColor' => 'rgb(11, 94, 215)',
-                    'data' => $salesData,
-                ]],
-                'labels' => $label,
+            'chart' => [
+                'data' => [
+                    'datasets' => [[
+                        'type' => 'line',
+                        'label' => 'Order count',
+                        'backgroundColor' => 'rgb(255, 99, 132)',
+                        'borderColor' => 'rgb(255, 99, 132)',
+                        'data' => $countData,
+                    ], [
+                        'type' => 'line',
+                        'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
+                        'backgroundColor' => 'rgb(11, 94, 215)',
+                        'borderColor' => 'rgb(11, 94, 215)',
+                        'data' => $salesData,
+                    ]],
+                    'labels' => $label,
+                ],
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Monthly Sales in ' . $date->format('Y'),
+                        ],
+                    ],
+                ],
             ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Monthly Sales in ' . $date->format('Y'),
-                    ]
-                ]
-            ]
+            'table' => $tableRow,
         ];
 
         return $result;
@@ -202,9 +209,12 @@ class ReportController extends Controller
         $label = [];
         $countData = [];
         $salesData = [];
+        $tableRow = [];
         $tempStart = $date->copy();
         $tempEnd = $date->copy();
         $tempEnd->endOfYear();
+
+        array_push($tableRow, ['Store', 'Order Count', 'Order Sales(' . config('payment.currency_symbol') . ')']);
 
         $stores = Store::all();
 
@@ -221,33 +231,37 @@ class ReportController extends Controller
             array_push($countData, $count);
             array_push($salesData, $sales);
             array_push($label, $store->name);
+            array_push($tableRow, [$store->name, $count, $sales]);
         }
 
         $result = [
-            'data' => [
-                'datasets' => [[
-                    'type' => 'bar',
-                    'label' => 'Order count',
-                    'backgroundColor' => 'rgb(255, 99, 132)',
-                    'borderColor' => 'rgb(255, 99, 132)',
-                    'data' => $countData,
-                ], [
-                    'type' => 'bar',
-                    'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
-                    'backgroundColor' => 'rgb(11, 94, 215)',
-                    'borderColor' => 'rgb(11, 94, 215)',
-                    'data' => $salesData,
-                ]],
-                'labels' => $label,
+            'chart' => [
+                'data' => [
+                    'datasets' => [[
+                        'type' => 'bar',
+                        'label' => 'Order count',
+                        'backgroundColor' => 'rgb(255, 99, 132)',
+                        'borderColor' => 'rgb(255, 99, 132)',
+                        'data' => $countData,
+                    ], [
+                        'type' => 'bar',
+                        'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
+                        'backgroundColor' => 'rgb(11, 94, 215)',
+                        'borderColor' => 'rgb(11, 94, 215)',
+                        'data' => $salesData,
+                    ]],
+                    'labels' => $label,
+                ],
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Sales Performance by Stores in ' . $date->format('Y'),
+                        ],
+                    ],
+                ],
             ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Sales Performance by Stores in ' . $date->format('Y'),
-                    ]
-                ]
-            ]
+            'table' => $tableRow,
         ];
 
         return $result;
@@ -258,104 +272,12 @@ class ReportController extends Controller
         $label = [];
         $countData = [];
         $backgroundColors = [];
+        $tableRow = [];
         $startDate = $date->copy();
         $endDate = $startDate->copy();
         $endDate->endOfYear();
 
-        $productCategories = ProductCategory::all();
-
-        foreach($productCategories as $category){
-            $count = OrderDetail::whereBetween('created_at', [$startDate, $endDate])->whereHas('product', function ($query) use ($category) {
-                $query->where('category_id', $category->id);
-            })->count();
-
-            array_push($label, $category->name);
-            array_push($countData, $count);
-
-            $color = 'rgb(' . random_int(0, 255) . ', ' . random_int(0, 255) . ', ' . random_int(0, 255) . ')';
-            array_push($backgroundColors, $color);
-        }
-
-        $result = [
-            'type' => 'pie',
-            'data' => [
-                'labels' => $label,
-                'datasets' => [
-                    [
-                        'label' => 'Product Category',
-                        'data' => $countData,
-                        'backgroundColor' => $backgroundColors,
-                        'hoverOffset' => 4,
-                    ],
-                ],
-            ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Product Category Sales in ' . $date->format('Y'),
-                    ]
-                ]
-            ]
-        ];
-
-        return $result;
-    }
-
-    private function generateAdminTopProductSalesByYear($date)
-    {
-        $label = [];
-        $countData = [];
-        $startDate = $date->copy();
-        $endDate = $date->copy();
-        $endDate->endOfYear();
-
-        if(Product::all()->count() <= 1){
-            return null;
-        }
-
-        $products = Product::withCount(['orderDetails as order_details_count' => function ($query) use ($startDate, $endDate) {
-            $query->whereBetween('created_at', [$startDate, $endDate]);
-        }])->orderBy('order_details_count', 'desc')->take(5)->get();
-
-        foreach($products as $product){
-            array_push($label, $product->name);
-            array_push($countData, $product->order_details_count);
-        }
-
-        $result = [
-            'type' => 'bar',
-            'data' => [
-                'labels' => $label,
-                'datasets' => [[
-                    'label' => 'Order Count',
-                    'data' => $countData,
-                    'backgroundColor' => 'rgb(11, 94, 215)',
-                    'borderColor' => 'rgb(11, 94, 215)',
-                ]],
-            ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Top ' . $products->count() . ' Products Sales in ' . $startDate->format('Y'),
-                    ],
-                ],
-            ],
-        ];
-
-        return $result;
-
-    }
-
-    private function generateAdminProductCategoriesSalesByMonth($date)
-    {
-        $label = [];
-        $countData = [];
-        $backgroundColors = [];
-        $startDate = $date->copy();
-        $endDate = $startDate->copy();
-        $endDate->endOfMonth();
+        array_push($tableRow, ['Product Category', 'Count']);
 
         $productCategories = ProductCategory::all();
 
@@ -369,29 +291,143 @@ class ReportController extends Controller
 
             $color = 'rgb(' . random_int(0, 255) . ', ' . random_int(0, 255) . ', ' . random_int(0, 255) . ')';
             array_push($backgroundColors, $color);
+
+            array_push($tableRow, [$category->name, $count]);
         }
 
         $result = [
-            'type' => 'pie',
-            'data' => [
-                'labels' => $label,
-                'datasets' => [
-                    [
-                        'label' => 'Product Category',
-                        'data' => $countData,
-                        'backgroundColor' => $backgroundColors,
-                        'hoverOffset' => 4,
+            'chart' => [
+                'type' => 'pie',
+                'data' => [
+                    'labels' => $label,
+                    'datasets' => [
+                        [
+                            'label' => 'Product Category',
+                            'data' => $countData,
+                            'backgroundColor' => $backgroundColors,
+                            'hoverOffset' => 4,
+                        ],
+                    ],
+                ],
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Product Category Sales in ' . $date->format('Y'),
+                        ],
                     ],
                 ],
             ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Product Category Sales in ' . $date->format('Y F'),
-                    ]
-                ]
-            ]
+            'table' => $tableRow,
+        ];
+
+        return $result;
+    }
+
+    private function generateAdminTopProductSalesByYear($date)
+    {
+        $label = [];
+        $countData = [];
+        $tableRow = [];
+        $startDate = $date->copy();
+        $endDate = $date->copy();
+        $endDate->endOfYear();
+
+        if (Product::all()->count() <= 1) {
+            return null;
+        }
+
+        array_push($tableRow, ['Product', 'Count']);
+
+        $products = Product::withCount(['orderDetails as order_details_count' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }])->orderBy('order_details_count', 'desc')->take(5)->get();
+
+        foreach ($products as $product) {
+            array_push($label, $product->name);
+            array_push($countData, $product->order_details_count);
+            array_push($tableRow, [$product->name, $product->order_details_count]);
+        }
+
+        $result = [
+            'chart' => [
+                'type' => 'bar',
+                'data' => [
+                    'labels' => $label,
+                    'datasets' => [[
+                        'label' => 'Order Count',
+                        'data' => $countData,
+                        'backgroundColor' => 'rgb(11, 94, 215)',
+                        'borderColor' => 'rgb(11, 94, 215)',
+                    ]],
+                ],
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Top ' . $products->count() . ' Products Sales in ' . $startDate->format('Y'),
+                        ],
+                    ],
+                ],
+            ],
+            'table' => $tableRow,
+        ];
+
+        return $result;
+    }
+
+    private function generateAdminProductCategoriesSalesByMonth($date)
+    {
+        $label = [];
+        $countData = [];
+        $backgroundColors = [];
+        $tableRow = [];
+        $startDate = $date->copy();
+        $endDate = $startDate->copy();
+        $endDate->endOfMonth();
+
+        array_push($tableRow, ['Product Category', 'Count']);
+
+        $productCategories = ProductCategory::all();
+
+        foreach ($productCategories as $category) {
+            $count = OrderDetail::whereBetween('created_at', [$startDate, $endDate])->whereHas('product', function ($query) use ($category) {
+                $query->where('category_id', $category->id);
+            })->count();
+
+            array_push($label, $category->name);
+            array_push($countData, $count);
+
+            $color = 'rgb(' . random_int(0, 255) . ', ' . random_int(0, 255) . ', ' . random_int(0, 255) . ')';
+            array_push($backgroundColors, $color);
+
+            array_push($tableRow, [$category->name, $count]);
+        }
+
+        $result = [
+            'chart' => [
+                'type' => 'pie',
+                'data' => [
+                    'labels' => $label,
+                    'datasets' => [
+                        [
+                            'label' => 'Product Category',
+                            'data' => $countData,
+                            'backgroundColor' => $backgroundColors,
+                            'hoverOffset' => 4,
+                        ],
+                    ],
+                ],
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Product Category Sales in ' . $date->format('Y F'),
+                        ],
+                    ],
+                ],
+            ],
+            'table' => $tableRow,
         ];
 
         return $result;
@@ -402,11 +438,14 @@ class ReportController extends Controller
         $label = [];
         $countData = [];
         $salesData = [];
+        $tableRow = [];
         $startDate = $date->copy();
         $endDate = $startDate->copy();
         $endDate->endOfMonth();
 
         $stores = Store::all();
+
+        array_push($tableRow, ['Store', 'Order Count', 'Order Sales(' . config('payment.currency_symbol') . ')']);
 
         foreach ($stores as $store) {
             $productIds = $store->products()->pluck('id')->toArray();
@@ -421,77 +460,90 @@ class ReportController extends Controller
             array_push($countData, $count);
             array_push($salesData, $sales);
             array_push($label, $store->name);
+
+            array_push($tableRow, [$store->name, $count, $sales]);
         }
 
         $result = [
-            'data' => [
-                'datasets' => [[
-                    'type' => 'bar',
-                    'label' => 'Order count',
-                    'backgroundColor' => 'rgb(255, 99, 132)',
-                    'borderColor' => 'rgb(255, 99, 132)',
-                    'data' => $countData,
-                ], [
-                    'type' => 'bar',
-                    'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
-                    'backgroundColor' => 'rgb(11, 94, 215)',
-                    'borderColor' => 'rgb(11, 94, 215)',
-                    'data' => $salesData,
-                ]],
-                'labels' => $label,
+            'chart' => [
+                'data' => [
+                    'datasets' => [[
+                        'type' => 'bar',
+                        'label' => 'Order count',
+                        'backgroundColor' => 'rgb(255, 99, 132)',
+                        'borderColor' => 'rgb(255, 99, 132)',
+                        'data' => $countData,
+                    ], [
+                        'type' => 'bar',
+                        'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
+                        'backgroundColor' => 'rgb(11, 94, 215)',
+                        'borderColor' => 'rgb(11, 94, 215)',
+                        'data' => $salesData,
+                    ]],
+                    'labels' => $label,
+                ],
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Sales Performance by Stores in ' . $date->format('Y F'),
+                        ],
+                    ],
+                ],
             ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Sales Performance by Stores in ' . $date->format('Y F'),
-                    ]
-                ]
-            ]
+            'table' => $tableRow,
         ];
 
         return $result;
     }
 
-    private function generateAdminTopProductsSalesByMonth ($date) {
+    private function generateAdminTopProductsSalesByMonth($date)
+    {
         $label = [];
         $countData = [];
+        $tableRow = [];
         $startDate = $date->copy();
         $endDate = $date->copy();
         $endDate->endOfMonth();
 
-        if(Product::all()->count() <= 1){
+        if (Product::all()->count() <= 1) {
             return null;
         }
+
+        array_push($tableRow, ['Product', 'Count']);
 
         $products = Product::withCount(['orderDetails as order_details_count' => function ($query) use ($startDate, $endDate) {
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }])->orderBy('order_details_count', 'desc')->take(5)->get();
 
-        foreach($products as $product){
+        foreach ($products as $product) {
             array_push($label, $product->name);
             array_push($countData, $product->order_details_count);
+            array_push($tableRow, [$product->name, $product->order_details_count]);
         }
 
         $result = [
-            'type' => 'bar',
-            'data' => [
-                'labels' => $label,
-                'datasets' => [[
-                    'label' => 'Order Count',
-                    'data' => $countData,
-                    'backgroundColor' => 'rgb(11, 94, 215)',
-                    'borderColor' => 'rgb(11, 94, 215)',
-                ]],
-            ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Top ' . $products->count() . ' Products Sales in ' . $startDate->format('Y'),
+            'chart' => [
+                'type' => 'bar',
+                'data' => [
+                    'labels' => $label,
+                    'datasets' => [[
+                        'label' => 'Order Count',
+                        'data' => $countData,
+                        'backgroundColor' => 'rgb(11, 94, 215)',
+                        'borderColor' => 'rgb(11, 94, 215)',
+                    ]],
+                ],
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Top ' . $products->count() . ' Products Sales in ' . $startDate->format('Y'),
+                        ],
                     ],
                 ],
             ],
+            'table' => $tableRow,
         ];
 
         return $result;
@@ -555,7 +607,8 @@ class ReportController extends Controller
         return $result;
     }
 
-    private function generateFoodSellerProductSalesByYear ($date, $store) {
+    private function generateFoodSellerProductSalesByYear($date, $store)
+    {
         $label = [];
         $countData = [];
         $backgroundColors = [];
@@ -565,7 +618,7 @@ class ReportController extends Controller
 
         $products = $store->products;
 
-        foreach($products as $product){
+        foreach ($products as $product) {
             $count = OrderDetail::whereBetween('created_at', [$startDate, $endDate])
                 ->where('product_id', $product->id)
                 ->count();
@@ -603,7 +656,7 @@ class ReportController extends Controller
         return $result;
     }
 
-    private function generateFoodSellerDailySalesByMonth ($date, $store)
+    private function generateFoodSellerDailySalesByMonth($date, $store)
     {
         $label = [];
         $countData = [];
@@ -612,7 +665,7 @@ class ReportController extends Controller
         $endOfDate = $date->copy()->endOfMonth()->day;
         $productIds = $store->products()->pluck('id')->toArray();
 
-        while($startDate->day <= $endOfDate && $startDate->month <= $date->month){
+        while ($startDate->day <= $endOfDate && $startDate->month <= $date->month) {
             $endDate = $startDate->copy();
             $endDate->endOfDay();
             array_push($label, $startDate->day);
@@ -673,7 +726,7 @@ class ReportController extends Controller
         return $result;
     }
 
-    private function generateFoodSellerProductSalesByMonth ($date, $store)
+    private function generateFoodSellerProductSalesByMonth($date, $store)
     {
         $label = [];
         $countData = [];
@@ -684,7 +737,7 @@ class ReportController extends Controller
 
         $products = $store->products;
 
-        foreach($products as $product){
+        foreach ($products as $product) {
             $count = OrderDetail::whereBetween('created_at', [$startDate, $endDate])
                 ->where('product_id', $product->id)
                 ->count();
