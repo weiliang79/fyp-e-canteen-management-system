@@ -129,6 +129,8 @@ class ReportController extends Controller
                 return response()->json([
                     'message' => 'success',
                     'type' => 'year',
+                    'appName' => config('app.name'),
+                    'title' => 'Yearly Sales Report in ' . $reportDate->format('Y'),
                     'monthlySales' => $monthlySales,
                     'productSales' => $productSales,
                 ]);
@@ -139,12 +141,12 @@ class ReportController extends Controller
                 return response()->json([
                     'message' => 'success',
                     'type' => 'month',
+                    'appName' => config('app.name'),
+                    'title' => 'Monthly Sales Report in ' . $reportDate->format('Y F'),
                     'dailySales' => $dailySales,
                     'productSales' => $productSales,
                 ]);
             }
-
-            return response()->json('test');
         }
     }
 
@@ -554,8 +556,11 @@ class ReportController extends Controller
         $label = [];
         $countData = [];
         $salesData = [];
+        $tableRow = [];
         $startDate = $date->copy();
         $productIds = $store->products()->pluck('id')->toArray();
+
+        array_push($tableRow, ['Month', 'Order Count', 'Order Sales(' . config('payment.currency_symbol') . ')']);
 
         while ($startDate->month <= 12 && $startDate->year <= $date->year) {
             $endDate = $startDate->copy();
@@ -574,34 +579,39 @@ class ReportController extends Controller
             array_push($countData, $count);
             array_push($salesData, $sales);
 
+            array_push($tableRow, [$startDate->englishMonth, $count, $sales]);
+
             $startDate->addMonth();
         }
 
         $result = [
-            'data' => [
-                'datasets' => [[
-                    'type' => 'line',
-                    'label' => 'Order count',
-                    'backgroundColor' => 'rgb(255, 99, 132)',
-                    'borderColor' => 'rgb(255, 99, 132)',
-                    'data' => $countData,
-                ], [
-                    'type' => 'line',
-                    'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
-                    'backgroundColor' => 'rgb(11, 94, 215)',
-                    'borderColor' => 'rgb(11, 94, 215)',
-                    'data' => $salesData,
-                ]],
-                'labels' => $label,
+            'chart' => [
+                'data' => [
+                    'datasets' => [[
+                        'type' => 'line',
+                        'label' => 'Order count',
+                        'backgroundColor' => 'rgb(255, 99, 132)',
+                        'borderColor' => 'rgb(255, 99, 132)',
+                        'data' => $countData,
+                    ], [
+                        'type' => 'line',
+                        'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
+                        'backgroundColor' => 'rgb(11, 94, 215)',
+                        'borderColor' => 'rgb(11, 94, 215)',
+                        'data' => $salesData,
+                    ]],
+                    'labels' => $label,
+                ],
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Monthly Sales in ' . $date->format('Y'),
+                        ],
+                    ],
+                ],
             ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Monthly Sales in ' . $date->format('Y'),
-                    ]
-                ]
-            ]
+            'table' => $tableRow,
         ];
 
         return $result;
@@ -612,9 +622,12 @@ class ReportController extends Controller
         $label = [];
         $countData = [];
         $backgroundColors = [];
+        $tableRow = [];
         $startDate = $date->copy();
         $endDate = $startDate->copy();
         $endDate->endOfYear();
+
+        array_push($tableRow, ['Product', 'Count']);
 
         $products = $store->products;
 
@@ -626,31 +639,36 @@ class ReportController extends Controller
             array_push($label, $product->name);
             array_push($countData, $count);
 
+            array_push($tableRow, [$product->name, $count]);
+
             $color = 'rgb(' . random_int(0, 255) . ', ' . random_int(0, 255) . ', ' . random_int(0, 255) . ')';
             array_push($backgroundColors, $color);
         }
 
         $result = [
-            'type' => 'pie',
-            'data' => [
-                'labels' => $label,
-                'datasets' => [
-                    [
-                        'label' => 'Product Category',
-                        'data' => $countData,
-                        'backgroundColor' => $backgroundColors,
-                        'hoverOffset' => 4,
+            'chart' => [
+                'type' => 'pie',
+                'data' => [
+                    'labels' => $label,
+                    'datasets' => [
+                        [
+                            'label' => 'Product Category',
+                            'data' => $countData,
+                            'backgroundColor' => $backgroundColors,
+                            'hoverOffset' => 4,
+                        ],
+                    ],
+                ],
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Product Sales in ' . $date->format('Y'),
+                        ],
                     ],
                 ],
             ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Product Sales in ' . $date->format('Y'),
-                    ]
-                ]
-            ]
+            'table' => $tableRow,
         ];
 
         return $result;
@@ -661,9 +679,12 @@ class ReportController extends Controller
         $label = [];
         $countData = [];
         $salesData = [];
+        $tableRow = [];
         $startDate = $date->copy();
         $endOfDate = $date->copy()->endOfMonth()->day;
         $productIds = $store->products()->pluck('id')->toArray();
+
+        array_push($tableRow, ['Day', 'Order Count', 'Order Sales(' . config('payment.currency_symbol') . ')']);
 
         while ($startDate->day <= $endOfDate && $startDate->month <= $date->month) {
             $endDate = $startDate->copy();
@@ -682,6 +703,8 @@ class ReportController extends Controller
             array_push($countData, $count);
             array_push($salesData, $sales);
 
+            array_push($tableRow, [$startDate->day, $count, $sales]);
+
             $startDate->addDay();
         }
 
@@ -690,37 +713,40 @@ class ReportController extends Controller
         array_push($salesData, array_sum($salesData));
 
         $result = [
-            'data' => [
-                'datasets' => [[
-                    'type' => 'line',
-                    'label' => 'Order count',
-                    'backgroundColor' => 'rgb(255, 99, 132)',
-                    'borderColor' => 'rgb(255, 99, 132)',
-                    'data' => $countData,
-                ], [
-                    'type' => 'line',
-                    'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
-                    'backgroundColor' => 'rgb(11, 94, 215)',
-                    'borderColor' => 'rgb(11, 94, 215)',
-                    'data' => $salesData,
-                ]],
-                'labels' => $label,
-            ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Daily Sales in ' . $date->format('Y'),
-                    ],
+            'chart' => [
+                'data' => [
+                    'datasets' => [[
+                        'type' => 'line',
+                        'label' => 'Order count',
+                        'backgroundColor' => 'rgb(255, 99, 132)',
+                        'borderColor' => 'rgb(255, 99, 132)',
+                        'data' => $countData,
+                    ], [
+                        'type' => 'line',
+                        'label' => 'Order Sales(' . config('payment.currency_symbol') . ')',
+                        'backgroundColor' => 'rgb(11, 94, 215)',
+                        'borderColor' => 'rgb(11, 94, 215)',
+                        'data' => $salesData,
+                    ]],
+                    'labels' => $label,
                 ],
-                'scales' => [
-                    'x' => [
-                        'ticks' => [
-                            'autoSkip' => false,
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Daily Sales in ' . $date->format('Y'),
+                        ],
+                    ],
+                    'scales' => [
+                        'x' => [
+                            'ticks' => [
+                                'autoSkip' => false,
+                            ],
                         ],
                     ],
                 ],
             ],
+            'table' => $tableRow,
         ];
 
         return $result;
@@ -731,9 +757,12 @@ class ReportController extends Controller
         $label = [];
         $countData = [];
         $backgroundColors = [];
+        $tableRow = [];
         $startDate = $date->copy();
         $endDate = $startDate->copy();
         $endDate->endOfMonth();
+
+        array_push($tableRow, ['Product', 'Count']);
 
         $products = $store->products;
 
@@ -745,31 +774,36 @@ class ReportController extends Controller
             array_push($label, $product->name);
             array_push($countData, $count);
 
+            array_push($tableRow, [$product->name, $count]);
+
             $color = 'rgb(' . random_int(0, 255) . ', ' . random_int(0, 255) . ', ' . random_int(0, 255) . ')';
             array_push($backgroundColors, $color);
         }
 
         $result = [
-            'type' => 'pie',
-            'data' => [
-                'labels' => $label,
-                'datasets' => [
-                    [
-                        'label' => 'Product Category',
-                        'data' => $countData,
-                        'backgroundColor' => $backgroundColors,
-                        'hoverOffset' => 4,
+            'chart' => [
+                'type' => 'pie',
+                'data' => [
+                    'labels' => $label,
+                    'datasets' => [
+                        [
+                            'label' => 'Product Category',
+                            'data' => $countData,
+                            'backgroundColor' => $backgroundColors,
+                            'hoverOffset' => 4,
+                        ],
+                    ],
+                ],
+                'options' => [
+                    'plugins' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => 'Product Sales in ' . $date->format('Y'),
+                        ],
                     ],
                 ],
             ],
-            'options' => [
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Product Sales in ' . $date->format('Y'),
-                    ]
-                ]
-            ]
+            'table' => $tableRow,
         ];
 
         return $result;
