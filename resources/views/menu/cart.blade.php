@@ -80,12 +80,12 @@
                               </div>
 
                               <div class="card-footer">
-                                    <button class="btn btn-primary" @if($carts->count() == 0 || (config('payment.maintenance_mode') && !Auth::guard('student')->user()->is_a_sandbox_student) || count($restDates) == 0) disabled @endif>Procced to Checkout</button>
+                                    <button class="btn btn-primary" @if($carts->count() == 0 || (config('payment.maintenance_mode') && !Auth::guard('student')->user()->is_a_sandbox_student || (config('payment.2c2p-status') == false && config('payment.stripe-status') == false)) || count($restDates) == 0) disabled @endif>Procced to Checkout</button>
                                     @if($carts->count() == 0)
                                     <div class="text-danger mt-2">
                                           <i class="fa-solid fa-circle-exclamation fa-lg"></i> The cart was empty.
                                     </div>
-                                    @elseif(config('payment.maintenance_mode') && !Auth::guard('student')->user()->is_a_sandbox_student)
+                                    @elseif(config('payment.maintenance_mode') && !Auth::guard('student')->user()->is_a_sandbox_student || (config('payment.2c2p-status') == false && config('payment.stripe-status') == false))
                                     <div class="text-danger mt-2">
                                           <i class="fa-solid fa-circle-exclamation fa-lg"></i> Currently checkout services are unavailable.
                                     </div>

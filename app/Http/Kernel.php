@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'emailVerified' => \App\Http\Middleware\EmailIsVerified::class,
         'isPaymentMaintenance' => \App\Http\Middleware\CheckForPaymentMaintenanceMode::class,
         'isOrderMatchStudent' => \App\Http\Middleware\OrderMatchedStudent::class,
+        'isAllPaymentEnabled' => \App\Http\Middleware\EnabledForAllPayment::class,
         'is2c2pEnabled' => \App\Http\Middleware\EnabledFor2c2p::class,
         'isStripeEnabled' => \App\Http\Middleware\EnabledForStripe::class,
         'isOrderCompleted' => \App\Http\Middleware\OrderIsCompleted::class,

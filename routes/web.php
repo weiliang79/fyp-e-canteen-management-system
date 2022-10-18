@@ -84,9 +84,6 @@ Route::post('/student/password/reset', [studentAuth\ResetPasswordController::cla
 //Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
 //Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 
-Route::group(['middleware' => ['guest']], function () {
-});
-
 Route::group(['middleware' => ['auth:student']], function () {
 
     // profile
@@ -104,7 +101,7 @@ Route::group(['middleware' => ['auth:student']], function () {
     Route::post('/menus/carts/delete', [StudentMenuController::class, 'deleteCartItem'])->name('student.menus.cart.delete');
     Route::post('/menus/carts/create_order', [StudentMenuController::class, 'createOrder'])->name('student.menus.create_order');
 
-    Route::group(['middleware' => ['isPaymentMaintenance', 'isOrderMatchStudent:student', 'isOrderCompleted']], function () {
+    Route::group(['middleware' => ['isPaymentMaintenance', 'isAllPaymentEnabled', 'isOrderMatchStudent:student', 'isOrderCompleted']], function () {
 
         // checkout
         Route::get('/checkout/{order_id}', [CheckoutController::class, 'index'])->name('student.checkout');
