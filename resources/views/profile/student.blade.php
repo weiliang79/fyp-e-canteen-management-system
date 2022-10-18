@@ -132,8 +132,7 @@
                                             @csrf
 
                                             <div class="row mb-3">
-                                                <label for="" class="col-md-3 col-form-label text-md-end">Email
-                                                    Address</label>
+                                                <label for="" class="col-md-3 col-form-label text-md-end">Email Address</label>
 
                                                 <div class="col-md-8">
                                                     <div id="email_group" class="input-group">
@@ -163,8 +162,7 @@
                                                 @error('code')
                                                 <div class="code_input">
                                                     <div class="row mb-3">
-                                                        <label for="" class="col-md-3 col-form-label text-md-end">Verification
-                                                            Code</label>
+                                                        <label for="" class="col-md-3 col-form-label text-md-end">Verification Code</label>
 
                                                         <div class="col-md-8">
                                                             <div class="input-group">
@@ -202,7 +200,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card">
+                                <div class="card mb-4">
                                     <div class="card-header">
                                         Change Password
                                     </div>
@@ -213,8 +211,7 @@
                                             @csrf
 
                                             <div class="row mb-3">
-                                                <label for="" class="col-md-3 col-form-label text-md-end">New
-                                                    Password</label>
+                                                <label for="" class="col-md-3 col-form-label text-md-end">New Password</label>
 
                                                 <div class="col-md-8">
                                                     <div class="input-group">
@@ -237,8 +234,7 @@
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label for="" class="col-md-3 col-form-label text-md-end">Confirm
-                                                    Password</label>
+                                                <label for="" class="col-md-3 col-form-label text-md-end">Confirm Password</label>
 
                                                 <div class="col-md-8">
                                                     <div class="input-group">
@@ -257,6 +253,44 @@
                                                             <strong>{{ $message }}</strong>
                                                         </span>
                                                         @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-0">
+                                                <div class="col-md-8 offset-md-3">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        {{ __('Submit') }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        Notification
+                                    </div>
+
+                                    <div class="card-body">
+
+                                        <form action="{{ route('student.profile.update_notify') }}" method="POST">
+                                            @csrf
+                                            
+                                            <div class="row mb-3">
+                                                <label for="" class="col-md-3 col-form-label text-md-end">Email</label>
+
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <div class="input-group-text justify-content-center" style="width: 8%;">
+                                                            <i class="fa-solid fa-envelope fa-fw"></i>
+                                                        </div>
+
+                                                        <div class="form-check form-switch form-switch-md" style="margin: 0.3rem 0 0.3rem 0.5rem;">
+                                                            <input type="checkbox" class="form-check-input" role="switch" id="statusSwitch" name="email_notify" {{ auth()->guard('student')->user()->allow_email_notify ? 'checked' : '' }}>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\StudentOrderSuccessful;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\PaymentDetail2c2p;
@@ -14,6 +15,7 @@ use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Cashier\Cashier;
+use Mail;
 use Stripe\Exception\ApiErrorException;
 
 class CheckoutController extends Controller
@@ -23,7 +25,7 @@ class CheckoutController extends Controller
         $student = Auth::guard('student')->user();
         $order = Order::find($request->order_id);
 
-        if($order->student_id !== $student->id){
+        if ($order->student_id !== $student->id) {
             abort(403);
         }
 
@@ -36,110 +38,117 @@ class CheckoutController extends Controller
             'payment' => 'required',
         ]);
 
-        $order = Order::find($request->order_id);
-        $student = Student::find($order->student_id);
-
         if ($request->payment == '2c2p') {
 
-            echo '<center>
-            <h3>Please wait while we redirect you to 2C2P secure site.</h3>
-            <p>Don\'t refresh until the page is redirected.</p>
-            </center>';
-
-            if (config('payment.2c2p-sandbox.status') == true) {
-                $url = config('payment.2c2p-sandbox.url') . 'paymentToken';
-                $info2c2p = [
-                    'merchantID' => config('payment.2c2p-sandbox.merchantID'),
-                    'currencyCode' => config('payment.2c2p-sandbox.currencyCode'),
-                    'secretCode' => config('payment.2c2p-sandbox.secretCode'),
-                    'localeCode' => config('payment.2c2p-sandbox.localeCode'),
-                ];
-            } else {
-                $url = config('payment.2c2p.url') . 'paymentToken';
-                $info2c2p = [
-                    'merchantID' => config('payment.2c2p.merchantID'),
-                    'currencyCode' => config('payment.2c2p.currencyCode'),
-                    'secretCode' => config('payment.2c2p.secretCode'),
-                    'localeCode' => config('payment.2c2p.localeCode'),
-                ];
-            }
-
-            $invoiceCount = PaymentDetail2c2p::whereDate('created_at', Carbon::today())->count() == 0 ? 1 : PaymentDetail2c2p::whereDate('created_at', Carbon::today())->count() + 1;
-            $payload = CheckoutController::getTokenRequestPayload($info2c2p, Carbon::now()->format('Ymd') . str_pad($invoiceCount, 4, 0, STR_PAD_LEFT), $order);
-            $jwt = JWT::encode($payload, $info2c2p['secretCode'], config('payment.2c2p-algorithm'));
-            $requestData = '{"payload": "' . $jwt . '"}';
-
-            $client = new \GuzzleHttp\Client();
-
-            $response = $client->request('POST', $url, [
-                'body' => $requestData,
-                'headers' => [
-                    'Accept' => 'text/plain',
-                    'Content-Type' => 'application/*+json',
-                ],
+            return redirect()->route('student.checkout.2c2p.process', [
+                'order_id' => $request->order_id,
             ]);
 
-            $decode = (array) json_decode($response->getBody(), true);
-
-            if(!array_key_exists('payload', $decode)){
-                if ($decode['respCode'] == '9015') {
-                    //dd('invoice exist');
-
-                    while ($decode['respCode'] == '9015') {
-                        $invoiceCount++;
-                        $payload = CheckoutController::getTokenRequestPayload($info2c2p, Carbon::now()->format('Ymd') . str_pad($invoiceCount, 4, 0, STR_PAD_LEFT), $order);
-                        $jwt = JWT::encode($payload, $info2c2p['secretCode'], config('payment.2c2p-algorithm'));
-                        $requestData = '{"payload": "' . $jwt . '"}';
-
-                        $response = $client->request('POST', $url, [
-                            'body' => $requestData,
-                            'headers' => [
-                                'Accept' => 'text/plain',
-                                'Content-Type' => 'application/*+json',
-                            ],
-                        ]);
-
-                        $decode = json_decode($response->getBody(), true);
-
-                        if(array_key_exists('payload', $decode)){
-                            break;
-                        }
-                    }
-                } else {
-                    // error
-                    return redirect()->route('student.checkout.failure', ['order_id' => $order->id, 'payment_type' => '2c2p', 'resp_code' => $decode['respCode']]);
-                }
-            }
-
-            $decodedPayload = (array) JWT::decode($decode['payload'], new Key($info2c2p['secretCode'], config('payment.2c2p-algorithm')));
-
-            if ($decodedPayload['respCode'] !== '0000') {
-                // error
-                return redirect()->route('student.checkout.failure', ['order_id' => $order->id, 'payment_type' => '2c2p', 'resp_code' => $decodedPayload['respCode']]);
-            }
-
-            $payment2c2p = PaymentDetail2c2p::create([
-                'invoice_no' => $payload['invoiceNo'],
-                'amount' => $payload['amount'],
-                'currency_code' => $payload['currencyCode'],
-                'status' => PaymentDetail2c2p::STATUS_PENDING,
-            ]);
-
-            $payment = $order->payments()->create([
-                'payment_type_id' => PaymentType::PAYMENT_2C2P,
-                'payment_detail_2c2p_id' => $payment2c2p->id,
-                'amount' => $order->total_price,
-                'status' => Payment::STATUS_PENDING,
-                'is_sandbox_payment' => config('payment.2c2p-sandbox.status'),
-            ]);
-
-            return redirect()->to($decodedPayload['webPaymentUrl']);
         } else if ($request->payment == 'stripe') {
             // TODO: for stripe payment
             return redirect()->route('student.checkout.stripe', [
                 'order_id' => $request->order_id,
             ]);
         }
+    }
+
+    public function process2c2p(Request $request)
+    {
+        $order = Order::find($request->order_id);
+
+        echo '<center>
+        <h3>Please wait while we redirect you to 2C2P secure site.</h3>
+        <p>Don\'t refresh until the page is redirected.</p>
+        </center>';
+
+        if (config('payment.2c2p-sandbox.status') == true) {
+            $url = config('payment.2c2p-sandbox.url') . 'paymentToken';
+            $info2c2p = [
+                'merchantID' => config('payment.2c2p-sandbox.merchantID'),
+                'currencyCode' => config('payment.2c2p-sandbox.currencyCode'),
+                'secretCode' => config('payment.2c2p-sandbox.secretCode'),
+                'localeCode' => config('payment.2c2p-sandbox.localeCode'),
+            ];
+        } else {
+            $url = config('payment.2c2p.url') . 'paymentToken';
+            $info2c2p = [
+                'merchantID' => config('payment.2c2p.merchantID'),
+                'currencyCode' => config('payment.2c2p.currencyCode'),
+                'secretCode' => config('payment.2c2p.secretCode'),
+                'localeCode' => config('payment.2c2p.localeCode'),
+            ];
+        }
+
+        $invoiceCount = PaymentDetail2c2p::whereDate('created_at', Carbon::today())->count() == 0 ? 1 : PaymentDetail2c2p::whereDate('created_at', Carbon::today())->count() + 1;
+        $payload = CheckoutController::getTokenRequestPayload($info2c2p, Carbon::now()->format('Ymd') . str_pad($invoiceCount, 4, 0, STR_PAD_LEFT), $order);
+        $jwt = JWT::encode($payload, $info2c2p['secretCode'], config('payment.2c2p-algorithm'));
+        $requestData = '{"payload": "' . $jwt . '"}';
+
+        $client = new \GuzzleHttp\Client();
+
+        $response = $client->request('POST', $url, [
+            'body' => $requestData,
+            'headers' => [
+                'Accept' => 'text/plain',
+                'Content-Type' => 'application/*+json',
+            ],
+        ]);
+
+        $decode = (array) json_decode($response->getBody(), true);
+
+        if (!array_key_exists('payload', $decode)) {
+            if ($decode['respCode'] == '9015') {
+                //dd('invoice exist');
+
+                while ($decode['respCode'] == '9015') {
+                    $invoiceCount++;
+                    $payload = CheckoutController::getTokenRequestPayload($info2c2p, Carbon::now()->format('Ymd') . str_pad($invoiceCount, 4, 0, STR_PAD_LEFT), $order);
+                    $jwt = JWT::encode($payload, $info2c2p['secretCode'], config('payment.2c2p-algorithm'));
+                    $requestData = '{"payload": "' . $jwt . '"}';
+
+                    $response = $client->request('POST', $url, [
+                        'body' => $requestData,
+                        'headers' => [
+                            'Accept' => 'text/plain',
+                            'Content-Type' => 'application/*+json',
+                        ],
+                    ]);
+
+                    $decode = json_decode($response->getBody(), true);
+
+                    if (array_key_exists('payload', $decode)) {
+                        break;
+                    }
+                }
+            } else {
+                // error
+                return redirect()->route('student.checkout.failure', ['order_id' => $order->id, 'payment_type' => '2c2p', 'resp_code' => $decode['respCode']]);
+            }
+        }
+
+        $decodedPayload = (array) JWT::decode($decode['payload'], new Key($info2c2p['secretCode'], config('payment.2c2p-algorithm')));
+
+        if ($decodedPayload['respCode'] !== '0000') {
+            // error
+            return redirect()->route('student.checkout.failure', ['order_id' => $order->id, 'payment_type' => '2c2p', 'resp_code' => $decodedPayload['respCode']]);
+        }
+
+        $payment2c2p = PaymentDetail2c2p::create([
+            'invoice_no' => $payload['invoiceNo'],
+            'amount' => $payload['amount'],
+            'currency_code' => $payload['currencyCode'],
+            'status' => PaymentDetail2c2p::STATUS_PENDING,
+        ]);
+
+        $payment = $order->payments()->create([
+            'payment_type_id' => PaymentType::PAYMENT_2C2P,
+            'payment_detail_2c2p_id' => $payment2c2p->id,
+            'amount' => $order->total_price,
+            'status' => Payment::STATUS_PENDING,
+            'is_sandbox_payment' => config('payment.2c2p-sandbox.status'),
+        ]);
+
+        return redirect()->to($decodedPayload['webPaymentUrl']);
     }
 
     public function receivePaymentInfo(Request $request)
@@ -223,9 +232,9 @@ class CheckoutController extends Controller
         ]);
         $stripePayments = $order->payments()->where('payment_type_id', PaymentType::PAYMENT_STRIPE)->get();
 
-        if($stripePayments->count() !== 0){
+        if ($stripePayments->count() !== 0) {
             $stripe = new \Stripe\StripeClient(config('cashier.secret'));
-            foreach($stripePayments as $stripePayment){
+            foreach ($stripePayments as $stripePayment) {
                 $stripePayment->update([
                     'status' => Payment::STATUS_ABORT,
                 ]);
@@ -244,22 +253,30 @@ class CheckoutController extends Controller
         }
 
         if ($inquiryPayload['respCode'] == '0000') {
+
+            $student = $order->student;
+
+            if ($student->email !== null && $student->email_verified_at !== null && $student->allow_email_notify) {
+                Mail::to($student)->send(new StudentOrderSuccessful($order));
+            }
+
             return redirect()->route('student.checkout.success', ['order_id' => $detail2c2p->payment->order->id, 'payment_id' => $detail2c2p->payment->id]);
         } else {
             return redirect()->route('student.checkout.failure', ['order_id' => $detail2c2p->payment->order->id, 'payment_type' => '2c2p', 'resp_code' => $inquiryPayload['respCode']]);
         }
     }
 
-    public function stripeCharge(Request $request){
+    public function stripeCharge(Request $request)
+    {
 
         $student = Student::find(Auth::guard('student')->user()->id);
         $order = Order::find($request->order_id);
         $payment = $order->payments()->where('payment_type_id', PaymentType::PAYMENT_STRIPE)->orderBy('created_at', 'desc')->first();
         $clientSecret = null;
 
-        if($payment !== null){
-            if($payment->status === Payment::STATUS_PENDING || $payment->status === Payment::STATUS_FAILURE){
-                if($payment->paymentDetailStripe->client_secret !== null){
+        if ($payment !== null) {
+            if ($payment->status === Payment::STATUS_PENDING || $payment->status === Payment::STATUS_FAILURE) {
+                if ($payment->paymentDetailStripe->client_secret !== null) {
                     $clientSecret = $payment->paymentDetailStripe->client_secret;
                 } else {
                     abort(500);
@@ -284,17 +301,16 @@ class CheckoutController extends Controller
                 'status' => Payment::STATUS_PENDING,
                 'is_sandbox_payment' => config('payment.stripe-sandbox'),
             ]);
-
         }
 
         return view('checkout.stripe.payment', [
             'clientSecret' => $clientSecret,
             'order' => $order,
         ]);
-
     }
 
-    public function stripeProcess(Request $request){
+    public function stripeProcess(Request $request)
+    {
 
         $student = Student::find(Auth::guard('student')->user()->id);
         $order = Order::find($request->order_id);
@@ -317,13 +333,17 @@ class CheckoutController extends Controller
             'status' => PaymentDetailStripe::STATUS_SUCCESS,
         ]);
 
+        if ($student->email !== null && $student->email_verified_at !== null && $student->allow_email_notify) {
+            Mail::to($student)->send(new StudentOrderSuccessful($order));
+        }
+
         return redirect()->route('student.checkout.success', ['order_id' => $order->id, 'payment_id' => $payment->id]);
     }
 
     public function paymentSuccess(Request $request)
     {
         $request->validate([
-           'payment_id' => 'required',
+            'payment_id' => 'required',
         ]);
         $order = Order::find($request->order_id);
         $payment = Payment::find($request->payment_id);
@@ -335,7 +355,7 @@ class CheckoutController extends Controller
         $paymentType = $request->payment_type;
         $order = Order::find($request->order_id);
 
-        if($paymentType == '2c2p'){
+        if ($paymentType == '2c2p') {
             $respCode = $request->resp_code;
             return view('checkout.failure', compact('order', 'paymentType', 'respCode'));
         } else {

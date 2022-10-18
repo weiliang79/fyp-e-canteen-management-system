@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\controllers\studentAuth;
 use App\Http\Controllers\StudentMenuController;
 use App\Http\Controllers\StudentProfileController;
+use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentDetail2c2p;
 use App\Models\Student;
@@ -92,6 +93,7 @@ Route::group(['middleware' => ['auth:student']], function () {
     Route::post('/student/profile/email_verify', [StudentProfileController::class, 'verifyEmail'])->name('student.profile.email_verify');
     Route::post('/student/profile/update_email', [StudentProfileController::class, 'updateEmail'])->name('student.profile.update_email');
     Route::post('/student/profile/update_password', [StudentProfileController::class, 'updatePassword'])->name('student.profile.update_password');
+    Route::post('/student/profile/update_notify', [StudentProfileController::class, 'updateNotify'])->name('student.profile.update_notify');
 
     // menus
     Route::get('/menus', [StudentMenuController::class, 'index'])->name('student.menus');
@@ -105,10 +107,11 @@ Route::group(['middleware' => ['auth:student']], function () {
 
         // checkout
         Route::get('/checkout/{order_id}', [CheckoutController::class, 'index'])->name('student.checkout');
+        Route::post('/checkout/{order_id}/process', [CheckoutController::class, 'process'])->name('student.checkout.process');
 
         // checkout - 2c2p
         Route::group(['middleware' => ['is2c2pEnabled']], function () {
-            Route::post('/checkout/{order_id}/process', [CheckoutController::class, 'process'])->name('student.checkout.process');
+            Route::get('/checkout/{order_id}/2c2p/process', [CheckoutController::class, 'process2c2p'])->name('student.checkout.2c2p.process');
             Route::match(['get', 'post'], '/checkout/{order_id}/receive_payment_info', [CheckoutController::class, 'receivePaymentInfo'])->name('student.checkout.receive_payment_info');
         });
 
@@ -274,8 +277,6 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('/test', function () {
-    $start = Carbon::now()->startOfMonth();
-    dd($start->endOfDay());
-
-
+    $order = Order::find(4);
+    return new App\Mail\StudentOrderSuccessful($order);
 });

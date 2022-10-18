@@ -114,4 +114,13 @@ class StudentProfileController extends Controller
 
         return redirect()->route('student.profile')->with('swal-success', 'Password update successful.');
     }
+
+    public function updateNotify(Request $request)
+    {
+        $user = Student::find(Auth::guard('student')->user()->id);
+        $user->allow_email_notify = $request->email_notify == 'on' ? true : false;
+        $user->save();
+
+        return redirect()->route('student.profile')->with('swal-success', 'Notification update successful.');
+    }
 }
