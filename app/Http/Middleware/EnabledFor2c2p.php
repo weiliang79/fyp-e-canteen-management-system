@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class EnabledFor2c2p
 {
     /**
-     * Handle an incoming request.
+     * Handle an incoming request if 2C2P payment is enabled.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next

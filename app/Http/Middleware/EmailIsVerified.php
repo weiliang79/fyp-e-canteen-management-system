@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class EmailIsVerified
 {
     /**
-     * Handle an incoming request.
+     * Handle an incoming request to check the user's email is verified.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
