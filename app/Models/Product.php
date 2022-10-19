@@ -26,22 +26,47 @@ class Product extends Model
         'category_id',
     ];
 
+    /**
+     * Get the store that owns the product.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function Store(){
         return $this->belongsTo(Store::class);
     }
 
+    /**
+     * Get the product category that owns the product.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function productCategory(){
         return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 
+    /**
+     * Get the product options for the product.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function productOptions(){
         return $this->hasMany(ProductOption::class);
     }
 
+    /**
+     * Get the carts for the product.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function carts(){
         return $this->hasMany(Cart::class);
     }
 
+    /**
+     * Get the order details for the product.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function orderDetails(){
         return $this->hasMany(OrderDetail::class);
     }

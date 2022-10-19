@@ -19,4 +19,5 @@ class LandingDesign extends Model
         'slogan',
         'description',
     ];
+
 }

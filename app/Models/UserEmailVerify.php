@@ -9,6 +9,11 @@ class UserEmailVerify extends Model
 {
     use HasFactory;
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
     public $timestamps = false;
 
     /**
@@ -23,10 +28,20 @@ class UserEmailVerify extends Model
         'created_at',
     ];
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array<int, string>
+     */
     protected $dates = [
         'created_at'
     ];
 
+    /**
+     * Get the user that own the email verify model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user(){
         return $this->belongsTo(User::class);
     }

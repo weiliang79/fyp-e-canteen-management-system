@@ -10,8 +10,18 @@ class PaymentDetail2c2p extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * Constant variables for 2C2P payment detail status.
+     *
+     * @var int
+     */
     const STATUS_PENDING = 1, STATUS_SUCCESS = 2, STATUS_FAILURE = 3;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'payment_details_2c2p';
 
     /**
@@ -42,6 +52,11 @@ class PaymentDetail2c2p extends Model
         'transaction_time' => 'datetime',
     ];
 
+    /**
+     * Get the payment associated with the 2C2P payment detail.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function payment(){
         return $this->hasOne(Payment::class, 'payment_detail_2c2p_id');
     }

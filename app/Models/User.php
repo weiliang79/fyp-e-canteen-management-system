@@ -48,26 +48,56 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Get the role that own the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function role(){
         return $this->belongsTo(Role::class);
     }
 
+    /**
+     * Get the store for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function store(){
         return $this->hasOne(Store::class);
     }
-    
+
+    /**
+     * Get the email verify model for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function emailVerify(){
         return $this->hasOne(UserEmailVerify::class);
     }
 
+    /**
+     * Get the admin identity for the user.
+     *
+     * @return bool
+     */
     public function isAdmin(){
         return $this->role->id == Role::ROLE_ADMIN;
     }
 
+    /**
+     * Get the food seller identity for the user.
+     *
+     * @return bool
+     */
     public function isFoodSeller(){
         return $this->role->id == Role::ROLE_SELLER;
     }
 
+    /**
+     * Get the student identity for the user.
+     *
+     * @return false
+     */
     public function isStudent(){
         return false;
     }

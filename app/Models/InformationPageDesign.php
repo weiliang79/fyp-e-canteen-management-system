@@ -19,4 +19,5 @@ class InformationPageDesign extends Model
         'title',
         'content',
     ];
+
 }

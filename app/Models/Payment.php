@@ -10,6 +10,11 @@ class Payment extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * Constant variables for payment status.
+     *
+     * @var int
+     */
     const STATUS_PENDING = 1, STATUS_FAILURE = 2, STATUS_ABORT = 3, STATUS_SUCCESS = 4;
 
     /**
@@ -27,22 +32,47 @@ class Payment extends Model
         'is_sandbox_payment',
     ];
 
+    /**
+     * Get the order that owns the payment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function order(){
         return $this->belongsTo(Order::class);
     }
 
+    /**
+     * Get the payment type that owns the payment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function paymentType(){
         return $this->belongsTo(PaymentType::class);
     }
 
+    /**
+     * Get the 2C2P payment detail that owns the payment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function paymentDetail2c2p(){
         return $this->belongsTo(PaymentDetail2c2p::class, 'payment_detail_2c2p_id');
     }
 
+    /**
+     * Get the Stripe payment detail that owns the payment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function paymentDetailStripe(){
         return $this->belongsTo(PaymentDetailStripe::class, 'payment_detail_stripe_id');
     }
 
+    /**
+     * Get the payment status in string.
+     *
+     * @return string
+     */
     public function getStatusString(){
         return match ($this->status) {
             Payment::STATUS_PENDING => 'Payment Pending',
@@ -53,6 +83,11 @@ class Payment extends Model
         };
     }
 
+    /**
+     * Get the payment status background color based on Bootstrap 5.
+     *
+     * @return string
+     */
     public function getStatusBg(){
         return match ($this->status) {
             Payment::STATUS_PENDING => 'bg-warning',
@@ -62,6 +97,11 @@ class Payment extends Model
         };
     }
 
+    /**
+     * Get the payment type in string.
+     *
+     * @return string
+     */
     public function getPaymentTypeString(){
         return match ($this->payment_type_id) {
             PaymentType::PAYMENT_2C2P => '2C2P',

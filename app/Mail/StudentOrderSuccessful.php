@@ -12,6 +12,11 @@ class StudentOrderSuccessful extends Mailable
 {
     use Queueable, SerializesModels;
 
+    /**
+     * The order instance.
+     *
+     * @var \App\Models\Order
+     */
     public $order;
 
     /**

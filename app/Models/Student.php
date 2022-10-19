@@ -52,33 +52,68 @@ class Student extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Get the carts for the student.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function carts()
     {
         return $this->hasMany(Cart::class);
     }
 
+    /**
+     * Get the orders for the student.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     */
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
 
+    /**
+     * Get the rest times that belong to the student.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function restTimes()
     {
         return $this->belongsToMany(RestTime::class, 'student_rest_time')->withTimestamps();
     }
 
+    /**
+     * Get the email verify model for the student.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function emailVerify(){
         return $this->hasOne(StudentEmailVerify::class);
     }
 
+    /**
+     * Get admin identity for the student.
+     *
+     * @return false
+     */
     public function isAdmin(){
         return false;
     }
 
+    /**
+     * Get food seller identity for the student.
+     *
+     * @return false
+     */
     public function isFoodSeller(){
         return false;
     }
 
+    /**
+     * Get student identity for the student.
+     *
+     * @return bool
+     */
     public function isStudent(){
         return true;
     }

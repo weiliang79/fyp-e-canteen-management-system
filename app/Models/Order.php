@@ -10,6 +10,11 @@ class Order extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * constant variable for order status.
+     *
+     * @var int
+     */
     const PAYMENT_PENDING = 1, PAYMENT_FAILURE = 2, PAYMENT_SUCCESS = 3, PICKUP_PARTIALLY = 4, PICKUP_ALL = 5;
 
     /**
@@ -36,18 +41,38 @@ class Order extends Model
         'pick_up_end' => 'datetime',
     ];
 
+    /**
+     * Get the student that owns the order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function student(){
         return $this->belongsTo(Student::class);
     }
 
+    /**
+     * Get the order details for the order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function orderDetails(){
         return $this->hasMany(OrderDetail::class);
     }
 
+    /**
+     * Get the payments for the order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function payments(){
         return $this->hasMany(Payment::class);
     }
 
+    /**
+     * Get the order status in string.
+     *
+     * @return string
+     */
     public function getStatusString(){
         return match ($this->status) {
             Order::PAYMENT_PENDING => 'Payment Pending',
@@ -59,6 +84,11 @@ class Order extends Model
         };
     }
 
+    /**
+     * Get the order status background color based on Bootstrap 5
+     *
+     * @return string
+     */
     public function getStatusBg(){
         return match ($this->status) {
             Order::PAYMENT_PENDING, Order::PICKUP_PARTIALLY => 'bg-warning',

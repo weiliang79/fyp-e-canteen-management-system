@@ -19,4 +19,5 @@ class GeneralDesign extends Model
         'name',
         'path',
     ];
+
 }

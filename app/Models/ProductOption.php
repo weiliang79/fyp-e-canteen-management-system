@@ -21,10 +21,20 @@ class ProductOption extends Model
         'product_id',
     ];
 
+    /**
+     * Get the product that owns the product option.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function product(){
         return $this->belongsTo(Product::class);
     }
 
+    /**
+     * Get the option details for the product option.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function optionDetails(){
         return $this->hasMany(OptionDetail::class);
     }

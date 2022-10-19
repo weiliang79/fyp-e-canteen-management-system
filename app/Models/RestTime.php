@@ -10,6 +10,11 @@ class RestTime extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * Constant variables for days
+     *
+     * @var array<int, string>
+     */
     const DAYS = [
         1 => 'Monday',
         2 => 'Tuesday',
@@ -32,6 +37,11 @@ class RestTime extends Model
         'description',
     ];
 
+    /**
+     * Get the students that belongs to the rest time.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function students(){
         return $this->belongsToMany(Student::class, 'student_rest_time')->withTimestamps();
     }
