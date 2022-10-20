@@ -75,8 +75,8 @@ window.Chart = Chart;
 
 // pdfmake
 import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
+import pdfFonts from './vfs_fonts';
 import pdfSize from 'pdfmake/src/standardPageSizes';
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.vfs = pdfFonts;
 window.pdfMake = pdfMake;
 window.pdfSize = pdfSize;
