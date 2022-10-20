@@ -152,7 +152,7 @@
             SwalWithBootstrap.showLoading();
 
             axios.post(
-                '{{ route("student.menus.get_food_options") }}',
+                '{{ route("student.menus.get_product_options") }}',
                 {
                     id: $(item).data('id'),
                 })

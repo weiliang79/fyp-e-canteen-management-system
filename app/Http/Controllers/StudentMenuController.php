@@ -9,13 +9,19 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Store;
 use App\Models\Student;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class StudentMenuController extends Controller
 {
+
+    /**
+     * Show all the available products to student.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index(Request $request)
     {
         $allStores = Store::all();
@@ -38,7 +44,6 @@ class StudentMenuController extends Controller
                     ->get();
             }
 
-            //dd($products);
         } else {
             $products = Product::where('status', true)->get();
         }
@@ -46,7 +51,13 @@ class StudentMenuController extends Controller
         return view('menu.index', compact('allStores', 'allCategories', 'products'));
     }
 
-    public function getFoodOptions(Request $request)
+    /**
+     * Get the product details.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getProductOptions(Request $request)
     {
         $product = Product::find($request->id);
         $options = $product->productOptions;
@@ -66,6 +77,12 @@ class StudentMenuController extends Controller
         ]);
     }
 
+    /**
+     * Add the given product to the student's cart.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function addCart(Request $request)
     {
         $request->validate([
@@ -91,12 +108,18 @@ class StudentMenuController extends Controller
         return response()->json('Add to cart successful.');
     }
 
-    public function cartIndex(){
+    /**
+     * Show the student's cart.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function cartIndex()
+    {
         $carts = Cart::where('student_id', Auth::guard('student')->user()->id)->get();
 
         $userRestTimes = Student::find(Auth::guard('student')->user()->id)->restTimes()->get();
-        
-        //select the dates within two weeks
+
+        // Select the dates within two weeks
         $startDate = Carbon::now();
         $endDate = Carbon::now()->addWeeks(2);
 
@@ -106,7 +129,7 @@ class StudentMenuController extends Controller
 
             foreach($userRestTimes as $rest){
                 if($rest->day_id === $startDate->dayOfWeek){
-                    
+
                     $startTime = Carbon::createFromFormat('Y-m-d H:i A', $startDate->format('Y-m-d') . $rest->start_time);
                     $endTime = Carbon::createFromFormat('Y-m-d H:i A', $startDate->format('Y-m-d') . $rest->end_time);
 
@@ -125,8 +148,14 @@ class StudentMenuController extends Controller
         return view('menu.cart', compact('carts', 'restDates'));
     }
 
-    public function deleteCartItem(Request $request){
-
+    /**
+     * Delete the given cart item from the student's cart.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteCartItem(Request $request)
+    {
         $request->validate([
             'product_id' => 'required',
             'time_created' => 'required',
@@ -140,8 +169,14 @@ class StudentMenuController extends Controller
         return response()->json('The product has successful removed from cart.');
     }
 
-    public function createOrder(Request $request){
-
+    /**
+     * Create a new order from the student's cart.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function createOrder(Request $request)
+    {
         $request->validate([
             'restTime' => 'required',
         ]);
@@ -149,8 +184,6 @@ class StudentMenuController extends Controller
         $restTimes = explode('->', $request->restTime);
         $student = Student::find(Auth::guard('student')->user()->id);
         $carts = Cart::where('student_id', $student->id)->get();
-
-        //dd($request, $restTimes, $carts, $carts->sum('price'));
 
         $order = Order::create([
             'student_id' => Auth::guard('student')->user()->id,
