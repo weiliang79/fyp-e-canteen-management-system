@@ -48,10 +48,21 @@ class OrderDetailFactory extends Factory
         });
     }
 
+    /**
+     * Get the random product.
+     *
+     * @return Product
+     */
     private function getRandomProduct(){
         return Product::inRandomOrder()->first();
     }
 
+    /**
+     * Get the product options.
+     *
+     * @param Product $product
+     * @return array
+     */
     public function getProductOptions(Product $product){
         $options = $product->productOptions;
         $result = array();
