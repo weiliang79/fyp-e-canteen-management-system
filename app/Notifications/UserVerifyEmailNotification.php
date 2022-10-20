@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
@@ -14,14 +13,14 @@ class UserVerifyEmailNotification extends Notification
 
     /**
      * The email verification 6-digit code
-     * 
+     *
      * @var integer
      */
     public $token;
 
     /**
      * The user model
-     * 
+     *
      * @var App\Models\User
      */
     public $user;
