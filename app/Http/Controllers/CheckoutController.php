@@ -14,12 +14,18 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Cashier\Cashier;
 use Mail;
 use Stripe\Exception\ApiErrorException;
 
 class CheckoutController extends Controller
 {
+
+    /**
+     * Show the checkout page.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index(Request $request)
     {
         $student = Auth::guard('student')->user();
@@ -32,6 +38,12 @@ class CheckoutController extends Controller
         return view('checkout.index', compact('order'));
     }
 
+    /**
+     * process the given payment type.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
     public function process(Request $request)
     {
         $request->validate([
@@ -52,6 +64,13 @@ class CheckoutController extends Controller
         }
     }
 
+    /**
+     * Initialize 2C2P payment and redirect to 2C2P secure payment gateway.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function process2c2p(Request $request)
     {
         $order = Order::find($request->order_id);
@@ -98,7 +117,6 @@ class CheckoutController extends Controller
 
         if (!array_key_exists('payload', $decode)) {
             if ($decode['respCode'] == '9015') {
-                //dd('invoice exist');
 
                 while ($decode['respCode'] == '9015') {
                     $invoiceCount++;
@@ -151,9 +169,15 @@ class CheckoutController extends Controller
         return redirect()->to($decodedPayload['webPaymentUrl']);
     }
 
+    /**
+     * receive 2C2P payment info after redirect from 2C2P secure payment gateway.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function receivePaymentInfo(Request $request)
     {
-
         $request->validate([
             'paymentResponse' => 'required',
         ]);
@@ -266,9 +290,14 @@ class CheckoutController extends Controller
         }
     }
 
+    /**
+     * Initialize Stripe payment and show the payment form.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function stripeCharge(Request $request)
     {
-
         $student = Student::find(Auth::guard('student')->user()->id);
         $order = Order::find($request->order_id);
         $payment = $order->payments()->where('payment_type_id', PaymentType::PAYMENT_STRIPE)->orderBy('created_at', 'desc')->first();
@@ -309,9 +338,14 @@ class CheckoutController extends Controller
         ]);
     }
 
+    /**
+     * Process the stripe payment info after payment success.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function stripeProcess(Request $request)
     {
-
         $student = Student::find(Auth::guard('student')->user()->id);
         $order = Order::find($request->order_id);
 
@@ -340,6 +374,12 @@ class CheckoutController extends Controller
         return redirect()->route('student.checkout.success', ['order_id' => $order->id, 'payment_id' => $payment->id]);
     }
 
+    /**
+     * Show the payment success.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function paymentSuccess(Request $request)
     {
         $request->validate([
@@ -350,6 +390,12 @@ class CheckoutController extends Controller
         return view('checkout.success', compact('order', 'payment'));
     }
 
+    /**
+     * Show the payment failure.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|void
+     */
     public function paymentFailure(Request $request)
     {
         $paymentType = $request->payment_type;
@@ -358,12 +404,17 @@ class CheckoutController extends Controller
         if ($paymentType == '2c2p') {
             $respCode = $request->resp_code;
             return view('checkout.failure', compact('order', 'paymentType', 'respCode'));
-        } else {
-            // for stripe transaction error
-            dd('stripe error');
         }
     }
 
+    /**
+     * Generate the 2C2P request json.
+     *
+     * @param array $info2c2p
+     * @param string $invoiceNo
+     * @param Order $order
+     * @return array
+     */
     function getTokenRequestPayload(array $info2c2p, string $invoiceNo, Order $order)
     {
         return [
@@ -378,6 +429,13 @@ class CheckoutController extends Controller
         ];
     }
 
+    /**
+     * Generate the 2C2P query info json.
+     *
+     * @param array $info2c2p
+     * @param string $invoiceNo
+     * @return array
+     */
     function getPaymentInquiryPayload(array $info2c2p, string $invoiceNo)
     {
         return [

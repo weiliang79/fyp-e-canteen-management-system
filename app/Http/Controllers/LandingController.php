@@ -8,14 +8,27 @@ use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
-    public function index(){
+
+    /**
+     * Show the landing page.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function index()
+    {
         $design = LandingDesign::first();
         return view('landing', compact('design'));
     }
 
-    public function information(Request $request){
+    /**
+     * Show the given information page.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function information(Request $request)
+    {
         $info = InformationPageDesign::find($request->id);
-        
         return view('information', compact('info'));
     }
 }

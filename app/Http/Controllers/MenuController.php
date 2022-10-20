@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class MenuController extends Controller
 {
+
+    /**
+     * Show all the product categories.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function categoryIndex()
     {
         $user = User::find(Auth::user()->id);
@@ -27,37 +33,57 @@ class MenuController extends Controller
         }
     }
 
+    /**
+     * Show the product category create form.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showCategoryCreateForm()
     {
         $category = null;
         return view('admin.menus.category.edit', compact('category'));
     }
 
+    /**
+     * Show the product category edit form with given product category id.
+     *
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showCategoryEditForm($id)
     {
         $category = ProductCategory::find($id);
         return view('admin.menus.category.edit', compact('category'));
     }
 
+    /**
+     * Create the given product category.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function saveCategory(Request $request)
     {
-        //dd($request);
-
         $request->validate([
             'name' => 'required',
         ]);
 
         ProductCategory::create([
             'name' => $request->name,
-            'description' => $request->description ? $request->description : '',
+            'description' => $request->description ?: '',
         ]);
 
         return redirect()->route('admin.menus.category')->with('swal-success', 'Product Category Save Successful.');
     }
 
+    /**
+     * Update the given product category.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateCategory(Request $request)
     {
-
         $request->validate([
             'id' => 'required|integer',
             'name' => 'required',
@@ -71,15 +97,25 @@ class MenuController extends Controller
         return redirect()->route('admin.menus.category')->with('swal-success', 'Category update successful.');
     }
 
+    /**
+     * Delete the given product category.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteCategory(Request $request)
     {
         ProductCategory::destroy($request->id);
         return response()->json('Category delete successful.');
     }
 
+    /**
+     * SHow the product list.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function productIndex()
     {
-
         $user = User::find(Auth::user()->id);
 
         if ($user->isAdmin()) {
@@ -98,12 +134,23 @@ class MenuController extends Controller
         }
     }
 
+    /**
+     * Show the given product details.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function productDetails(Request $request){
         $product = Product::find($request->product_id);
 
         return view('admin.menus.list.details', compact('product'));
     }
 
+    /**
+     * Show the product create form.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showProductCreateForm()
     {
         $product = null;
@@ -111,9 +158,14 @@ class MenuController extends Controller
         return view('food_seller.menus.product.edit', compact('product', 'categories'));
     }
 
+    /**
+     * Create the given product.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function saveProduct(Request $request)
     {
-
         $request->validate(
             [
                 'name' => 'required',
@@ -164,6 +216,12 @@ class MenuController extends Controller
         return redirect()->route('food_seller.menus.product')->with('swal-success', 'Product info save successful.');
     }
 
+    /**
+     * Show the given product edit form.
+     *
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showProductEditForm($id)
     {
         $product = Product::find($id);
@@ -171,8 +229,14 @@ class MenuController extends Controller
         return view('food_seller.menus.product.edit', compact('product', 'categories'));
     }
 
-    public function updateProduct(Request $request){
-
+    /**
+     * Update the given product.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateProduct(Request $request)
+    {
         $request->validate(
             [
                 'name' => 'required',
@@ -190,8 +254,6 @@ class MenuController extends Controller
                 'additionalPrice.*.*.numeric' => 'The additional price field must be a number.',
             ]
         );
-
-        //dd($request);
 
         $product = Product::find($request->productId);
 
@@ -302,6 +364,12 @@ class MenuController extends Controller
         return redirect()->route('food_seller.menus.product')->with('swal-success', 'Product info update successful.');
     }
 
+    /**
+     * Delete the given product.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteProduct(Request $request)
     {
         $product = Product::find($request->id);

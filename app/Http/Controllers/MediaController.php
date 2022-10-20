@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class MediaController extends Controller
 {
-    public function index(){
+
+    /**
+     * Show the media manager.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function index()
+    {
         return view('media_manager.index');
     }
 }

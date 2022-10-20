@@ -10,18 +10,36 @@ use Illuminate\Support\Facades\Session;
 
 class StoreController extends Controller
 {
-    public function adminIndex(){
+    /**
+     * Show all the stores.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function adminIndex()
+    {
         $stores = Store::all();
         return view('admin.store.index', compact('stores'));
     }
 
-    public function adminDetails(Request $request){
+    /**
+     * Show the given store details.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function adminDetails(Request $request)
+    {
         $store = Store::find($request->store_id);
-
         return view('admin.store.details', compact('store'));
     }
 
-    public function index(){
+    /**
+     * Show the store's details with food seller role.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|void
+     */
+    public function index()
+    {
         $user = User::find(Auth::user()->id);
         if($user->isAdmin()){
             echo 'TODO';
@@ -36,18 +54,28 @@ class StoreController extends Controller
 
             return view('food_seller.store.index', compact('store'));
         }
-
     }
 
-    public function showEditForm(){
+    /**
+     * Show the store edit form.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function showEditForm()
+    {
         $user = User::find(Auth::user()->id);
         $store = $user->store;
         return view('food_seller.store.edit', compact('store'));
     }
 
-    public function save(Request $request){
-        //dd($request);
-
+    /**
+     * Create or update the store details.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function save(Request $request)
+    {
         $request->validate([
             'store_name' => 'required',
         ]);

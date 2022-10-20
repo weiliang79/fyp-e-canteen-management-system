@@ -10,23 +10,40 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
-use function PHPSTORM_META\map;
-
 class UserManagementController extends Controller
 {
-    public function index(){
+
+    /**
+     * Show all the users.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function index()
+    {
         $users = User::all();
         $students = Student::all();
         return view('admin.user_management.index', compact('users', 'students'));
     }
 
-    public function showCreateForm(){
+    /**
+     * Show create user form.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function showCreateForm()
+    {
         $roles = Role::get();
         return view('admin.user_management.create', compact('roles'));
     }
 
-    public function save(Request $request){
-
+    /**
+     * Create the given user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function save(Request $request)
+    {
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -49,16 +66,27 @@ class UserManagementController extends Controller
         ]);
 
         return redirect()->route('admin.user_management')->with('swal-success', 'New user details save successful.');
-
     }
 
-    public function delete(Request $request){
+    /**
+     * Delete the given user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request)
+    {
         User::destroy($request->user_id);
         return response()->json('User delete successful.');
     }
 
-    public function showStudentCreateForm(){
-
+    /**
+     * Show student create form.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function showStudentCreateForm()
+    {
         if(count(RestTime::all()) == 0){
             return redirect()->route('admin.user_management.student.rest_time');
         }
@@ -68,8 +96,14 @@ class UserManagementController extends Controller
         return view('admin.user_management.student.create', compact('restTimes'));
     }
 
-    public function saveStudent(Request $request){
-
+    /**
+     * Create and store the given student.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function saveStudent(Request $request)
+    {
         $request->validate([
             'student_number' => 'required|numeric|gt:0|unique:students,student_number',
             'first_name' => 'required',
@@ -83,8 +117,6 @@ class UserManagementController extends Controller
             'student_number.gt' => 'The student number is invalid.',
             'rest_id.*.gt' => 'The rest time field need to choose a rest time.',
         ]);
-
-        //dd($request);
 
         $student = Student::create([
             'student_number' => $request->student_number,
@@ -106,14 +138,28 @@ class UserManagementController extends Controller
         return redirect()->route('admin.user_management')->with('swal-success', 'New Student Details save successful.');
     }
 
-    public function showStudentEditForm(Request $request){
+    /**
+     * Show student edit form by the given student.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function showStudentEditForm(Request $request)
+    {
         $restTimes = RestTime::all();
         $student = Student::find($request->id);
 
         return view('admin.user_management.student.edit', compact('student', 'restTimes'));
     }
 
-    public function updateStudent(Request $request){
+    /**
+     * Update the given student info.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateStudent(Request $request)
+    {
 
         $request->validate([
             'rest_id.*' => 'integer|gt:0',
@@ -123,8 +169,6 @@ class UserManagementController extends Controller
         ]);
 
         $student = Student::find($request->id);
-
-        //dd($request, $student);
 
         $restIds = $request->rest_id;
 
@@ -138,11 +182,16 @@ class UserManagementController extends Controller
         $student->restTimes()->detach($needDelete);
 
         return redirect()->route('admin.user_management')->with('swal-success', 'Student info update successful.');
-
-
     }
 
-    public function deleteStudent(Request $request){
+    /**
+     * Delete the given student.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteStudent(Request $request)
+    {
         $student = Student::find($request->student_id);
         $student->restTimes()->detach();
         $student->delete();

@@ -8,7 +8,14 @@ use Illuminate\Support\Facades\Session;
 
 class RestTimeController extends Controller
 {
-    public function index(){
+
+    /**
+     * Show the rest times.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function index()
+    {
         $restTimes = RestTime::all();
 
         if(count($restTimes) == 0){
@@ -19,8 +26,14 @@ class RestTimeController extends Controller
         return view('admin.user_management.student.manage_rest_time', compact('restTimes'));
     }
 
-    public function update(Request $request){
-
+    /**
+     * Create/update/delete the rest times.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request)
+    {
         $request->validate([
             'start_time.*' => 'required',
             'end_time.*' => 'required',
@@ -36,7 +49,7 @@ class RestTimeController extends Controller
 
             if(isset($id[$i])){
 
-                //update the rest time details
+                // Update the rest time details
                 RestTime::find($id[$i])->update([
                     'day_id' => $request->day_id[$i],
                     'start_time' => $request->start_time[$i],
@@ -46,7 +59,7 @@ class RestTimeController extends Controller
 
             } else {
 
-                //create the rest time details
+                // Create the rest time details
                 $rest = RestTime::create([
                     'day_id' => $request->day_id[$i],
                     'start_time' => $request->start_time[$i],
@@ -59,7 +72,7 @@ class RestTimeController extends Controller
 
         }
 
-        //delete the record if not inside id array
+        // Delete the record if not inside id array
         $needDeteteIds = RestTime::whereNotIn('id', $id)->pluck('id')->toArray();
 
         if(count($needDeteteIds) !== 0){
@@ -71,4 +84,5 @@ class RestTimeController extends Controller
 
         return redirect()->route('admin.user_management')->with('swal-success', 'Rest Time update successful.');
     }
+
 }

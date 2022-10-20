@@ -13,22 +13,30 @@ use Illuminate\Validation\Rules;
 
 class StudentProfileController extends Controller
 {
+    /**
+     * Show the student profile.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index()
     {
         return view('profile.student');
     }
 
+    /**
+     * Update the student profile.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateProfile(Request $request)
     {
-
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
             'phone' => 'required',
             'address' => 'required',
         ]);
-
-        //dd($request);
 
         $user = Student::find(auth()->guard('student')->user()->id);
         $user->first_name = $request->first_name;
@@ -40,13 +48,18 @@ class StudentProfileController extends Controller
         return redirect()->route('student.profile')->with('swal-success', 'Profile update successful.');
     }
 
+    /**
+     * Send the verification email to the given email address.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     public function verifyEmail(Request $request)
     {
         $request->validate([
             'email' => 'required|email|unique:users,email|unique:students,email',
         ]);
-
-        //dd($request);
 
         $user = Student::find(Auth::guard('student')->user()->id);
         $token = random_int(100000, 999999);
@@ -72,14 +85,18 @@ class StudentProfileController extends Controller
         ]);
     }
 
+    /**
+     * Update the student's email after verified.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateEmail(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
             'code' => 'required',
         ]);
-
-        //dd($request);
 
         $user = Student::find(Auth::guard('student')->user()->id);
         $userCode = $user->emailVerify()->orderBy('created_at', 'DESC')->first();
@@ -99,14 +116,17 @@ class StudentProfileController extends Controller
         return redirect()->route('student.profile')->with('swal-success', 'Email address update successful.');
     }
 
+    /**
+     * Update the student's password.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatePassword(Request $request)
     {
-
         $request->validate([
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
-        //dd($request);
 
         $user = Student::find(auth()->guard('student')->user()->id);
         $user->password = Hash::make($request->password);
@@ -115,6 +135,12 @@ class StudentProfileController extends Controller
         return redirect()->route('student.profile')->with('swal-success', 'Password update successful.');
     }
 
+    /**
+     * Update the student's notification.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateNotify(Request $request)
     {
         $user = Student::find(Auth::guard('student')->user()->id);

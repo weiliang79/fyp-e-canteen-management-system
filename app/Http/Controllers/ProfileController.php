@@ -5,30 +5,37 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Notifications\UserVerifyEmailNotification;
 use Carbon\Carbon;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use PhpParser\Node\Stmt\Catch_;
 
 class ProfileController extends Controller
 {
+
+    /**
+     * Show the user's profile.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index()
     {
         return view('profile.user');
     }
 
+    /**
+     * Update user's name.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateName(Request $request)
     {
-
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
         ]);
-
-        //dd($request);
 
         $user = User::find(auth()->user()->id);
         $user->first_name = $request->first_name;
@@ -42,13 +49,18 @@ class ProfileController extends Controller
         }
     }
 
+    /**
+     * Send the verification email to the given email address.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     public function verifyEmail(Request $request)
     {
         $request->validate([
             'email' => 'required|email|unique:users,email|unique:students,email',
         ]);
-
-        //dd($request);
 
         $user = User::find(Auth::user()->id);
         $token = random_int(100000, 999999);
@@ -74,6 +86,12 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * Update the user's email after verified.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateEmail(Request $request)
     {
         $request->validate([
@@ -103,14 +121,18 @@ class ProfileController extends Controller
         }
     }
 
+    /**
+     * Update the user's password.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatePassword(Request $request)
     {
 
         $request->validate([
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
-        //dd($request);
 
         $user = User::find(auth()->user()->id);
         $user->password = Hash::make($request->password);
@@ -122,4 +144,5 @@ class ProfileController extends Controller
             return redirect()->route('food_seller.profile')->with('swal-success', 'Password update successful.');
         }
     }
+
 }

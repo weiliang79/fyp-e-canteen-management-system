@@ -14,9 +14,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
+
+    /**
+     * Show the report page with the specified user role.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index()
     {
-
         if (Auth::user()->isAdmin()) {
             $startDate = Order::orderBy('created_at', 'asc')->first()->created_at->firstOfMonth();
             $endDate = Order::orderBy('created_at', 'desc')->first()->created_at->firstOfMonth();
@@ -76,9 +81,14 @@ class ReportController extends Controller
         }
     }
 
+    /**
+     * Get the specified month or year report to the specified user role.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getData(Request $request)
     {
-
         $request->validate([
             'report_date' => 'required',
         ]);
@@ -86,14 +96,13 @@ class ReportController extends Controller
         $split = explode(':', $request->report_date);
         $reportDate = Carbon::createFromTimestamp($split[1]);
 
-
         if (Auth::user()->isAdmin()) {
 
             if ($split[0] === 'year') {
                 $monthlySales = $this->generateAdminMonthlySaleByYear($reportDate);
                 $storesSales = $this->generateAdminStoresSalesByYear($reportDate);
                 $productCategoriesSales = $this->generateAdminProductCategoriesSalesByYear($reportDate);
-                $topProductsSales = $this->generateAdminTopProductSalesByYear($reportDate);
+                $topProductsSales = $this->generateAdminTopProductsSalesByYear($reportDate);
 
                 return response()->json([
                     'message' => 'success',
@@ -124,7 +133,7 @@ class ReportController extends Controller
             $store = User::find(Auth::user()->id)->store;
             if ($split[0] === 'year') {
                 $monthlySales = $this->generateFoodSellerMonthySalesByYear($reportDate, $store);
-                $productSales = $this->generateFoodSellerProductSalesByYear($reportDate, $store);
+                $productSales = $this->generateFoodSellerProductsSalesByYear($reportDate, $store);
 
                 return response()->json([
                     'message' => 'success',
@@ -136,7 +145,7 @@ class ReportController extends Controller
                 ]);
             } else {
                 $dailySales = $this->generateFoodSellerDailySalesByMonth($reportDate, $store);
-                $productSales = $this->generateFoodSellerProductSalesByMonth($reportDate, $store);
+                $productSales = $this->generateFoodSellerProductsSalesByMonth($reportDate, $store);
 
                 return response()->json([
                     'message' => 'success',
@@ -150,6 +159,12 @@ class ReportController extends Controller
         }
     }
 
+    /**
+     * Get the yearly report with monthly sales.
+     *
+     * @param Carbon $date
+     * @return array
+     */
     private function generateAdminMonthlySaleByYear($date)
     {
         $label = [];
@@ -206,6 +221,12 @@ class ReportController extends Controller
         return $result;
     }
 
+    /**
+     * Get the yearly report with stores sales.
+     *
+     * @param Carbon $date
+     * @return array
+     */
     private function generateAdminStoresSalesByYear($date)
     {
         $label = [];
@@ -269,6 +290,13 @@ class ReportController extends Controller
         return $result;
     }
 
+    /**
+     * Get the yearly report with product categories sales.
+     *
+     * @param Carbon $date
+     * @return array
+     * @throws \Exception
+     */
     private function generateAdminProductCategoriesSalesByYear($date)
     {
         $label = [];
@@ -326,7 +354,13 @@ class ReportController extends Controller
         return $result;
     }
 
-    private function generateAdminTopProductSalesByYear($date)
+    /**
+     * Get the yearly report with top products sales.
+     *
+     * @param Carbon $date
+     * @return array|null
+     */
+    private function generateAdminTopProductsSalesByYear($date)
     {
         $label = [];
         $countData = [];
@@ -378,6 +412,13 @@ class ReportController extends Controller
         return $result;
     }
 
+    /**
+     * Get the monthly report with product categories sales.
+     *
+     * @param Carbon $date
+     * @return array
+     * @throws \Exception
+     */
     private function generateAdminProductCategoriesSalesByMonth($date)
     {
         $label = [];
@@ -435,6 +476,12 @@ class ReportController extends Controller
         return $result;
     }
 
+    /**
+     * Get the monthly report with stores sales.
+     *
+     * @param Carbon $date
+     * @return array
+     */
     private function generateAdminStoreSalesByMonth($date)
     {
         $label = [];
@@ -499,6 +546,12 @@ class ReportController extends Controller
         return $result;
     }
 
+    /**
+     * Get the monthly report with top products sales.
+     *
+     * @param $date
+     * @return array|null
+     */
     private function generateAdminTopProductsSalesByMonth($date)
     {
         $label = [];
@@ -551,6 +604,13 @@ class ReportController extends Controller
         return $result;
     }
 
+    /**
+     * Get the store's yearly report with monthly sales.
+     *
+     * @param Carbon $date
+     * @param Store $store
+     * @return array
+     */
     private function generateFoodSellerMonthySalesByYear($date, $store)
     {
         $label = [];
@@ -617,7 +677,15 @@ class ReportController extends Controller
         return $result;
     }
 
-    private function generateFoodSellerProductSalesByYear($date, $store)
+    /**
+     * Get the store's yearly report with products sales.
+     *
+     * @param Carbon $date
+     * @param Store $store
+     * @return array
+     * @throws \Exception
+     */
+    private function generateFoodSellerProductsSalesByYear($date, $store)
     {
         $label = [];
         $countData = [];
@@ -674,6 +742,13 @@ class ReportController extends Controller
         return $result;
     }
 
+    /**
+     * Get the store's monthly report with daily sales.
+     *
+     * @param Carbon $date
+     * @param Store $store
+     * @return array
+     */
     private function generateFoodSellerDailySalesByMonth($date, $store)
     {
         $label = [];
@@ -752,7 +827,15 @@ class ReportController extends Controller
         return $result;
     }
 
-    private function generateFoodSellerProductSalesByMonth($date, $store)
+    /**
+     * Get the store's monthly report with products sales.
+     *
+     * @param Carbon $date
+     * @param Store $store
+     * @return array
+     * @throws \Exception
+     */
+    private function generateFoodSellerProductsSalesByMonth($date, $store)
     {
         $label = [];
         $countData = [];
@@ -808,4 +891,5 @@ class ReportController extends Controller
 
         return $result;
     }
+
 }
