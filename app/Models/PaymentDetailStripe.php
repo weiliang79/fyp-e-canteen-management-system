@@ -41,7 +41,8 @@ class PaymentDetailStripe extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function payment(){
+    public function payment()
+    {
         return $this->hasOne(Payment::class, 'payment_detail_stripe_id');
     }
 }

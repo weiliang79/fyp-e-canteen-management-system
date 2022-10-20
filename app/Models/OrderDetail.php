@@ -38,7 +38,8 @@ class OrderDetail extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function order(){
+    public function order()
+    {
         return $this->belongsTo(Order::class);
     }
 
@@ -47,7 +48,8 @@ class OrderDetail extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
 }

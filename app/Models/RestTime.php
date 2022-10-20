@@ -42,7 +42,8 @@ class RestTime extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function students(){
+    public function students()
+    {
         return $this->belongsToMany(Student::class, 'student_rest_time')->withTimestamps();
     }
 }

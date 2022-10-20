@@ -27,7 +27,8 @@ class Store extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -36,7 +37,8 @@ class Store extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function products(){
+    public function products()
+    {
         return $this->hasMany(Product::class);
     }
 }

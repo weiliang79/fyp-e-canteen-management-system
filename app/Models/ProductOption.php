@@ -26,7 +26,8 @@ class ProductOption extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
 
@@ -35,7 +36,8 @@ class ProductOption extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function optionDetails(){
+    public function optionDetails()
+    {
         return $this->hasMany(OptionDetail::class);
     }
 }

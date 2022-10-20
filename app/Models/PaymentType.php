@@ -32,7 +32,8 @@ class PaymentType extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function payments(){
+    public function payments()
+    {
         return $this->hasMany(Payment::class);
     }
 }

@@ -51,7 +51,8 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function role(){
+    public function role()
+    {
         return $this->belongsTo(Role::class);
     }
 
@@ -60,7 +61,8 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function store(){
+    public function store()
+    {
         return $this->hasOne(Store::class);
     }
 
@@ -69,7 +71,8 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function emailVerify(){
+    public function emailVerify()
+    {
         return $this->hasOne(UserEmailVerify::class);
     }
 
@@ -78,7 +81,8 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isAdmin(){
+    public function isAdmin()
+    {
         return $this->role->id == Role::ROLE_ADMIN;
     }
 
@@ -87,7 +91,8 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isFoodSeller(){
+    public function isFoodSeller()
+    {
         return $this->role->id == Role::ROLE_SELLER;
     }
 
@@ -96,7 +101,8 @@ class User extends Authenticatable
      *
      * @return false
      */
-    public function isStudent(){
+    public function isStudent()
+    {
         return false;
     }
 

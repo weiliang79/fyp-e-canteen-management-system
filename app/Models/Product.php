@@ -31,7 +31,8 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function Store(){
+    public function Store()
+    {
         return $this->belongsTo(Store::class);
     }
 
@@ -40,7 +41,8 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function productCategory(){
+    public function productCategory()
+    {
         return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 
@@ -49,7 +51,8 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function productOptions(){
+    public function productOptions()
+    {
         return $this->hasMany(ProductOption::class);
     }
 
@@ -58,7 +61,8 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function carts(){
+    public function carts()
+    {
         return $this->hasMany(Cart::class);
     }
 
@@ -67,7 +71,8 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function orderDetails(){
+    public function orderDetails()
+    {
         return $this->hasMany(OrderDetail::class);
     }
 }

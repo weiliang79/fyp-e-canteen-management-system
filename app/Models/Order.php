@@ -46,7 +46,8 @@ class Order extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function student(){
+    public function student()
+    {
         return $this->belongsTo(Student::class);
     }
 
@@ -55,7 +56,8 @@ class Order extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function orderDetails(){
+    public function orderDetails()
+    {
         return $this->hasMany(OrderDetail::class);
     }
 
@@ -64,7 +66,8 @@ class Order extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function payments(){
+    public function payments()
+    {
         return $this->hasMany(Payment::class);
     }
 
@@ -73,7 +76,8 @@ class Order extends Model
      *
      * @return string
      */
-    public function getStatusString(){
+    public function getStatusString()
+    {
         return match ($this->status) {
             Order::PAYMENT_PENDING => 'Payment Pending',
             Order::PAYMENT_FAILURE => 'Payment Failure',
@@ -89,7 +93,8 @@ class Order extends Model
      *
      * @return string
      */
-    public function getStatusBg(){
+    public function getStatusBg()
+    {
         return match ($this->status) {
             Order::PAYMENT_PENDING, Order::PICKUP_PARTIALLY => 'bg-warning',
             Order::PAYMENT_FAILURE => 'bg-danger',

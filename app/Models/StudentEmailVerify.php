@@ -42,7 +42,8 @@ class StudentEmailVerify extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function student(){
+    public function student()
+    {
         return $this->belongsTo(Student::class);
     }
 }

@@ -86,7 +86,8 @@ class Student extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function emailVerify(){
+    public function emailVerify()
+    {
         return $this->hasOne(StudentEmailVerify::class);
     }
 
@@ -95,7 +96,8 @@ class Student extends Authenticatable
      *
      * @return false
      */
-    public function isAdmin(){
+    public function isAdmin()
+    {
         return false;
     }
 
@@ -104,7 +106,8 @@ class Student extends Authenticatable
      *
      * @return false
      */
-    public function isFoodSeller(){
+    public function isFoodSeller()
+    {
         return false;
     }
 
@@ -113,7 +116,8 @@ class Student extends Authenticatable
      *
      * @return bool
      */
-    public function isStudent(){
+    public function isStudent()
+    {
         return true;
     }
 

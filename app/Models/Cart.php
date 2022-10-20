@@ -36,7 +36,8 @@ class Cart extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function student(){
+    public function student()
+    {
         return $this->belongsTo(Student::class);
     }
 
@@ -45,7 +46,8 @@ class Cart extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
 }

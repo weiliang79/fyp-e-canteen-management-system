@@ -57,7 +57,8 @@ class PaymentDetail2c2p extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function payment(){
+    public function payment()
+    {
         return $this->hasOne(Payment::class, 'payment_detail_2c2p_id');
     }
 }

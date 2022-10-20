@@ -37,7 +37,8 @@ class Payment extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function order(){
+    public function order()
+    {
         return $this->belongsTo(Order::class);
     }
 
@@ -46,7 +47,8 @@ class Payment extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function paymentType(){
+    public function paymentType()
+    {
         return $this->belongsTo(PaymentType::class);
     }
 
@@ -55,7 +57,8 @@ class Payment extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function paymentDetail2c2p(){
+    public function paymentDetail2c2p()
+    {
         return $this->belongsTo(PaymentDetail2c2p::class, 'payment_detail_2c2p_id');
     }
 
@@ -64,7 +67,8 @@ class Payment extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function paymentDetailStripe(){
+    public function paymentDetailStripe()
+    {
         return $this->belongsTo(PaymentDetailStripe::class, 'payment_detail_stripe_id');
     }
 
@@ -73,7 +77,8 @@ class Payment extends Model
      *
      * @return string
      */
-    public function getStatusString(){
+    public function getStatusString()
+    {
         return match ($this->status) {
             Payment::STATUS_PENDING => 'Payment Pending',
             Payment::STATUS_FAILURE => 'Payment Failure',
@@ -88,7 +93,8 @@ class Payment extends Model
      *
      * @return string
      */
-    public function getStatusBg(){
+    public function getStatusBg()
+    {
         return match ($this->status) {
             Payment::STATUS_PENDING => 'bg-warning',
             Payment::STATUS_FAILURE, Payment::STATUS_ABORT => 'bg-danger',
@@ -102,7 +108,8 @@ class Payment extends Model
      *
      * @return string
      */
-    public function getPaymentTypeString(){
+    public function getPaymentTypeString()
+    {
         return match ($this->payment_type_id) {
             PaymentType::PAYMENT_2C2P => '2C2P',
             PaymentType::PAYMENT_STRIPE => 'Stripe',

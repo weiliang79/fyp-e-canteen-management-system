@@ -26,7 +26,8 @@ class OptionDetail extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function productOption(){
+    public function productOption()
+    {
         return $this->belongsTo(ProductOption::class);
     }
 
