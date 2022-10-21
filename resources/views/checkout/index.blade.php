@@ -7,7 +7,7 @@
             <div class="col">
                   <div class="card">
                         <div class="card-header">
-                              Checkout
+                              {{ __('Checkout') }}
                         </div>
 
                         <div class="card-body">
@@ -15,17 +15,17 @@
                               <div class="row">
 
                                     <div class="col-4 border-end">
-                                          <h5>Order Details</h5>
+                                          <h5>{{ __('Order Details') }}</h5>
 
-                                          <p class="mb-1">Student Name: {{ $order->student->first_name }} {{ $order->student->last_name }}</p>
-                                          <p class="mb-1">Total Price: {{ config('payment.currency_symbol') }}{{ $order->total_price }}</p>
-                                          <p class="mb-1">Pick-Up Date: {{ $order->pick_up_start->format('Y/m/d h:ia') }} to {{ $order->pick_up_end->format('Y/m/d h:ia') }}</p>
+                                          <p class="mb-1">{{ 'Student Name: ' . $order->student->first_name . ' ' . $order->student->last_name }}</p>
+                                          <p class="mb-1">{{ 'Total Price: ' . config('payment.currency_symbol') . $order->total_price }}</p>
+                                          <p class="mb-1">{{ 'Pick-Up Date: ' . $order->pick_up_start->format('Y/m/d h:ia') . ' to ' . $order->pick_up_end->format('Y/m/d h:ia') }}</p>
 
                                           <table class="dataTable-cart table table-striped" style="width: 100%;">
                                                 <thead>
                                                       <tr>
-                                                            <th>Product</th>
-                                                            <th>Price({{ config('payment.currency_symbol') }})</th>
+                                                            <th>{{ __('Product') }}</th>
+                                                            <th>{{ 'Price(' . config('payment.currency_symbol') . ')' }}</th>
                                                       </tr>
                                                 </thead>
                                                 <tbody>
@@ -40,14 +40,14 @@
                                     </div>
 
                                     <div class="col-8">
-                                          <h5>Payment Method</h5>
+                                          <h5>{{ __('Payment Method') }}</h5>
 
-                                          <p class="mb-1">Please choose a payment method to procced transaction.</p>
+                                          <p class="mb-1">{{ __('Please choose a payment method to procced transaction.') }}</p>
 
                                           @error('payment')
                                           <div class="row my-4">
                                                 <div class="col-md-8 offset-md-3 text-danger">
-                                                      <i class="fa-solid fa-circle-exclamation fa-lg"></i> Please choose a valid payment method.
+                                                      <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('Please choose a valid payment method.') }}
                                                 </div>
                                           </div>
                                           @enderror
@@ -57,12 +57,12 @@
 
                                                 @if(config('payment.2c2p-status'))
                                                 <div class="row mb-3">
-                                                      <div class="col-md-3">
+                                                      <div class="col">
                                                             <div class="form-check">
                                                                   <input type="radio" class="form-check-input" name="payment" id="payment2c2p" value="2c2p">
                                                                   <label for="payment2c2p" class="form-check-label">
-                                                                        <img src="{{ asset('storage/defaults/2C2P_Logo/PNG/2C2P_Logo_RGB_Dark_Green.png') }}" alt="2C2P Logo" style="width: 100%;">
-                                                                        <p class="mb-1 ms-3">2c2p_description</p>
+                                                                        <img src="{{ asset('storage/defaults/2C2P_Logo/PNG/2C2P_Logo_RGB_Dark_Green.png') }}" alt="2C2P Logo" style="width: 20%;">
+                                                                        <p class="mb-1 ms-3">{{ \App\Models\PaymentType::find(\App\Models\PaymentType::PAYMENT_2C2P)->description }}</p>
                                                                   </label>
                                                             </div>
                                                       </div>
@@ -71,12 +71,12 @@
 
                                                 @if(config('payment.stripe-status'))
                                                 <div class="row mb-3">
-                                                      <div class="col-md-3">
+                                                      <div class="col">
                                                             <div class="form-check">
                                                                   <input type="radio" class="form-check-input" name="payment" id="paymentStripe" value="stripe">
                                                                   <label for="paymentStripe" class="form-check-label">
-                                                                        <img src="{{ asset('storage/defaults/Stripe_Logo/Stripe wordmark - blurple (small).png') }}" alt="Stripe Logo" style="width: 100%;">
-                                                                        <p class="mb-1 ms-3">stripe_description</p>
+                                                                        <img src="{{ asset('storage/defaults/Stripe_Logo/Stripe wordmark - blurple (small).png') }}" alt="Stripe Logo" style="width: 20%;">
+                                                                        <p class="mb-1 ms-3">{{ \App\Models\PaymentType::find(\App\Models\PaymentType::PAYMENT_STRIPE)->description }}</p>
                                                                   </label>
                                                             </div>
                                                       </div>
