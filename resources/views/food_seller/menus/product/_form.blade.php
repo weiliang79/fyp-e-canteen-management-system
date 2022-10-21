@@ -1,9 +1,9 @@
 <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
       <li class="nav-items">
-            <a class="nav-link active" id="pills-details-tab" data-bs-toggle="pill" data-bs-target="#pills-details" role="tab" aria-controls="pills-details" aria-selected="true" href="#">Details</a>
+            <a class="nav-link active" id="pills-details-tab" data-bs-toggle="pill" data-bs-target="#pills-details" role="tab" aria-controls="pills-details" aria-selected="true" href="#">{{ __('Details') }}</a>
       </li>
       <li class="nav-items">
-            <a class="nav-link" id="pills-options-tab" data-bs-toggle="pill" data-bs-target="#pills-options" role="tab" aria-controls="pills-options" aria-selected="false" href="#">Options</a>
+            <a class="nav-link" id="pills-options-tab" data-bs-toggle="pill" data-bs-target="#pills-options" role="tab" aria-controls="pills-options" aria-selected="false" href="#">{{ __('Options') }}</a>
       </li>
 </ul>
 
@@ -44,7 +44,7 @@
                               </div>
 
                               <select class="form-control @error('category_id') is-invalid @enderror" name="category_id" id="">
-                                    <option value="0">Select a category</option>
+                                    <option value="0">{{ __('Select a category') }}</option>
                                     @foreach($categories as $category)
                                     <option value="{{ $category->id }}" {{ old('category_id', $product !== null ? $product->category_id : '') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                     @endforeach
@@ -81,7 +81,7 @@
             </div>
 
             <div class="row mb-3">
-                  <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Price') }}({{ config('payment.currency_symbol') }})</label>
+                  <label for="" class="col-md-3 col-form-label text-md-end">{{ 'Price(' . config('payment.currency_symbol') . ')' }}</label>
 
                   <div class="col-md-8">
                         <div class="input-group">
@@ -111,7 +111,7 @@
                               </div>
 
                               <input id="image_path" class="form-control @error('image_path') is-invalid @enderror" type="text" name="image_path" value="{{ old('image_path', $product !== null ? ($product->media_path !== null ? Request::root() . '/' . $product->media_path : '') : '') }}">
-                              <button class="btn btn-primary" id="lfm" data-input="image_path" data-preview="holder">Choose Image</button>
+                              <button class="btn btn-primary" id="lfm" data-input="image_path" data-preview="holder">{{ __('Choose Image') }}</button>
 
                               @error('image_path')
                               <span class="invalid-feedback" role="alert">
@@ -125,9 +125,7 @@
 
             {{-- image preview --}}
             <div class="row mb-3 justify-content-center">
-                  <div class="col-1 " id="holder">
-
-                  </div>
+                  <div class="col-1 " id="holder"></div>
             </div>
 
             <div class="row mb-3">
@@ -179,366 +177,275 @@
       <div class="tab-pane fade" id="pills-options" role="tabpanel" aria-labelledby="pills-options-tab">
 
             <div id="options">
-                  <?php
+                  @php
                   $optionsId = session()->getOldInput('optionId');
                   $options = session()->getOldInput('optionName');
                   $descriptions = session()->getOldInput('optionDescription');
                   $optionDetailId = session()->getOldInput('optionDetailId');
                   $optionDetail = session()->getOldInput('optionDetail');
                   $additionalPrices = session()->getOldInput('additionalPrice');
+                  @endphp
 
-                  if ($product !== null) {
-                        if ($product->productOptions && $options === null) {
-                              $count = 0;
-                              foreach ($product->productOptions as $option) {
-                                    echo '<div class="row mb-3 justify-content-center optionGroup">
-                              <div class="col-md-10">
-                                    <div class="card">
-                                          <div class="card-header">
-                                                <div class="row mb-3">
-                                                      <label for="" class="col-md-3 col-form-label text-md-end">Option Name</label>
-                  
-                                                      <div class="col-md-8">
-                                                            <div class="input-group">
-                                                                  <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                        <i class="fa-solid fa-utensils fa-fw"></i>
-                                                                  </div>
-                  
-                                                                  <input type="hidden" name="optionId[]" value="' . $option->id . '"> 
-                                                                  <input class="form-control" type="text" name="optionName[]" placeholder="Option Name" value="' . $option->name . '">
+                  @if($product !== null)
+                  @if($product->productOptions && $options === null)
+                  @php $count = 0; @endphp
+                  @foreach($product->productOptions as $option)
+                  <div class="row mb-3 justify-content-center optionGroup">
+                        <div class="col-md-10">
+                              <div class="card">
+                                    <div class="card-header">
+                                          <div class="row mb-3">
+                                                <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Option Name') }}</label>
+
+                                                <div class="col-md-8">
+                                                      <div class="input-group">
+                                                            <div class="input-group-text justify-content-center" style="width: 6%;">
+                                                                  <i class="fa-solid fa-utensils fa-fw"></i>
                                                             </div>
-                                                      </div>
-                                                </div>
-                  
-                                                <div class="row mb-3">
-                                                      <label for="" class="col-md-3 col-form-label text-md-end">Description</label>
-                  
-                                                      <div class="col-md-8">
-                                                            <div class="input-group">
-                                                                  <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                        <i class="fa-solid fa-quote-right fa-fw"></i>
-                                                                  </div>
-                  
-                                                                  <textarea class="form-control") is-invalid @enderror" name="optionDescription[]" id="" cols="30" rows="3">' . $option->description . '</textarea>
-                                                            </div>
-                                                      </div>
-                                                </div>
-                  
-                                                <div class="row">
-                                                      <div class="col-md-8 offset-md-10">
-                                                            <button type="button" class="btn btn-danger" onclick="delOptions(this);"><i class="fa-solid fa-minus"></i></button>
+
+                                                            <input type="hidden" name="optionId[]" value="{{ $option->id }}">
+                                                            <input class="form-control" type="text" name="optionName[]" placeholder="Option Name" value="{{ $option->name }}">
                                                       </div>
                                                 </div>
                                           </div>
-                  
-                                          <div class="card-body">
-                                                <div id="optionDetail' . $count . '">';
 
-                                    foreach ($option->optionDetails as $detail) {
-                                          if ($detail->name == 'None') {
-                                                echo '<div class="row mb-3 justify-content-center optionDetailGroup">
-                                                            <div class="col-md-10">
-                                                                  <div class="card">
-                                                                        <div class="card-body">
-                  
-                                                                              <div class="row mb-3">
-                                                                                    <label for="" class=" col-md-3 col-form-label text-md-end">Option</label>
-                  
-                                                                                    <div class="col-md-8">
-                                                                                          <div class="input-group">
-                                                                                                <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                                                      <i class="fa-solid fa-wheat-awn-circle-exclamation fa-fw"></i>
-                                                                                                </div>
-                  
-                                                                                                <input class="form-control" type="text" name="optionDetail" placeholder="Option" value="None" disabled>
-                                                                                                <input type="hidden" name="optionDetailId[' . $count . '][]" value="' . $detail->id . '"> 
-                                                                                                <input type="hidden" name="optionDetail[' . $count . '][]" value="None">
-                                                                                          </div>
-                                                                                    </div>
-                                                                              </div>
-                  
-                                                                              <div class="row mb-3">
-                                                                                    <label for="" class=" col-md-3 col-form-label text-md-end">Additional Price(' . Config::get('payment.currency_symbol') . ')</label>
-                  
-                                                                                    <div class="col-md-8">
-                                                                                          <div class="input-group">
-                                                                                                <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                                                      <i class="fa-solid fa-money-bill-wheat fa-fw"></i>
-                                                                                                </div>
-                  
-                                                                                                <input class="form-control" type="text" name="additionalPrice" placeholder="Additional Price" value="0.00" disabled>
-                                                                                                <input type="hidden" name="additionalPrice[' . $count . '][]" value="0.00">
-                                                                                          </div>
-                                                                                    </div>
-                                                                              </div>
-                  
-                                                                        </div>
-                                                                  </div>
+                                          <div class="row mb-3">
+                                                <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Description') }}</label>
+
+                                                <div class="col-md-8">
+                                                      <div class="input-group">
+                                                            <div class="input-group-text justify-content-center" style="width: 6%;">
+                                                                  <i class="fa-solid fa-quote-right fa-fw"></i>
                                                             </div>
-                                                      </div>';
-                                          } else {
-                                                echo '<div class="row mb-3 justify-content-center optionDetailGroup">
-                                          <div class="col-md-10">
-                                                <div class="card">
-                                                      <div class="card-body">
-                              
-                                                            <div class="row mb-3">
-                                                                  <label for="" class=" col-md-3 col-form-label text-md-end">Option</label>
-                              
-                                                                  <div class="col-md-8">
-                                                                        <div class="input-group">
-                                                                              <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                                    <i class="fa-solid fa-wheat-awn-circle-exclamation fa-fw"></i>
-                                                                              </div>
-                              
-                                                                              <input type="hidden" name="optionDetailId[' . $count . '][]" value="' . $detail->id . '">
-                                                                              <input class="form-control" type="text" name="optionDetail[' . $count . '][]" placeholder="Option" value="' . $detail->name . '">
-                                                                        </div>
-                                                                  </div>
-                                                            </div>
-                              
-                                                            <div class="row mb-3">
-                                                                  <label for="" class=" col-md-3 col-form-label text-md-end">Additional Price(' . Config::get('payment.currency_symbol') . ')</label>
-                              
-                                                                  <div class="col-md-8">
-                                                                        <div class="input-group">
-                                                                              <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                                    <i class="fa-solid fa-money-bill-wheat fa-fw"></i>
-                                                                              </div>
-                              
-                                                                              <input class="form-control" type="text" name="additionalPrice[' . $count . '][]" placeholder="Additional Price" value="' . $detail->extra_price . '">
-                                                                        </div>
-                                                                  </div>
-                                                            </div>
-                              
-                                                            <div class="row">
-                                                                  <div class="col-md-8 offset-md-10">
-                                                                        <button type="button" class="btn btn-danger" onclick="delOptionDetail(this);" data-count=""><i class="fa-solid fa-minus"></i></button>
-                                                                  </div>
-                                                            </div>
-                              
+
+                                                            <textarea class="form-control" name="optionDescription[]" id="" cols="30" rows="3">{{ $option->description }}</textarea>
                                                       </div>
                                                 </div>
                                           </div>
-                                    </div>';
-                                          }
-                                    }
 
-                                    echo '</div>
+                                          <div class="row">
+                                                <div class="col-md-8 offset-md-10">
+                                                      <button type="button" class="btn btn-danger" onclick="delOptions(this);"><i class="fa-solid fa-minus"></i></button>
+                                                </div>
+                                          </div>
+                                    </div>
 
-                                                <div class="row mb-0">
-                                                      <div class="col-md-8 offset-md-10">
-                                                            <button type="button" class="btn btn-primary" onclick="addOptionDetail(this);" data-count="' . $count . '"><i class="fas fa-plus"></i></button>
+                                    <div class="card-body">
+                                          <div id="optionDetail{{ $count }}">
+                                                @foreach($option->optionDetails as $detail)
+                                                <div class="row mb-3 justify-content-center optionDetailGroup">
+                                                      <div class="col-md-10">
+                                                            <div class="card">
+                                                                  <div class="card-body">
+
+                                                                        <div class="row mb-3">
+                                                                              <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Option') }}</label>
+
+                                                                              <div class="col-md-8">
+                                                                                    <div class="input-group">
+                                                                                          <div class="input-group-text justify-content-center" style="width: 6%;">
+                                                                                                <i class="fa-solid fa-wheat-awn-circle-exclamation fa-fw"></i>
+                                                                                          </div>
+
+                                                                                          <input class="form-control" type="text" name="optionDetail[{{ $count }}][]" placeholder="Option" value="{{ $detail->name }}" @if($detail->name === 'None') disabled @endif>
+                                                                                          @if($detail->name === 'None')
+                                                                                          <input type="hidden" name="optionDetail[{{ $count }}][]" value="{{ $detail->name }}">
+                                                                                          @endif
+                                                                                          <input type="hidden" name="optionDetailId[{{ $count }}][]" value="{{ $detail->id }}">
+                                                                                    </div>
+                                                                              </div>
+                                                                        </div>
+
+                                                                        <div class="row mb-3">
+                                                                              <label for="" class=" col-md-3 col-form-label text-md-end">{{ 'Additional Price(' . Config::get('payment.currency_symbol') . ')' }}</label>
+
+                                                                              <div class="col-md-8">
+                                                                                    <div class="input-group">
+                                                                                          <div class="input-group-text justify-content-center" style="width: 6%;">
+                                                                                                <i class="fa-solid fa-money-bill-wheat fa-fw"></i>
+                                                                                          </div>
+
+                                                                                          <input class="form-control" type="text" name="additionalPrice[{{ $count }}][]" placeholder="Additional Price" value="{{ $detail->extra_price }}" @if($detail->name === 'None') disabled @endif>
+                                                                                          @if($detail->name === 'None')
+                                                                                          <input type="hidden" name="additionalPrice[{{ $count }}][]" value="{{ $detail->extra_price }}">
+                                                                                          @endif
+                                                                                    </div>
+                                                                              </div>
+                                                                        </div>
+
+                                                                        <div class="row">
+                                                                              <div class="col-md-8 offset-md-10">
+                                                                                    <button type="button" class="btn btn-danger" onclick="delOptionDetail(this);" data-count=""><i class="fa-solid fa-minus"></i></button>
+                                                                              </div>
+                                                                        </div>
+
+                                                                  </div>
+                                                            </div>
                                                       </div>
                                                 </div>
-                  
+                                                @endforeach
+                                          </div>
+
+                                          <div class="row mb-0">
+                                                <div class="col-md-8 offset-md-10">
+                                                      <button type="button" class="btn btn-primary" onclick="addOptionDetail(this);" data-count="{{ $count }}"><i class="fas fa-plus"></i></button>
+                                                </div>
                                           </div>
                                     </div>
                               </div>
-                        </div>';
-                                    $count++;
-                              }
-                        }
-                  }
+                        </div>
+                  </div>
+                  @php $count++; @endphp
+                  @endforeach
+                  @endif
+                  @endif
 
-                  if ($options) {
-                        foreach ($options as $key => $value) {
-                              echo '<div class="row mb-3 justify-content-center optionGroup">
-                                    <div class="col-md-10">
-                                          <div class="card">
-                                                <div class="card-header">
-                                                      <div class="row mb-3">
-                                                            <label for="" class="col-md-3 col-form-label text-md-end">Option Name</label>
-                        
-                                                            <div class="col-md-8">
-                                                                  <div class="input-group">
-                                                                        <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                              <i class="fa-solid fa-utensils fa-fw"></i>
-                                                                        </div>
+                  @if($options)
+                  @foreach($options as $key => $value)
+                  <div class="row mb-3 justify-content-center optionGroup">
+                        <div class="col-md-10">
+                              <div class="card">
+                                    <div class="card-header">
 
-                                                                        ';
+                                          <div class="row mb-3">
+                                                <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Option Name') }}</label>
 
-                              if ($errors->has('optionName.' . strval($key))) {
-                                    echo '<input class="form-control is-invalid" type="text" name="optionName[' . $key . ']" placeholder="Option Name">
-                                                                              
-                                          <span class="invalid-feedback" role="alert">
-                                                <strong>' . $errors->first('optionName.' . strval($key)) . '</strong>
-                                          </span>';
-                              } else {
-                                    echo '<input class="form-control" type="text" name="optionName[' . $key . ']" placeholder="Option Name" value="' . $value . '">';
-                              }
-
-                              if ($optionsId !== null) {
-                                    if (array_key_exists($key, $optionsId)) {
-                                          echo '<input type="hidden" name="optionNameId[' . $key . ']" value="' . $optionsId[$key] . '">';
-                                    }
-                              }
-
-                              echo '</div>
+                                                <div class="col-md-8">
+                                                      <div class="input-group">
+                                                            <div class="input-group-text justify-content-center" style="width: 6%;">
+                                                                  <i class="fa-solid fa-utensils fa-fw"></i>
                                                             </div>
-                                                      </div>
-                        
-                                                      <div class="row mb-3">
-                                                            <label for="" class="col-md-3 col-form-label text-md-end">Description</label>
-                        
-                                                            <div class="col-md-8">
-                                                                  <div class="input-group">
-                                                                        <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                              <i class="fa-solid fa-quote-right fa-fw"></i>
-                                                                        </div>
-                        
-                                                                        <textarea class="form-control" name="optionDescription[]" id="" cols="30" rows="3">' . $descriptions[$key] . '</textarea>
-                                                                  </div>
-                                                            </div>
-                                                      </div>
-                        
-                                                      <div class="row">
-                                                            <div class="col-md-8 offset-md-10">
-                                                                  <button type="button" class="btn btn-danger" onclick="delOptions(this);"><i class="fa-solid fa-minus"></i></button>
-                                                            </div>
+
+                                                            <input class="form-control @error('optionName.' . strval($key)) is-invalid @enderror" type="text" name="optionName[{{ $key }}]" value="{{ $value }}" placeholder="Option Name">
+                                                            @if($optionsId !== null)
+                                                            @if(array_key_exists($key, $optionsId))
+                                                            <input type="hidden" name="optionNameId[{{ $key }}]" value="{{ $optionsId[$key] }}">
+                                                            @endif
+                                                            @endif
+
+                                                            @error('optionName.' . strval($key))
+                                                            <span class="invalid-feedback" role="alert">
+                                                                  <strong>{{ $message }}</strong>
+                                                            </span>
+                                                            @enderror
                                                       </div>
                                                 </div>
-                        
-                                                <div class="card-body">
-                        
-                                                      <div id="optionDetail' . $key . '">';
+                                          </div>
 
-                              if ($optionDetail[$key]) {
-                                    foreach ($optionDetail[$key] as $key1 => $value1) {
-                                          if ($value1 == 'None') {
-                                                echo '<div class="row mb-3 justify-content-center optionDetailGroup">
-                                                <div class="col-md-10">
-                                                      <div class="card">
-                                                            <div class="card-body">
-      
-                                                                  <div class="row mb-3">
-                                                                        <label for="" class=" col-md-3 col-form-label text-md-end">Option</label>
-      
-                                                                        <div class="col-md-8">
-                                                                              <div class="input-group">
-                                                                                    <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                                          <i class="fa-solid fa-wheat-awn-circle-exclamation fa-fw"></i>
+                                          <div class="row mb-3">
+                                                <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Description') }}</label>
+
+                                                <div class="col-md-8">
+                                                      <div class="input-group">
+                                                            <div class="input-group-text justify-content-center" style="width: 6%;">
+                                                                  <i class="fa-solid fa-quote-right fa-fw"></i>
+                                                            </div>
+
+                                                            <textarea class="form-control" name="optionDescription[]" id="" cols="30" rows="3">{{ $descriptions[$key] }}</textarea>
+                                                      </div>
+                                                </div>
+                                          </div>
+
+                                          <div class="row">
+                                                <div class="col-md-8 offset-md-10">
+                                                      <button type="button" class="btn btn-danger" onclick="delOptions(this);"><i class="fa-solid fa-minus"></i></button>
+                                                </div>
+                                          </div>
+
+                                    </div>
+
+                                    <div class="card-body">
+                                          <div id="optionDetail{{ $key }}">
+                                                @if($optionDetail[$key])
+                                                @foreach($optionDetail[$key] as $key1 => $value1)
+                                                <div class="row mb-3 justify-content-center optionDetailGroup">
+                                                      <div class="col-md-10">
+                                                            <div class="card">
+
+                                                                  <div class="card-body">
+
+                                                                        <div class="row mb-3">
+                                                                              <label for="" class=" col-md-3 col-form-label text-md-end">{{ __('Option') }}</label>
+
+                                                                              <div class="col-md-8">
+                                                                                    <div class="input-group">
+                                                                                          <div class="input-group-text justify-content-center" style="width: 6%;">
+                                                                                                <i class="fa-solid fa-wheat-awn-circle-exclamation fa-fw"></i>
+                                                                                          </div>
+
+                                                                                          <input class="form-control @error('optionDetail.' . strval($key) . '.' . strval($key1)) is-invalid @enderror" type="text" name="optionDetail[{{ $key }}][]" value="{{ $value1 }}" placeholder="Option" @if($value1==='None' ) disabled @endif>
+                                                                                          @if($optionDetailId !== null)
+                                                                                          @if(array_key_exists($key, $optionDetailId))
+                                                                                          @if(array_key_exists($key1, $optionDetailId[$key]))
+                                                                                          <input type="hidden" name="optionDetailId[{{ $key }}][]" value="{{ $optionDetailId[$key][$key1] }}">
+                                                                                          @endif
+                                                                                          @endif
+                                                                                          @endif
+
+                                                                                          @if($value1 === 'None')
+                                                                                          <input type="hidden" name="optionDetail[{{ $key }}][]" value="{{ $value1 }}">
+                                                                                          @endif
+
+                                                                                          @error('optionDetail.' . strval($key) . '.' . strval($key1))
+                                                                                          <span class="invalid-feedback" role="alert">
+                                                                                                <strong>{{ $message }}</strong>
+                                                                                          </span>
+                                                                                          @enderror
                                                                                     </div>
-      
-                                                                                    <input class="form-control" type="text" name="optionDetail" placeholder="Option" value="None" disabled>
-                                                                                    <input type="hidden" name="optionDetail[' . $key . '][]" value="None">';
-
-                                                if ($optionDetailId !== null) {
-                                                      if (array_key_exists($key1, $optionDetailId[$key])) {
-                                                            echo '<input type="hidden" name="optionDetailId[' . $key . '][]" value="' . $optionDetailId[$key][$key1] . '">';
-                                                      }
-                                                }
-
-                                                echo '</div>
-                                                                        </div>
-                                                                  </div>
-      
-                                                                  <div class="row mb-3">
-                                                                        <label for="" class=" col-md-3 col-form-label text-md-end">Additional Price(' . Config::get('payment.currency_symbol') . ')</label>
-      
-                                                                        <div class="col-md-8">
-                                                                              <div class="input-group">
-                                                                                    <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                                          <i class="fa-solid fa-money-bill-wheat fa-fw"></i>
-                                                                                    </div>
-      
-                                                                                    <input class="form-control" type="text" name="additionalPrice" placeholder="Additional Price" value="0.00" disabled>
-                                                                                    <input type="hidden" name="additionalPrice[' . $key . '][]" value="0.00">
                                                                               </div>
                                                                         </div>
+
+                                                                        <div class="row mb-3">
+                                                                              <label for="" class=" col-md-3 col-form-label text-md-end">{{ 'Additional Price(' . Config::get('payment.currency_symbol') . ')' }}</label>
+
+                                                                              <div class="col-md-8">
+                                                                                    <div class="input-group">
+                                                                                          <div class="input-group-text justify-content-center" style="width: 6%;">
+                                                                                                <i class="fa-solid fa-money-bill-wheat fa-fw"></i>
+                                                                                          </div>
+
+                                                                                          <input class="form-control @error('additionalPrice.' . strval($key) . '.' . strval($key1)) is-invalid @enderror" type="text" name="additionalPrice[{{ $key }}][]" value="{{ $additionalPrices[$key][$key1] }}" placeholder="Additional Price" @if($value1==='None' ) disabled @endif>
+
+                                                                                          @if($value1 === 'None')
+                                                                                          <input type="hidden" name="additionalPrice[{{ $key }}][]" value="{{ $additionalPrices[$key][$key1] }}">
+                                                                                          @endif
+
+                                                                                          @error('additionalPrice.' . strval($key) . '.' . strval($key1))
+                                                                                          <span class="invalid-feedback" role="alert">
+                                                                                                <strong>{{ $message }}</strong>
+                                                                                          </span>
+                                                                                          @enderror
+                                                                                    </div>
+                                                                              </div>
+                                                                        </div>
+
+                                                                        <div class="row">
+                                                                              <div class="col-md-8 offset-md-10">
+                                                                                    <button type="button" class="btn btn-danger" onclick="delOptionDetail(this);"><i class="fa-solid fa-minus"></i></button>
+                                                                              </div>
+                                                                        </div>
+
                                                                   </div>
-      
+
                                                             </div>
                                                       </div>
                                                 </div>
-                                          </div>';
-                                          } else {
-                                                echo '<div class="row mb-3 justify-content-center optionDetailGroup">
-                                          <div class="col-md-10">
-                                                <div class="card">
-                                                      <div class="card-body">
-                              
-                                                            <div class="row mb-3">
-                                                                  <label for="" class=" col-md-3 col-form-label text-md-end">Option</label>
-                              
-                                                                  <div class="col-md-8">
-                                                                        <div class="input-group">
-                                                                              <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                                    <i class="fa-solid fa-wheat-awn-circle-exclamation fa-fw"></i>
-                                                                              </div>';
+                                                @endforeach
+                                                @endif
+                                          </div>
 
-                                                if ($errors->has('optionDetail.' . strval($key) . '.' . strval($key1))) {
-                                                      echo '<input class="form-control is-invalid" type="text" name="optionDetail[' . $key . '][]" placeholder="Option">
-                                                      
-                                                      <span class="invalid-feedback" role="alert">
-                                                            <strong>' . $errors->first('optionDetail.' . strval($key) . '.' . strval($key1)) . '</strong>
-                                                      </span>';
-                                                } else {
-                                                      echo '<input class="form-control" type="text" name="optionDetail[' . $key . '][]" placeholder="Option" value="' . $value1 . '">';
-                                                }
-
-                                                if ($optionDetailId !== null) {
-                                                      if (array_key_exists($key1, $optionDetailId[$key])) {
-                                                            echo '<input type="hidden" name="optionDetailId[' . $key . '][]" value="' . $optionDetailId[$key][$key1] . '">';
-                                                      }
-                                                }
-
-                                                echo '</div>
-                                                                  </div>
-                                                            </div>
-                              
-                                                            <div class="row mb-3">
-                                                                  <label for="" class=" col-md-3 col-form-label text-md-end">Additional Price(' . Config::get('payment.currency_symbol') . ')</label>
-                              
-                                                                  <div class="col-md-8">
-                                                                        <div class="input-group">
-                                                                              <div class="input-group-text justify-content-center" style="width: 6%;">
-                                                                                    <i class="fa-solid fa-money-bill-wheat fa-fw"></i>
-                                                                              </div>';
-
-                                                if ($errors->has('additionalPrice.' . strval($key) . '.' . strval($key1))) {
-                                                      echo '<input class="form-control is-invalid" type="text" name="additionalPrice[' . $key . '][]" placeholder="Additional Price">
-                                                                                    
-                                                                                    <span class="invalid-feedback" role="alert">
-                                                                                          <strong>' . $errors->first('additionalPrice.' . strval($key) . '.' . strval($key1)) . '</strong>
-                                                                                    </span>';
-                                                } else {
-                                                      echo '<input class="form-control" type="text" name="additionalPrice[' . $key . '][]" placeholder="Additional Price" value="' . $additionalPrices[$key][$key1] . '">';
-                                                }
-
-                                                echo '</div>
-                                                                  </div>
-                                                            </div>
-                              
-                                                            <div class="row">
-                                                                  <div class="col-md-8 offset-md-10">
-                                                                        <button type="button" class="btn btn-danger" onclick="delOptionDetail(this);"><i class="fa-solid fa-minus"></i></button>
-                                                                  </div>
-                                                            </div>
-                              
-                                                      </div>
+                                          <div class="row mb-0">
+                                                <div class="col-md-8 offset-md-10">
+                                                      <button type="button" class="btn btn-primary" onclick="addOptionDetail(this);" data-count="{{ $key }}"><i class="fas fa-plus"></i></button>
                                                 </div>
                                           </div>
-                                    </div>';
-                                          }
-                                    }
-                              }
 
-                              echo '</div>
-                        
-                                                      <div class="row mb-0">
-                                                            <div class="col-md-8 offset-md-10">
-                                                                  <button type="button" class="btn btn-primary" onclick="addOptionDetail(this);" data-count="' . $key . '"><i class="fas fa-plus"></i></button>
-                                                            </div>
-                                                      </div>
-                        
-                                                </div>
-                                          </div>
                                     </div>
-                              </div>';
-                        }
-                  }
-                  ?>
+                              </div>
+                        </div>
+                  </div>
+                  @endforeach
+                  @endif
             </div>
 
             <div class="row mb-0">

@@ -7,7 +7,7 @@
             <div class="col-md-10">
                   <div class="card">
                         <div class="card-header">
-                              Store
+                              {{ __('Store') }}
                         </div>
 
                         <div class="card-body">
@@ -15,7 +15,7 @@
                               @if($errors->any())
                               <div class="row my-4">
                                     <div class="col-md-8 offset-md-3 text-danger">
-                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> The form has some error, please refill and submit again.
+                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The form has some error, please refill and submit again.') }}
                                     </div>
                               </div>
                               @endif
@@ -66,9 +66,7 @@
 
                                     {{-- image preview --}}
                                     <div class="row mb-3 justify-content-center">
-                                          <div class="col-1 " id="holder">
-
-                                          </div>
+                                          <div class="col-1 " id="holder"></div>
                                     </div>
 
                                     <div class="row mb-3">

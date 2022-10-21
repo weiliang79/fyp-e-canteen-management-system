@@ -7,7 +7,7 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header">
-                              Product Category
+                              {{ __('Product Category') }}
                         </div>
 
                         <div class="card-body">
@@ -15,8 +15,8 @@
                               <table class="dataTable table table-stripped" style="width: 100%;">
                                     <thead>
                                           <tr>
-                                                <th>Name</th>
-                                                <th>Description</th>
+                                                <th>{{ __('Name') }}</th>
+                                                <th>{{ __('Description') }}</th>
                                           </tr>
                                     </thead>
                                     <tbody>
