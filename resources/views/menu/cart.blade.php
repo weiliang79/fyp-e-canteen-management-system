@@ -7,7 +7,7 @@
             <div class="col-8">
                   <div class="card">
                         <div class="card-header">
-                              Carts
+                              {{ __('Carts') }}
                         </div>
 
                         <div class="card-body">
@@ -15,11 +15,11 @@
                               <table class="dataTable-cart table table-stripped" style="width: 100%;">
                                     <thead>
                                           <tr>
-                                                <th>Product</th>
-                                                <th>Option</th>
-                                                <th>Notes</th>
-                                                <th>Price({{ config('payment.currency_symbol') }})</th>
-                                                <th>Action</th>
+                                                <th>{{ __('Product') }}</th>
+                                                <th>{{ __('Option') }}</th>
+                                                <th>{{ __('Notes') }}</th>
+                                                <th>{{ 'Price(' . config('payment.currency_symbol') . ')' }}</th>
+                                                <th>{{ __('Action') }}</th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -53,7 +53,7 @@
             <div class="col-4">
                   <div class="card">
                         <div class="card-header">
-                              Summary
+                              {{ __('Summary') }}
                         </div>
 
                         <form action="{{ route('student.menus.create_order') }}" method="post">
@@ -63,8 +63,8 @@
 
                                     <div class="list-group">
                                           <div class="list-group-item">
-                                                <label class="form-control-label" for="">Rest Time to Pick-Up</label>
-                                                <select class="form-control" name="restTime" id="" @if(count($restDates) == 0) disabled @endif>
+                                                <label class="form-control-label" for="">{{ __('Rest Time to Pick-Up') }}</label>
+                                                <select class="form-control" name="restTime" id="" @if(count($restDates)==0) disabled @endif>
                                                       @foreach($restDates as $key => $value)
                                                       <option value="{{ $key }}">{{ $value }}</option>
                                                       @endforeach
@@ -72,8 +72,8 @@
                                           </div>
 
                                           <div class="list-group-item">
-                                                Price
-                                                <h4>Total: {{ config('payment.currency_symbol') }}{{ number_format((float) $carts->sum('price'), 2, '.', '') }}</h4>
+                                                {{ __('Price') }}
+                                                <h4> {{ 'Total: ' . config('payment.currency_symbol') . number_format((float) $carts->sum('price'), 2, '.', '') }}</h4>
                                           </div>
                                     </div>
 
@@ -83,17 +83,17 @@
                                     <button class="btn btn-primary" @if($carts->count() == 0 || (config('payment.maintenance_mode') && !Auth::guard('student')->user()->is_a_sandbox_student || (config('payment.2c2p-status') == false && config('payment.stripe-status') == false)) || count($restDates) == 0) disabled @endif>Procced to Checkout</button>
                                     @if($carts->count() == 0)
                                     <div class="text-danger mt-2">
-                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> The cart was empty.
+                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The cart was empty.') }}
                                     </div>
                                     @elseif(config('payment.maintenance_mode') && !Auth::guard('student')->user()->is_a_sandbox_student || (config('payment.2c2p-status') == false && config('payment.stripe-status') == false))
                                     <div class="text-danger mt-2">
-                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> Currently checkout services are unavailable.
+                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('Currently checkout services are unavailable.') }}
                                     </div>
                                     @endif
                                     @if(count($restDates) == 0)
-                                      <div class="text-danger mt-2">
-                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> Current Student haven't assigned any rest time. Please contact Administrator for further assist.
-                                      </div>
+                                    <div class="text-danger mt-2">
+                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('Current Student haven\'t assigned any rest time. Please contact Administrator for further assist.') }}
+                                    </div>
                                     @endif
                               </div>
 
@@ -118,32 +118,31 @@
             }).then((result) => {
                   if (result.isConfirmed) {
 
-                      axios.post(
-                          '{{ route("student.menus.cart.delete") }}',
-                          {
-                              product_id: $(item).data('product-id'),
-                              time_created: $(item).data('time-created'),
-                          }
-                          )
-                          .then(function (response) {
-                              SwalWithBootstrap.fire({
-                                  title: 'Success',
-                                  html: response.data,
-                                  icon: 'success',
-                              }).then((result) => {
-                                  window.location.reload();
+                        axios.post(
+                                    '{{ route("student.menus.cart.delete") }}', {
+                                          product_id: $(item).data('product-id'),
+                                          time_created: $(item).data('time-created'),
+                                    }
+                              )
+                              .then(function(response) {
+                                    SwalWithBootstrap.fire({
+                                          title: 'Success',
+                                          html: response.data,
+                                          icon: 'success',
+                                    }).then((result) => {
+                                          window.location.reload();
+                                    });
+                              })
+                              .catch(function(error) {
+                                    console.log(error);
+                                    SwalWithBootstrap.fire({
+                                          title: 'Error',
+                                          html: error.message,
+                                          icon: 'error',
+                                    }).then((result) => {
+                                          window.location.reload();
+                                    });
                               });
-                          })
-                          .catch(function (error) {
-                              console.log(error);
-                              SwalWithBootstrap.fire({
-                                  title: 'Error',
-                                  html: error.message,
-                                  icon: 'error',
-                              }).then((result) => {
-                                  window.location.reload();
-                              });
-                          });
 
                   } else if (result.dismiss === Swal.DismissReason.cancel) {
 

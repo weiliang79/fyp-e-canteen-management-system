@@ -7,7 +7,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    Order History
+                    {{ __('Order History') }}
                 </div>
 
                 <div class="card-body">
@@ -16,7 +16,7 @@
                         <div class="col">
 
                             @if(count($orders) === 0)
-                            <p class="mb-1 text-center">You haven't made any order before, <a href="{{ route('student.menus') }}">visit menus page</a></p>
+                            <p class="mb-1 text-center">{{ __('You haven\'t made any order before, ') }}<a href="{{ route('student.menus') }}">{{ __('visit menus page.') }}</a></p>
                             @else
                             <div class="accordion" id="orderAccordion">
                                 @for($i = 0; $i < count($orders); $i++) <div class="accordion-item">
@@ -24,9 +24,7 @@
                                         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse{{ $i }}" aria-expanded="false" aria-controls="collapse{{ $i }}">
 
                                             <div class="d-flex justify-content-between mx-4" style="width: 100%;">
-                                                <div class="align-items-start">Pick Up
-                                                    Time: {{ $orders[$i]->pick_up_start->format('Y-m-d H:i A') }}
-                                                    to {{ $orders[$i]->pick_up_end->format('Y-m-d H:i A') }}</div>
+                                                <div class="align-items-start">{{ __('Pick Up Time: ') }}{{ $orders[$i]->pick_up_start->format('Y-m-d H:i A') }}{{ __(' to ') }}{{ $orders[$i]->pick_up_end->format('Y-m-d H:i A') }}</div>
                                                 <div class="align-items-center ms-5">{{ config('payment.currency_symbol') }}{{ $orders[$i]->total_price }}</div>
                                                 <div class="align-items-end ms-auto">
                                                     <span class="badge {{ $orders[$i]->getStatusBg() }}" style="font-size:0.8rem;">
@@ -42,15 +40,13 @@
 
                                             @if($orders[$i]->status === \App\Models\Order::PAYMENT_PENDING || $orders[$i]->status === \App\Models\Order::PAYMENT_FAILURE)
                                             <div class="text-danger text-center mb-4">
-                                                <i class="fa-solid fa-circle-exclamation fa-lg"></i> The
-                                                payment is not complete, please go to <a href="{{ route('student.checkout', ['order_id' => $orders[$i]]) }}">Checkout
-                                                    Page</a>.
+                                                <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The payment is not complete, please go to') }}<a href="{{ route('student.checkout', ['order_id' => $orders[$i]]) }}">{{ __('Checkout Page') }}</a>{{ __('.') }}
                                             </div>
                                             @endif
 
                                             <div class="card mb-4">
                                                 <div class="card-header">
-                                                    Order Details
+                                                    {{ __('Order Details') }}
                                                 </div>
 
                                                 <div class="card-body">
@@ -58,13 +54,13 @@
                                                     <table class="dataTable-cart table table-stripped" style="width: 100%;">
                                                         <thead>
                                                             <tr>
-                                                                <th>Product</th>
-                                                                <th>Option</th>
-                                                                <th>Notes</th>
+                                                                <th>{{ __('Product') }}</th>
+                                                                <th>{{ __('Option') }}</th>
+                                                                <th>{{ __('Notes') }}</th>
                                                                 <th>
-                                                                    Price({{ config('payment.currency_symbol') }})
+                                                                    {{ __('Price')}}{{ '(' . config('payment.currency_symbol') . ')' }}
                                                                 </th>
-                                                                <th>Status</th>
+                                                                <th>{{ __('Status') }}</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -74,7 +70,7 @@
                                                                 <td>
                                                                     @foreach($detail->product_options as $option)
                                                                     @foreach($option as $key => $value)
-                                                                    {{ App\Models\ProductOption::find($key)->name }}: {{ App\Models\OptionDetail::find($value)->name }}
+                                                                    {{ App\Models\ProductOption::find($key)->name . ': ' . App\Models\OptionDetail::find($value)->name }}
                                                                     <br>
                                                                     @endforeach
                                                                     @endforeach
@@ -93,7 +89,7 @@
                                             @foreach($orders[$i]->payments()->orderBy('created_at', 'desc')->get() as $payment)
                                             <div class="card @if(!$loop->last) mb-4 @endif">
                                                 <div class="card-header">
-                                                    Payment # {{ $payment->created_at->format('Y-m-d h:i A') }}
+                                                    {{ 'Payment # ' . $payment->created_at->format('Y-m-d h:i A') }}
                                                 </div>
 
                                                 <div class="card-body">
@@ -103,15 +99,15 @@
                                                         <div class="col-6">
                                                             <ul class="list-group">
                                                                 <li class="list-group-item d-flex justify-content-between">
-                                                                    <p class="mb-1">Payment Type</p>
+                                                                    <p class="mb-1">{{ __('Payment Type') }}</p>
                                                                     <p class="mb-1">{{ $payment->getPaymentTypeString() }}</p>
                                                                 </li>
                                                                 <li class="list-group-item d-flex justify-content-between">
-                                                                    <p class="fw-bold mb-1">Amount</p>
+                                                                    <p class="fw-bold mb-1">{{ __('Amount') }}</p>
                                                                     <p class="fw-bold mb-1">{{ config('payment.currency_symbol') }}{{ $payment->amount }}</p>
                                                                 </li>
                                                                 <li class="list-group-item d-flex justify-content-between">
-                                                                    <p class="mb-1">Status</p>
+                                                                    <p class="mb-1">{{ __('Status') }}</p>
                                                                     <p class="mb-1">
                                                                         <span class="badge {{ $payment->getStatusBg() }}" style="font-size:0.8rem;">
                                                                             {{ $payment->getStatusString() }}
@@ -126,37 +122,37 @@
                                                                 @if($payment->payment_type_id == \App\Models\PaymentType::PAYMENT_2C2P && $payment->paymentDetail2c2p !== null)
                                                                 <li class="list-group-item d-flex justify-content-between">
 
-                                                                    <p class="mb-1">Invoice No</p>
+                                                                    <p class="mb-1">{{ __('Invoice No') }}</p>
                                                                     <p class="mb-1">
                                                                         {{ $payment->paymentDetail2c2p->invoice_no }}
                                                                     </p>
                                                                 </li>
                                                                 <li class="list-group-item d-flex justify-content-between">
-                                                                    <p class="mb-1">Transaction Time</p>
+                                                                    <p class="mb-1">{{ __('Transaction Time') }}</p>
                                                                     <p class="mb-1">
-                                                                        {{ $payment->paymentDetail2c2p->transaction_time->format('Y-m-d H:i A') }}
+                                                                        {{ $payment->paymentDetail2c2p->transaction_time ? $payment->paymentDetail2c2p->transaction_time->format('Y-m-d H:i A') : 'None' }}
                                                                     </p>
                                                                 </li>
                                                                 <li class="list-group-item d-flex justify-content-between">
-                                                                    <p class="mb-1">Agent Code</p>
+                                                                    <p class="mb-1">{{ __('Agent Code') }}</p>
                                                                     <p class="mb-1">
                                                                         {{ $payment->paymentDetail2c2p->agent_code ?: 'None' }}
                                                                     </p>
                                                                 </li>
                                                                 <li class="list-group-item d-flex justify-content-between">
-                                                                    <p class="mb-1">Channel Code</p>
+                                                                    <p class="mb-1">{{ __('Channel Code') }}</p>
                                                                     <p class="mb-1">
                                                                         {{ $payment->paymentDetail2c2p->channel_code ?: 'None' }}
                                                                     </p>
                                                                 </li>
                                                                 <li class="list-group-item d-flex justify-content-between">
-                                                                    <p class="mb-1">Reference No</p>
+                                                                    <p class="mb-1">{{ __('Reference No') }}</p>
                                                                     <p class="mb-1">
                                                                         {{ $payment->paymentDetail2c2p->reference_no ?: 'None' }}
                                                                     </p>
                                                                 </li>
                                                                 <li class="list-group-item d-flex justify-content-between">
-                                                                    <p class="mb-1">Transaction Reference</p>
+                                                                    <p class="mb-1">{{ __('Transaction Reference') }}</p>
                                                                     <p class="mb-1">
                                                                         {{ $payment->paymentDetail2c2p->tran_ref ?: 'None' }}
                                                                     </p>
@@ -167,12 +163,11 @@
                                                                 @php $paymentMethod = auth()->guard('student')->user()->findPaymentMethod($payment->paymentDetailStripe->payment_method_id) @endphp
 
                                                                 <li class="list-group-item d-flex justify-content-between">
-                                                                    <p class="mb-1">Payment
-                                                                        Processing Method</p>
+                                                                    <p class="mb-1">{{ __('Payment Processing Method') }}</p>
                                                                     <p class="mb-1">{{ $paymentMethod->type }} - {{ $paymentMethod->card->brand }}</p>
                                                                 </li>
                                                                 <li class="list-group-item d-flex justify-content-between">
-                                                                    <p class="mb-1">Transaction Time</p>
+                                                                    <p class="mb-1">{{ __('Transaction Time') }}</p>
                                                                     <p class="mb-1">{{ \Carbon\Carbon::createFromTimestamp($paymentMethod->created)->format('Y-m-d H:i A') }}</p>
                                                                 </li>
                                                                 @endif

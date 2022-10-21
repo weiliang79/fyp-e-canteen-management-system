@@ -8,12 +8,14 @@
                   <!-- Left Side Of Navbar -->
                   <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                              <a id="InformationBarDropdown" class="nav-link" href="{{ Route('student.menus') }}">Menu</a>
+                              <a id="InformationBarDropdown" class="nav-link" href="{{ Route('student.menus') }}">
+                                    {{ __('Menu') }}
+                              </a>
                         </li>
                         @if(\App\Models\InformationPageDesign::all()->count() !== 0)
                         <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    Information
+                                    {{ __('Information') }}
                               </a>
 
                               <div class="dropdown-menu dropdown-menu-end" aria-labelledby="InformationBarDropdown">
@@ -40,8 +42,8 @@
 
                               <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ auth()->user()->isAdmin() ? route('admin.home') : route('food_seller.home') }}">
-                                        <i class="fa-solid fa-house"></i>
-                                        {{ __('Home') }}
+                                          <i class="fa-solid fa-house"></i>
+                                          {{ __('Home') }}
                                     </a>
 
                                     <a class="dropdown-item" href="{{ auth()->user()->isAdmin() ? route('admin.profile') : route('food_seller.profile') }}">
@@ -68,14 +70,14 @@
                         @if(auth()->guard('student')->user()->is_a_sandbox_student)
                         <li class="nav-item">
                               <div class="nav-link">
-                                    <i class="fa-solid fa-flask fa-fw"></i> This is a sandbox student account. <i class="fa-solid fa-flask fa-fw"></i>
+                                    <i class="fa-solid fa-flask fa-fw"></i>{{ __(' This is a sandbox student account. ') }}<i class="fa-solid fa-flask fa-fw"></i>
                               </div>
                         </li>
                         @endif
 
                         <li class="nav-item">
                               <a class="nav-link" href="{{ route('student.menus.cart') }}">
-                                    Carts
+                                    {{ __('Carts') }}
                                     @if(auth()->guard('student')->user()->carts()->count() !== 0)
                                     <sup>
                                           <span class="badge bg-danger">{{ auth()->guard('student')->user()->carts()->count() > 99 ? '99+' : auth()->guard('student')->user()->carts()->count() }}</span>
