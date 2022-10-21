@@ -20,7 +20,7 @@ class ProductFactory extends Factory
         return [
             'name' => $this->faker->foodName(),
             'barcode' => $this->faker->ean13(),
-            'price' => $this->faker->randomFloat(2, 0, 20),
+            'price' => $this->faker->randomFloat(2, 5, 20),
             'status' => true,
         ];
     }
