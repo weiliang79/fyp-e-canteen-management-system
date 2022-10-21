@@ -7,7 +7,7 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header">
-                              Order
+                              {{ __('Order') }}
                         </div>
 
                         <div class="card-body">
@@ -15,13 +15,13 @@
                               <table class="dataTable table table-stripped" style="width: 100%;">
                                     <thead>
                                           <tr>
-                                                <th>Student Number</th>
-                                                <th>Student Name</th>
-                                                <th>Pick Up Time</th>
-                                                <th>Amount({{ config('payment.currency_symbol') }})</th>
-                                                <th>Status</th>
-                                                <th>Created At</th>
-                                                <th>Action</th>
+                                                <th>{{ __('Student Number') }}</th>
+                                                <th>{{ __('Student Name') }}</th>
+                                                <th>{{ __('Pick Up Time') }}</th>
+                                                <th>{{ 'Amount(' . config('payment.currency_symbol') . ')' }}</th>
+                                                <th>{{ __('Status') }}</th>
+                                                <th>{{ __('Created At') }}</th>
+                                                <th>{{ __('Action') }}</th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -32,13 +32,13 @@
                                                 <td>{{ $order->pick_up_start->format('Y/m/d h:ia') }} to {{ $order->pick_up_end->format('Y/m/d h:ia') }}</td>
                                                 <td>{{ $order->total_price }}</td>
                                                 <td>
-                                                    <span class="badge {{ $order->getStatusBg() }}" style="font-size: 0.8rem;">
-                                                        {{ $order->getStatusString() }}
-                                                    </span>
+                                                      <span class="badge {{ $order->getStatusBg() }}" style="font-size: 0.8rem;">
+                                                            {{ $order->getStatusString() }}
+                                                      </span>
                                                 </td>
                                                 <td>{{ $order->created_at->format('Y/m/d h:ia') }}</td>
                                                 <td>
-                                                      <a class="btn btn-primary" href="{{ route('admin.order.details', ['order_id' => $order->id]) }}">Details</a>
+                                                      <a class="btn btn-primary" href="{{ route('admin.order.details', ['order_id' => $order->id]) }}">{{ __('Details') }}</a>
                                                 </td>
                                           </tr>
                                           @endforeach

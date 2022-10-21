@@ -7,21 +7,21 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                              User Management
-                              <a href="{{ route('admin.user_management.create') }}" class="btn btn-primary">New User</a>
+                              {{ __('User Management') }}
+                              <a href="{{ route('admin.user_management.create') }}" class="btn btn-primary">{{ __('New User') }}</a>
                         </div>
 
                         <div class="card-body">
                               <table class="dataTable table table-striped" style="width: 100%;">
                                     <thead>
                                           <tr>
-                                                <th>Name</th>
-                                                <th>Username</th>
-                                                <th>Role</th>
-                                                <th>Email</th>
-                                                <th>Created At</th>
-                                                <th>Updated At</th>
-                                                <th>Action</th>
+                                                <th>{{ __('Name') }}</th>
+                                                <th>{{ __('Username') }}</th>
+                                                <th>{{ __('Role') }}</th>
+                                                <th>{{ __('Email') }}</th>
+                                                <th>{{ __('Created At') }}</th>
+                                                <th>{{ __('Updated At') }}</th>
+                                                <th>{{ __('Action') }}</th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -41,7 +41,7 @@
                                                 <td>{{ $user->email ?: 'None' }}</td>
                                                 <td>{{ $user->created_at->format('Y/m/d h:ia') }}</td>
                                                 <td>{{ $user->updated_at->format('Y/m/d h:ia') }}</td>
-                                                <td><button type="button" class="btn btn-danger" onclick="promptDeleteWarning(this)" data-user-id="{{ $user->id }}">Delete</button></td>
+                                                <td><button type="button" class="btn btn-danger" onclick="promptDeleteWarning(this)" data-user-id="{{ $user->id }}">{{ __('Delete') }}</button></td>
                                           </tr>
                                           @endforeach
                                     </tbody>
@@ -55,10 +55,10 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                              Student Management
+                              {{ __('Student Management') }}
                               <div>
-                                    <a href="{{ route('admin.user_management.student.rest_time') }}" class="btn btn-primary">Manage Rest Time</a>
-                                    <a href="{{ route('admin.user_management.student.create') }}" class="btn btn-primary">New Student</a>
+                                    <a href="{{ route('admin.user_management.student.rest_time') }}" class="btn btn-primary">{{ __('Manage Rest Time') }}</a>
+                                    <a href="{{ route('admin.user_management.student.create') }}" class="btn btn-primary">{{ __('New Student') }}</a>
                               </div>
                         </div>
 
@@ -66,15 +66,15 @@
                               <table class="dataTable table table-striped" style="width: 100%;">
                                     <thead>
                                           <tr>
-                                                <th>Student Number</th>
-                                                <th>Name</th>
-                                                <th>Username</th>
-                                                <th>Email</th>
-                                                <th>Phone</th>
-                                                <th>Address</th>
-                                                <th>Created At</th>
-                                                <th>Updated At</th>
-                                                <th>Action</th>
+                                                <th>{{ __('Student Number') }}</th>
+                                                <th>{{ __('Name') }}</th>
+                                                <th>{{ __('Username') }}</th>
+                                                <th>{{ __('Email') }}</th>
+                                                <th>{{ __('Phone') }}</th>
+                                                <th>{{ __('Address') }}</th>
+                                                <th>{{ __('Created At') }}</th>
+                                                <th>{{ __('Updated At') }}</th>
+                                                <th>{{ __('Action') }}</th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -89,8 +89,8 @@
                                                 <td>{{ $student->created_at }}</td>
                                                 <td>{{ $student->updated_at }}</td>
                                                 <td>
-                                                      <a class="btn btn-primary" href="{{ route('admin.user_management.student.edit', ['id' => $student->id]) }}">Edit</a>
-                                                      <button type="button" class="btn btn-danger" onclick="promptDeleteStudentWarning(this)" data-id="{{ $student->id }}">Delete</button>
+                                                      <a class="btn btn-primary" href="{{ route('admin.user_management.student.edit', ['id' => $student->id]) }}">{{ __('Edit') }}</a>
+                                                      <button type="button" class="btn btn-danger" onclick="promptDeleteStudentWarning(this)" data-id="{{ $student->id }}">{{ __('Delete') }}</button>
                                                 </td>
                                           </tr>
                                           @endforeach
@@ -115,30 +115,29 @@
             }).then((result) => {
                   if (result.isConfirmed) {
 
-                      axios.post(
-                          '{{ route("admin.user_management.delete") }}',
-                          {
-                              user_id: $(item).data('user_id'),
-                          })
-                          .then(function (response) {
-                              SwalWithBootstrap.fire({
-                                  title: 'Success',
-                                  html: response.data,
-                                  icon: 'success',
-                              }).then((result) => {
-                                  window.location.reload();
+                        axios.post(
+                                    '{{ route("admin.user_management.delete") }}', {
+                                          user_id: $(item).data('user_id'),
+                                    })
+                              .then(function(response) {
+                                    SwalWithBootstrap.fire({
+                                          title: 'Success',
+                                          html: response.data,
+                                          icon: 'success',
+                                    }).then((result) => {
+                                          window.location.reload();
+                                    });
+                              })
+                              .catch(function(error) {
+                                    console.log(error);
+                                    SwalWithBootstrap.fire({
+                                          title: 'Error',
+                                          html: error.message,
+                                          icon: 'error',
+                                    }).then((result) => {
+                                          window.location.reload();
+                                    });
                               });
-                          })
-                          .catch(function (error) {
-                              console.log(error);
-                              SwalWithBootstrap.fire({
-                                  title: 'Error',
-                                  html: error.message,
-                                  icon: 'error',
-                              }).then((result) => {
-                                  window.location.reload();
-                              });
-                          });
 
                   } else if (result.dismiss === Swal.DismissReason.cancel) {
 
@@ -158,31 +157,30 @@
             }).then((result) => {
                   if (result.isConfirmed) {
 
-                      axios.post(
-                          '{{  route("admin.user_management.student.delete") }}',
-                          {
-                              student_id: $(item).data('id'),
-                          }
-                          )
-                          .then(function (response) {
-                              SwalWithBootstrap.fire({
-                                  title: 'Success',
-                                  html: response.data,
-                                  icon: 'success',
-                              }).then((result) => {
-                                  window.location.reload();
+                        axios.post(
+                                    '{{  route("admin.user_management.student.delete") }}', {
+                                          student_id: $(item).data('id'),
+                                    }
+                              )
+                              .then(function(response) {
+                                    SwalWithBootstrap.fire({
+                                          title: 'Success',
+                                          html: response.data,
+                                          icon: 'success',
+                                    }).then((result) => {
+                                          window.location.reload();
+                                    });
+                              })
+                              .catch(function(error) {
+                                    console.log(error);
+                                    SwalWithBootstrap.fire({
+                                          title: 'Error',
+                                          html: error.message,
+                                          icon: 'error',
+                                    }).then((result) => {
+                                          window.location.reload();
+                                    });
                               });
-                          })
-                          .catch(function (error) {
-                              console.log(error);
-                              SwalWithBootstrap.fire({
-                                  title: 'Error',
-                                  html: error.message,
-                                  icon: 'error',
-                              }).then((result) => {
-                                  window.location.reload();
-                              });
-                          });
 
                   } else if (result.dismiss === Swal.DismissReason.cancel) {
 

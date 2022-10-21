@@ -7,7 +7,7 @@
         <div class="col-md-20">
             <div class="card">
                 <div class="card-header">
-                    Reports
+                    {{ __('Reports') }}
                 </div>
 
                 <div class="card-body">
@@ -30,7 +30,7 @@
                                     </optgroup>
                                 </select>
 
-                                <button type="button" class="btn btn-primary" onclick="getData();">Generate</button>
+                                <button type="button" class="btn btn-primary" onclick="getData();">{{ __('Generate') }}</button>
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                     <div id="generatePdfButton" hidden>
                         <div class="row">
                             <div class="col-md-8 offset-md-3">
-                                <button type="button" class="btn btn-primary" onclick="generatePdf()">Generate PDF</button>
+                                <button type="button" class="btn btn-primary" onclick="generatePdf()">{{ __('Generate PDF') }}</button>
                             </div>
                         </div>
                     </div>

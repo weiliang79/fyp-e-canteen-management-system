@@ -7,7 +7,7 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header">
-                              Payment
+                              {{ __('Payment') }}
                         </div>
 
                         <div class="card-body">
@@ -15,7 +15,7 @@
                               @if($errors->any())
                               <div class="row my-4">
                                     <div class="col-md-8 offset-md-3 text-danger">
-                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> The form has some error, please refill and submit again.
+                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The form has some error, please refill and submit again.') }}
                                     </div>
                               </div>
                               @endif
@@ -24,7 +24,7 @@
                                     @csrf
 
                                     <div class="row mb-3">
-                                          <label for="" class="col-md-3 col-form-label text-md-end">Currency Symbol</label>
+                                          <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Currency Symbol') }}</label>
 
                                           <div class="col-md-8">
                                                 <div class="input-group">
@@ -39,12 +39,12 @@
                                                       </span>
                                                       @enderror
                                                 </div>
-                                                <small class="form-text text-muted">*The symbol will be shown in the pages that has price tag.</small>
+                                                <small class="form-text text-muted">{{ __('*The symbol will be shown in the pages that has price tag.') }}</small>
                                           </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                          <label for="" class="col-md-3 col-form-label text-md-end">Maintenance Mode</label>
+                                          <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Maintenance Mode') }}</label>
 
                                           <div class="col-md-8">
                                                 <div class="input-group">
@@ -56,12 +56,12 @@
                                                             <input type="checkbox" class="form-check-input" role="switch" name="maintenance" id="" {{ old('maintenance') || (!old('maintenance') && config('payment.maintenance_mode') == true) ? 'checked' : '' }}>
                                                       </div>
                                                 </div>
-                                                <small class="form-text text-muted">*When enabled, the payment method will be disabled to prevent further transactions.</small>
+                                                <small class="form-text text-muted">{{ __('*When enabled, all the payment method will be disabled to prevent students make further transactions.') }}</small>
                                           </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                          <label for="" class="col-md-3 col-form-label text-md-end">2C2P</label>
+                                          <label for="" class="col-md-3 col-form-label text-md-end">{{ __('2C2P') }}</label>
 
                                           <div class="col-md-8">
                                                 <div class="input-group">
@@ -77,7 +77,7 @@
                                     </div>
 
                                     <div class="row mb-3">
-                                          <label for="" class="col-md-3 col-form-label text-md-end">Stripe</label>
+                                          <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Stripe') }}</label>
 
                                           <div class="col-md-8">
                                                 <div class="input-group">
@@ -99,7 +99,7 @@
                                                 </button>
                                           </div>
                                           <div class="col-md-8 offset-md-3">
-                                                <small class="form-text text-muted">*If nothing changes after submission, please restart the server.</small>
+                                                <small class="form-text text-muted">{{ __('*If nothing changes after submission, please restart the server.') }}</small>
                                           </div>
                                     </div>
 

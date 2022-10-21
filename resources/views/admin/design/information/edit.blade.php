@@ -7,14 +7,14 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header">
-                              Design: Information Page - Create
+                              {{ Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'admin.design.information.create') ? 'Design: Information Page - Create' : 'Design: Information Page - Edit' }}
                         </div>
 
                         <div class="card-body">
                               @if($errors->any())
                               <div class="row my-4">
                                     <div class="col-md-8 offset-md-3 text-danger">
-                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> The form has some error, please refill and submit again.
+                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The form has some error, please refill and submit again.') }}
                                     </div>
                               </div>
                               @endif

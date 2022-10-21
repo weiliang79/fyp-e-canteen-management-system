@@ -7,7 +7,7 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header">
-                              Store
+                              {{ __('Store') }}
                         </div>
 
                         <div class="card-body">
@@ -15,11 +15,11 @@
                               <table class="dataTable table table-stripped" style="width: 100%;">
                                     <thead>
                                           <tr>
-                                                <th>Food Seller Name</th>
-                                                <th>Food Seller Username</th>
-                                                <th>Store Name</th>
-                                                <th>Description</th>
-                                                <th>Action</th>
+                                                <th>{{ __('Food Seller Name') }}</th>
+                                                <th>{{ __('Food Seller Username') }}</th>
+                                                <th>{{ __('Store Name') }}</th>
+                                                <th>{{ __('Description') }}</th>
+                                                <th>{{ __('Action') }}</th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -30,7 +30,7 @@
                                                 <td>{{ $store->name }}</td>
                                                 <td>{{ $store->description ?: 'None' }}</td>
                                                 <td>
-                                                    <a class="btn btn-primary" href="{{ route('admin.store.details', ['store_id' => $store->id]) }}">Detail</a>
+                                                      <a class="btn btn-primary" href="{{ route('admin.store.details', ['store_id' => $store->id]) }}">{{ __('Detail') }}</a>
                                                 </td>
                                           </tr>
                                           @endforeach

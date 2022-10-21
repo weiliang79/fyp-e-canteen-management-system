@@ -7,7 +7,7 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header">
-                              User Management
+                              {{ __('User Management') }}
                         </div>
 
                         <div class="card-body">
@@ -15,7 +15,7 @@
                               @if($errors->any())
                               <div class="row my-4">
                                     <div class="col-md-8 offset-md-3 text-danger">
-                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> The form has some error, please refill and submit again.
+                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The form has some error, please refill and submit again.') }}
                                     </div>
                               </div>
                               @endif
@@ -87,7 +87,7 @@
                                                       </span>
                                                       @enderror
                                                 </div>
-                                                <small class="form-text text-muted">*The email field can be empty.</small>
+                                                <small class="form-text text-muted">{{ __('*The email field can be empty.') }}</small>
                                           </div>
                                     </div>
 
@@ -101,7 +101,7 @@
                                                       </div>
 
                                                       <input type="text" class="form-control @error('password') is-invalid @enderror" name="password" id="password" value="{{ old('password') }}" placeholder="Password">
-                                                      <button type="button" class="btn btn-primary" onclick="generatePassword()">Generate Password</button>
+                                                      <button type="button" class="btn btn-primary" onclick="generatePassword()">{{ __('Generate Password') }}</button>
 
                                                       @error('password')
                                                       <span class="invalid-feedback" role="alert">
@@ -122,7 +122,7 @@
                                                       </div>
 
                                                       <select class="form-select @error('role') is-invalid @enderror" name="role">
-                                                            <option value="0">Select a role</option>
+                                                            <option value="0">{{ __('Select a role') }}</option>
                                                             @foreach($roles as $role)
                                                             <option value="{{ $role->id }}" {{ $role->id == old('role') ? 'selected' : '' }}>{{ $role->name }}</option>
                                                             @endforeach

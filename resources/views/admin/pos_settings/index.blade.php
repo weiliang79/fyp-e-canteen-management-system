@@ -7,13 +7,13 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header">
-                              POS Settings
+                              {{ __('POS Settings') }}
                         </div>
 
                         <div class="card-body">
 
                               <form action="{{ route('admin.pos_settings.store') }}" method="POST">
-                              @csrf
+                                    @csrf
 
                                     <div class="row mb-3">
                                           <label for="" class="col-md-3 col-form-label text-md-end">{{ __('POS App Name') }}</label>
@@ -25,13 +25,13 @@
                                                       </div>
 
                                                       <input type="text" class="form-control @error('app_name') is-invalid @enderror" name="app_name" value="{{ old('app_name', $settings->where('key', 'app_name')->first()->value) }}" placeholder="POS App Name">
-                                                
+
                                                       @error('app_name')
                                                       <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
                                                       </span>
                                                       @enderror
-                                                
+
                                                 </div>
                                           </div>
                                     </div>

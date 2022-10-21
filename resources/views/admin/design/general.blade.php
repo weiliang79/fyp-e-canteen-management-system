@@ -7,7 +7,7 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header">
-                              Design: General
+                              {{ __('Design: General') }}
                         </div>
 
                         <div class="card-body">
@@ -33,16 +33,16 @@
                                                       </span>
                                                       @enderror
                                                 </div>
-                                                <small class="form-text text-muted">*The icon size should be 16px*16px and is .ico type.</small>
+                                                <small class="form-text text-muted">{{ __('*The icon size should be 16px*16px and is .ico type.') }}</small>
                                           </div>
                                     </div>
 
                                     <div class="row mb-0">
-                                        <div class="col-md-8 offset-md-3">
-                                            <button type="submit" class="btn btn-primary">
-                                                {{ __('Submit') }}
-                                            </button>
-                                        </div>
+                                          <div class="col-md-8 offset-md-3">
+                                                <button type="submit" class="btn btn-primary">
+                                                      {{ __('Submit') }}
+                                                </button>
+                                          </div>
                                     </div>
 
                               </form>

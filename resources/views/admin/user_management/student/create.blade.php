@@ -7,7 +7,7 @@
             <div class="col-md-20">
                   <div class="card">
                         <div class="card-header">
-                              Student Management
+                              {{ __('Student Management') }}
                         </div>
 
                         <div class="card-body">
@@ -15,7 +15,7 @@
                               @if($errors->any())
                               <div class="row my-4">
                                     <div class="col-md-8 offset-md-3 text-danger">
-                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> The form has some error, please refill and submit again.
+                                          <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The form has some error, please refill and submit again.') }}
                                     </div>
                               </div>
                               @endif
@@ -107,7 +107,7 @@
                                                       </span>
                                                       @enderror
                                                 </div>
-                                                <small class="form-text text-muted">*The email field can be empty.</small>
+                                                <small class="form-text text-muted">{{ __('*The email field can be empty.') }}</small>
                                           </div>
                                     </div>
 
@@ -121,7 +121,7 @@
                                                       </div>
 
                                                       <input type="text" class="form-control @error('password') is-invalid @enderror" name="password" id="password" value="{{ old('password') }}" placeholder="Password">
-                                                      <button type="button" class="btn btn-primary" onclick="generatePassword()">Generate Password</button>
+                                                      <button type="button" class="btn btn-primary" onclick="generatePassword()">{{ __('Generate Password') }}</button>
 
                                                       @error('password')
                                                       <span class="invalid-feedback" role="alert">
@@ -149,7 +149,7 @@
                                                       </span>
                                                       @enderror
                                                 </div>
-                                                <small class="form-text text-muted">*The phone field can be empty.</small>
+                                                <small class="form-text text-muted">{{ __('*The phone field can be empty.') }}</small>
                                           </div>
                                     </div>
 
@@ -170,7 +170,7 @@
                                                       </span>
                                                       @enderror
                                                 </div>
-                                                <small class="form-text text-muted">*The address field can be empty.</small>
+                                                <small class="form-text text-muted">{{ __('*The address field can be empty.') }}</small>
                                           </div>
                                     </div>
 
@@ -178,7 +178,7 @@
                                           <div class="col-md-10">
                                                 <div class="card">
                                                       <div class="card-header">
-                                                            Student Rest Time
+                                                            {{ __('Student Rest Time') }}
                                                       </div>
 
                                                       <div class="card-body">
@@ -196,9 +196,9 @@
                                                                                     </div>
 
                                                                                     <select class="form-control @if($errors->has('rest_id.'.$key)) is-invalid @endif" name="rest_id[{{ $key }}]" id="">
-                                                                                          <option value="0">Select a rest time</option>
+                                                                                          <option value="0">{{ __('Select a rest time') }}</option>
                                                                                           @foreach($restTimes as $restTime)
-                                                                                          <option value="{{ $restTime->id }}" {{ $restTime->id == $value ? 'selected' : '' }}>{{ $restTime->start_time }} - {{ $restTime->end_time }}{{ $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
+                                                                                          <option value="{{ $restTime->id }}" {{ $restTime->id == $value ? 'selected' : '' }}>{{ $restTime->start_time . ' - ' . $restTime->end_time . $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
                                                                                           @endforeach
                                                                                     </select>
 
@@ -253,9 +253,9 @@
                         </div>
 
                         <select class="form-control" name="rest_id[]" id="">
-                              <option value="0">Select a rest time</option>
+                              <option value="0">{{ __('Select a rest time') }}</option>
                               @foreach($restTimes as $restTime)
-                              <option value="{{ $restTime->id }}">{{ $restTime->start_time }} - {{ $restTime->end_time }}{{ $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
+                              <option value="{{ $restTime->id }}">{{ $restTime->start_time . ' - ' . $restTime->end_time . $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
                               @endforeach
                         </select>
 
