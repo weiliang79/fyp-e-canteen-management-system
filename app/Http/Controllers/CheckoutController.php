@@ -10,6 +10,7 @@ use App\Models\PaymentDetailStripe;
 use App\Models\PaymentType;
 use App\Models\Student;
 use Carbon\Carbon;
+use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
@@ -279,12 +280,17 @@ class CheckoutController extends Controller
         if ($inquiryPayload['respCode'] == '0000') {
 
             $student = $order->student;
+            $emailError = false;
 
-            if ($student->email !== null && $student->email_verified_at !== null && $student->allow_email_notify) {
+        if ($student->email !== null && $student->email_verified_at !== null && $student->allow_email_notify) {
+            try {
                 Mail::to($student)->send(new StudentOrderSuccessful($order));
+            } catch (Exception $exception) {
+                $emailError = true;
             }
+        }
 
-            return redirect()->route('student.checkout.success', ['order_id' => $detail2c2p->payment->order->id, 'payment_id' => $detail2c2p->payment->id]);
+            return redirect()->route('student.checkout.success', ['order_id' => $detail2c2p->payment->order->id, 'payment_id' => $detail2c2p->payment->id, 'email_error' => $emailError]);
         } else {
             return redirect()->route('student.checkout.failure', ['order_id' => $detail2c2p->payment->order->id, 'payment_type' => '2c2p', 'resp_code' => $inquiryPayload['respCode']]);
         }
@@ -367,11 +373,17 @@ class CheckoutController extends Controller
             'status' => PaymentDetailStripe::STATUS_SUCCESS,
         ]);
 
+        $emailError = false;
+
         if ($student->email !== null && $student->email_verified_at !== null && $student->allow_email_notify) {
-            Mail::to($student)->send(new StudentOrderSuccessful($order));
+            try {
+                Mail::to($student)->send(new StudentOrderSuccessful($order));
+            } catch (Exception $exception) {
+                $emailError = true;
+            }
         }
 
-        return redirect()->route('student.checkout.success', ['order_id' => $order->id, 'payment_id' => $payment->id]);
+        return redirect()->route('student.checkout.success', ['order_id' => $order->id, 'payment_id' => $payment->id, 'email_error' => $emailError]);
     }
 
     /**
@@ -387,7 +399,8 @@ class CheckoutController extends Controller
         ]);
         $order = Order::find($request->order_id);
         $payment = Payment::find($request->payment_id);
-        return view('checkout.success', compact('order', 'payment'));
+        $emailError = $request->email_error;
+        return view('checkout.success', compact('order', 'payment', 'emailError'));
     }
 
     /**

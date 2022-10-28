@@ -18,6 +18,14 @@
                                     </div>
                               </div>
 
+                              @if($emailError)
+                              <div class="row my-4">
+                                    <div class="col text-warning text-center">
+                                          <i class="fa-solid fa-triangle-exclamation fa-lg"></i> {{ __('Sorry that recently the system is occuring some errors and cannot send order confirmation email to you.') }}
+                                    </div>
+                              </div>
+                              @endif
+
                               <div class="row justify-content-center my-4">
                                     <div class="col-md-4">
                                           <ul class="list-group">
