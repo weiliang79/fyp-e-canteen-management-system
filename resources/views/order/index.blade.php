@@ -87,7 +87,7 @@
                                             </div>
 
                                             @foreach($orders[$i]->payments()->orderBy('created_at', 'desc')->get() as $payment)
-                                            <div class="card @if(!$loop->last) mb-4 @endif">
+                                            <div class="card mb-4">
                                                 <div class="card-header">
                                                     {{ 'Payment # ' . $payment->created_at->format('Y-m-d h:i A') }}
                                                 </div>
@@ -180,6 +180,12 @@
                                                 </div>
                                             </div>
                                             @endforeach
+
+                                            @if($orders[$i]->status >= \App\Models\Order::PAYMENT_SUCCESS)
+                                            <div class="d-flex justify-content-center">
+                                                <a class="btn btn-primary self-align-center" href="{{ route('student.order.send_email', ['order_id' => $orders[$i]->id]) }}">{{ __('Send Order Confirmation Email') }}</a>
+                                            </div>
+                                            @endif
 
                                         </div>
                                     </div>

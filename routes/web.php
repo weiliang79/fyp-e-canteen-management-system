@@ -129,6 +129,7 @@ Route::group(['middleware' => ['auth:student']], function () {
 
     // order
     Route::get('/student/order', [OrderController::class, 'index'])->name('student.order');
+    Route::get('/student/order/{order_id}/send_email', [OrderController::class, 'sendOrderEmail'])->name('student.order.send_email');
 
     // student logout routes
     Route::get('/student/logout', [StudentLoginController::class, 'logout'])->name('student.logout');
@@ -274,9 +275,4 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web']], function () {
         \UniSharp\LaravelFilemanager\Lfm::routes();
     });
-});
-
-Route::get('/test', function () {
-    $order = Order::find(4);
-    return new App\Mail\StudentOrderSuccessful($order);
 });

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\StudentOrderSuccessful;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Store;
+use App\Models\Student;
 use Auth;
+use Exception;
 use Illuminate\Http\Request;
+use Mail;
 
 class OrderController extends Controller
 {
@@ -20,6 +24,30 @@ class OrderController extends Controller
     {
         $orders = Order::where('student_id', Auth::guard('student')->user()->id)->orderBy('created_at', 'desc')->paginate(15);
         return view('order.index', compact('orders'));
+    }
+
+    /**
+     * Send order confirmation email to the student.
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function sendOrderEmail(Request $request)
+    {
+        $order = Order::find($request->order_id);
+        $student = Student::find(Auth::guard('student')->user()->id);
+
+        if($order->student_id !== $student->id){
+            return redirect()->route('student.order')->with('swal-warning', 'The order and and student account are not related.');
+        }
+
+        try {
+            Mail::to($student)->send(new StudentOrderSuccessful($order));
+        } catch (Exception $exception) {
+            return redirect()->route('student.order')->with('swal-warning', 'Recently the system is occuring some errors and cannot send order confirmation email.');
+        }
+
+        return redirect()->route('student.order')->with('swal-success', 'Order Confirmation Email sent successful.');
     }
 
     /**
