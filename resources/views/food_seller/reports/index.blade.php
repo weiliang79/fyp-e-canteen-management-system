@@ -94,16 +94,11 @@
     let result = null;
 
     function getData() {
-        console.log('getting data...');
         let value = document.getElementById('report_date').value;
-        console.log(value);
 
         axios.get('{{ route("food_seller.reports.get_data") }}' + '?report_date=' + value)
             .then(response => {
-                console.log(response);
-
                 result = response.data;
-
                 resetCharts();
 
                 if (response.data.type === 'year') {
@@ -120,6 +115,11 @@
 
             })
             .catch(error => {
+                SwalWithBootstrap.fire({
+                    title: 'Error',
+                    html: 'The server have some errors when generating the reports.',
+                    icon: 'error',
+                });
                 console.log(error);
             });
     }
