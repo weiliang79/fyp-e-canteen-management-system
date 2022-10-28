@@ -17,7 +17,7 @@
 
       @if($design !== null)
       @if($design->description !== null)
-      <div class="row my-4">
+      <div class="row m-5">
             <div class="col">
                   {!! $design !== null ? $design->description : '' !!}
             </div>
