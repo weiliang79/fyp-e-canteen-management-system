@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreignId('product_option_id');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('product_option_id')->references('id')->on('product_options')->onDelete('cascade');
         });
     }
 
