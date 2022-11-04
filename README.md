@@ -1,64 +1,154 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<h1 align="center">
+E-Canteen Management System
+</h1>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern management system for primary/secondary schools' canteen.
 
-## About Laravel
+## Installation
+### Clone the repository
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+      git clone https://github.com/weiliang79/fyp-e-canteen-management-system.git
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Install dependencies
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Before using it, make sure [Composer](https://getcomposer.org/) and [NPM from Node.js](https://nodejs.org/en/) has installed on the machine.
 
-## Learning Laravel
+Install composer dependencies
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+      cd [projectDirectoryName]
+      composer install
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Install NPM dependencies
 
-## Laravel Sponsors
+      cd [projectDirectoryName]
+      npm install
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Config Environment Variables File
+Copy `.env.example` and rename it to `.env`
 
-### Premium Partners
+      copy .env.example .env        //For Windows Command Prompt
+      cp .env.example .env          //For Linux Terminal
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Generate application key using `artisan` command
 
-## Contributing
+      php artisan key:generate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Edit the necessary variables in `.env` file.
 
-## Code of Conduct
+      APP_ENV=[choose one local, testing, or production]
+      APP_DEBUG=[true if needed to deploy]
+      APP_URL=[the app's url address]
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+      DB_CONNECTION=[database type, e.g. mysql, sqlite, etc]
+      DB_HOST=[database address]
+      DB_PORT=[database port]
+      DB_DATABASE=[database schema name]
+      DB_USERNAME=[username]
+      DB_PASSWORD=[password]
 
-## Security Vulnerabilities
+      MAIL_MAILER=[mail hosting type, e.g. smtp, mailgun, etc]
+      MAIL_HOST=[mail hosting address]
+      MAIL_PORT=[mail hosting port]
+      MAIL_USERNAME=[mail username]
+      MAIL_PASSWORD=[mail password]
+      MAIL_ENCRYPTION=null          //any encryption if needed
+      MAIL_FROM_ADDRESS=[mail sender address]
+      MAIL_FROM_NAME=[mail sender name]
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Optional: Edit the variables in `.env` file, these can edit in UI after system is finished setup.
 
-## License
+      CURRENCY_SYMBOL=[currency symbol that will be used in the system]
+      PAYMENT_MAINTENANCE=true            //or false if the payment is configured
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+      2C2P_ENABLE=true                    //or false if 2c2p payment is configured
+      2C2P_SANDBOX_ENABLE=[true/false]    //sandbox mode
+      2C2P_MERCHANT_ID=[2c2p merchant id]
+      2C2P_CURRENCY_CODE=[2c2p country currency code]
+      2C2P_LOCALE_CODE=[2c2p locale code]
+      2C2P_SECRET_CODE=[2c2p secret code]
+
+      STRIPE_ENABLE=true
+      STRIPE_SANDBOX=[true/false]         //sandbox mode
+      STRIPE_KEY=[Stripe public key]
+      STRIPE_SECRET=[Stripe secret key]
+      CASHIER_CURRENCY=[Stripe country currency code]
+
+### Database Configuration
+Migrate and seed the necessary data into tables.
+
+      php artisan migrate:fresh --seed
+
+### symbolic Storage Link for Public
+
+      php artisan storage:link
+
+### Run Server
+To run the server in development: 
+
+      php artisan serve
+
+Or run in other server hosts.
+
+Login with admin account: username: `admin1`, password: `password`
+
+## Installation for POS System
+
+### Clone the repository
+
+      git clone https://github.com/weiliang79/fyp-laravel-pos.git
+      
+### Install dependencies
+
+Install composer dependencies
+
+      cd [projectDirectoryName]
+      composer install
+
+Install NPM dependencies
+
+      cd [projectDirectoryName]
+      npm install
+
+### Config Environment Variables File
+Copy `.env.example` and rename it to `.env`
+
+      copy .env.example .env        //For Windows Command Prompt
+      cp .env.example .env          //For Linux Terminal
+
+Generate application key using `artisan` command
+
+      php artisan key:generate
+
+Edit the necessary variables in `.env` file.
+
+      APP_ENV=[choose one local, testing, or production]
+      APP_DEBUG=[true if needed to deploy]
+      APP_URL=[the app's url address]
+      MAIN_SYSTEM_URL=[E-canteen management system's url address]
+
+      DB_CONNECTION=[same db type from main system]
+      DB_HOST=[same db host from main system]
+      DB_PORT=[same db port from main system]
+      DB_DATABASE=[same schema name from main system]
+      DB_USERNAME=[same db username from main system]
+      DB_PASSWORD=[same db password from main system]
+
+### Run Server
+To run the server in development: 
+
+      php artisan serve
+
+Or run in other server hosts.
+
+### Notice when using POS system
+The `MAIN_SYSTEM_URL` in `.env` must matched with the main system's URL, otherwise the images cannot be loaded properly. 
+
+## Extra Command
+To delete/reset all the storage's images:
+
+      php artisan storage:clear
+
+## Resources
+Favicon from [svgrepo](https://www.svgrepo.com/): https://www.svgrepo.com/svg/156205/cutlery-cross-couple-of-fork-and-spoon
+
+Banner Background from [Freepik](https://www.freepik.com/) by upklyak: https://www.freepik.com/free-vector/school-cafe-university-canteen-empty-dining-room_8308807.htm#query=cafeteria&position=2&from_view=keyword
