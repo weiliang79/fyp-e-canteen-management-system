@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id');
             $table->foreignId('product_id');
-            $table->json('product_options');
+            $table->json('product_options')->nullable();
             $table->decimal('price');
             $table->text('notes')->nullable();
             $table->boolean('is_pickup')->default(false);
