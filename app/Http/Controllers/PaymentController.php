@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PaymentType;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Jackiedo\DotenvEditor\Facades\DotenvEditor;
@@ -78,7 +79,9 @@ class PaymentController extends Controller
 
         $locale = $decode->initialization->locale;
 
-        return view('admin.payment.2c2p.index', compact('locale'));
+        $config2c2p = PaymentType::find(PaymentType::PAYMENT_2C2P);
+
+        return view('admin.payment.2c2p.index', compact('locale', 'config2c2p'));
     }
 
     /**
@@ -108,6 +111,10 @@ class PaymentController extends Controller
             '2C2P_LOCALE_CODE' => ($request->locale_code && $request->sandbox == null) ? $request->locale_code : '',
         ])->save();
 
+        $config2c2p = PaymentType::find(PaymentType::PAYMENT_2C2P);
+        $config2c2p->description = $request->description;
+        $config2c2p->save();
+
         return redirect()->route('admin.payment.2c2p')->with('swal-success', '2C2P Payment Configuration has updated.');
     }
 
@@ -122,7 +129,9 @@ class PaymentController extends Controller
             return redirect()->route('admin.payment.general')->with('swal-warning', 'Please enable Stripe payment at General page first.');
         }
 
-        return view('admin.payment.stripe.index');
+        $configStripe = PaymentType::find(PaymentType::PAYMENT_STRIPE);
+
+        return view('admin.payment.stripe.index', compact('configStripe'));
     }
 
     /**
@@ -147,6 +156,10 @@ class PaymentController extends Controller
             'STRIPE_SECRET' => $request->stripe_secret?: config('cashier.secret'),
             'CASHIER_CURRENCY' => $request->currency_code,
         ])->save();
+
+        $configStripe = PaymentType::find(PaymentType::PAYMENT_STRIPE);
+        $configStripe->description = $request->description;
+        $configStripe->save();
 
         return redirect()->route('admin.payment.stripe')->with('swal-success', 'Stripe Payment Configuration has updated.');
     }

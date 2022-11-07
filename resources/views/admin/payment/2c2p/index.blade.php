@@ -152,6 +152,20 @@
                                           </div>
                                     </div>
 
+                                    <div class="row mb-3">
+                                          <label for="" class="col-md-3 col-form-label text-md-end">{{ __('Description') }}</label>
+
+                                          <div class="col-md-8">
+                                                <div class="input-group">
+                                                      <div class="input-group-text justify-content-center" style="width: 6%;">
+                                                            <i class="fa-solid fa-quote-right fa-fw"></i>
+                                                      </div>
+
+                                                      <textarea class="form-control" name="description" id="" cols="30" rows="10">{{ $config2c2p->description }}</textarea>
+                                                </div>
+                                          </div>
+                                    </div>
+
                                     <div class="row mb-0">
                                           <div class="col-md-8 offset-md-3">
                                                 <button type="submit" class="btn btn-primary">
