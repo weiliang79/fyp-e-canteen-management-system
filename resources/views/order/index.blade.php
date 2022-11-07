@@ -38,10 +38,16 @@
                                     <div id="collapse{{ $i }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $i }}" data-bs-parent="#orderAccordion">
                                         <div class="accordion-body">
 
-                                            @if($orders[$i]->status === \App\Models\Order::PAYMENT_PENDING || $orders[$i]->status === \App\Models\Order::PAYMENT_FAILURE)
+                                            @if(($orders[$i]->status === \App\Models\Order::PAYMENT_PENDING || $orders[$i]->status === \App\Models\Order::PAYMENT_FAILURE))
+                                            @if($orders[$i]->pick_up_start->gt(\Carbon\Carbon::today()))
                                             <div class="text-danger text-center mb-4">
-                                                <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The payment is not complete, please go to') }}<a href="{{ route('student.checkout', ['order_id' => $orders[$i]]) }}">{{ __('Checkout Page') }}</a>{{ __('.') }}
+                                                <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The payment is not complete and cannot be repay anymore.') }}
                                             </div>
+                                            @else
+                                            <div class="text-danger text-center mb-4">
+                                                <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The payment is not complete, please go to ') }}<a href="{{ route('student.checkout', ['order_id' => $orders[$i]]) }}">{{ __('Checkout Page') }}</a>{{ __('.') }}
+                                            </div>
+                                            @endif
                                             @endif
 
                                             <div class="card mb-4">
