@@ -23,6 +23,11 @@ class ReportController extends Controller
     public function index()
     {
         if (Auth::user()->isAdmin()) {
+
+            if (Order::all()->count() === 0) {
+                return redirect()->route('admin.home')->with('swal-warning', 'There are currently no orders records in the system');
+            }
+
             $startDate = Order::orderBy('created_at', 'asc')->first()->created_at->firstOfMonth();
             $endDate = Order::orderBy('created_at', 'desc')->first()->created_at->firstOfMonth();
 
@@ -48,7 +53,20 @@ class ReportController extends Controller
             return view('admin.reports.index', compact('list'));
         } else {
             $user = User::find(Auth::user()->id);
+
+            if ($user->store === null) {
+                return redirect()->route('food_seller.store');
+            }
+
             $productIds = $user->store->products->pluck('id')->toArray();
+            $orders = Order::whereHas('orderDetails', function ($query) use ($productIds) {
+                $query->whereIn('product_id', $productIds);
+            })->get();
+
+            if ($orders->count() === 0) {
+                return redirect()->route('food_seller.home')->with('swal-warning', 'There are currently no orders records in the system');
+            }
+
             $startDate = Order::whereHas('orderDetails', function ($query) use ($productIds) {
                 $query->whereIn('product_id', $productIds);
             })
