@@ -198,7 +198,7 @@
                                                                                     <select class="form-control @if($errors->has('rest_id.'.$key)) is-invalid @endif" name="rest_id[{{ $key }}]" id="">
                                                                                           <option value="0">{{ __('Select a rest time') }}</option>
                                                                                           @foreach($restTimes as $restTime)
-                                                                                          <option value="{{ $restTime->id }}" {{ $restTime->id == $value ? 'selected' : '' }}>{{ $restTime->start_time . ' - ' . $restTime->end_time . $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
+                                                                                          <option value="{{ $restTime->id }}" {{ $restTime->id == $value ? 'selected' : '' }}>{{ $restTime->start_time . ' - ' . $restTime->end_time }}{{ $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
                                                                                           @endforeach
                                                                                     </select>
 
@@ -255,7 +255,7 @@
                         <select class="form-control" name="rest_id[]" id="">
                               <option value="0">{{ __('Select a rest time') }}</option>
                               @foreach($restTimes as $restTime)
-                              <option value="{{ $restTime->id }}">{{ $restTime->start_time . ' - ' . $restTime->end_time . $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
+                              <option value="{{ $restTime->id }}">{{ $restTime->start_time  . ' - ' . $restTime->end_time }}{{ $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
                               @endforeach
                         </select>
 

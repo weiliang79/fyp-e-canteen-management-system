@@ -80,7 +80,7 @@
                                                         <select class="form-control" name="rest_id[]" id="">
                                                             <option value="0">{{ __('Select a rest time') }}</option>
                                                             @foreach($restTimes as $restTime)
-                                                            <option value="{{ $restTime->id }}" {{ $restTime->id == $rest->id ? 'selected' : '' }}>{{ $restTime->start_time . ' - ' . $restTime->end_time . $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
+                                                            <option value="{{ $restTime->id }}" {{ $restTime->id == $rest->id ? 'selected' : '' }}>{{ $restTime->start_time . ' - ' . $restTime->end_time }}{{ $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
                                                             @endforeach
                                                         </select>
 
@@ -106,7 +106,7 @@
                                                         <select class="form-control @error('rest_id.' . $i) is-invalid @enderror" name="rest_id[{{ $i }}]" id="">
                                                             <option value="0">{{ __('Select a rest time') }}</option>
                                                             @foreach($restTimes as $restTime)
-                                                            <option value="{{ $restTime->id }}" {{ $restTime->id == $old[$i] ? 'selected' : '' }}>{{ $restTime->start_time . ' - ' . $restTime->end_time . $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
+                                                            <option value="{{ $restTime->id }}" {{ $restTime->id == $old[$i] ? 'selected' : '' }}>{{ $restTime->start_time . ' - ' . $restTime->end_time }}{{ $restTime->description ? ' - [' . $restTime->description . ' ]' : '' }}</option>
                                                             @endforeach
                                                         </select>
 

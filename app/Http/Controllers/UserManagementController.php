@@ -129,7 +129,7 @@ class UserManagementController extends Controller
             'address' => $request->address,
         ]);
 
-        if($request->rest_id){
+        if($request->rest_id !== null && count($request->rest_id) !== 0){
             foreach($request->rest_id as $id){
                 $student->restTimes()->attach($id);
             }
@@ -146,6 +146,10 @@ class UserManagementController extends Controller
      */
     public function showStudentEditForm(Request $request)
     {
+        if(count(RestTime::all()) == 0){
+            return redirect()->route('admin.user_management.student.rest_time');
+        }
+
         $restTimes = RestTime::all();
         $student = Student::find($request->id);
 
@@ -172,14 +176,16 @@ class UserManagementController extends Controller
 
         $restIds = $request->rest_id;
 
-        foreach($restIds as $id){
-            if($student->restTimes()->wherePivot('rest_time_id', $id)->count() == 0){
-                $student->restTimes()->attach($id);
+        if($restIds !== null && count($restIds) !== 0){
+            foreach($restIds as $id){
+                if($student->restTimes()->wherePivot('rest_time_id', $id)->count() == 0){
+                    $student->restTimes()->attach($id);
+                }
             }
-        }
 
-        $needDelete = $student->restTimes()->wherePivotNotIn('rest_time_id', $restIds)->pluck('id')->toArray();
-        $student->restTimes()->detach($needDelete);
+            $needDelete = $student->restTimes()->wherePivotNotIn('rest_time_id', $restIds)->pluck('id')->toArray();
+            $student->restTimes()->detach($needDelete);
+        }
 
         return redirect()->route('admin.user_management')->with('swal-success', 'Student info update successful.');
     }
