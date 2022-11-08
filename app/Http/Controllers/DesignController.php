@@ -153,4 +153,10 @@ class DesignController extends Controller
 
         return redirect()->route('admin.design.information')->with('swal-success', 'Information Page updated successful.');
     }
+
+    public function deleteInformation(Request $request)
+    {
+        InformationPageDesign::destroy($request->id);
+        return response()->json('Information page delete successful.');
+    }
 }

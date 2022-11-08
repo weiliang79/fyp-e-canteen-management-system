@@ -26,7 +26,7 @@
                                                 <td>{{ $info->title }}</td>
                                                 <td>
                                                       <a href="{{ route('admin.design.information.edit', ['id' => $info->id]) }}" class="btn btn-primary">{{ __('Edit') }}</a>
-                                                      <button type="button" class="btn btn-danger">{{ __('Delete') }}</button>
+                                                      <button type="button" class="btn btn-danger" onclick="promptDelete(this)" data-id="{{ $info->id }}">{{ __('Delete') }}</button>
                                                 </td>
                                           </tr>
                                           @endforeach
@@ -38,5 +38,50 @@
             </div>
       </div>
 </div>
+
+<script>
+      function promptDelete(item){
+            SwalWithBootstrap.fire({
+                  title: 'Warning',
+                  html: 'Delete this information page?',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Confirm',
+                  cancelButtonText: 'Cancel',
+                  reverseButtons: true
+            }).then((result) => {
+                  if(result.isConfirmed) {
+
+                        axios.post(
+                              '{{ route("admin.design.information.delete") }}', {
+                                    id: $(item).data('id'),
+                              }
+                        )
+                        .then(function(response) {
+                              SwalWithBootstrap.fire({
+                                          title: 'Success',
+                                          html: response.data,
+                                          icon: 'success',
+                                    }).then((result) => {
+                                          window.location.reload();
+                                    });
+                        })
+                        .catch(function(error) {
+                              console.log(error);
+                              SwalWithBootstrap.fire({
+                                          title: 'Error',
+                                          html: error.message,
+                                          icon: 'error',
+                                    }).then((result) => {
+                                          window.location.reload();
+                                    });
+                        });
+
+                  } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+                  }
+            });
+      }
+</script>
 
 @endsection

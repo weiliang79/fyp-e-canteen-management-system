@@ -211,6 +211,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/admin/design/information/store', [DesignController::class, 'storeInformation'])->name('admin.design.information.store');
             Route::get('/admin/design/information/{id}/edit', [DesignController::class, 'showInformationEditForm'])->name('admin.design.information.edit');
             Route::post('/admin/design/information/{id}/update', [DesignController::class, 'updateInformation'])->name('admin.design.information.update');
+            Route::post('/admin/design/information/delete', [DesignController::class, 'deleteInformation'])->name('admin.design.information.delete');
 
             // reports
             Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.reports');
