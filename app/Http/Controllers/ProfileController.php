@@ -58,11 +58,12 @@ class ProfileController extends Controller
      */
     public function verifyEmail(Request $request)
     {
+        $user = User::find(Auth::user()->id);
+
         $request->validate([
-            'email' => 'required|email|unique:users,email|unique:students,email',
+            'email' => 'required|email|unique:users,email,' . $user->id . '|unique:students,email',
         ]);
 
-        $user = User::find(Auth::user()->id);
         $token = random_int(100000, 999999);
 
         try {

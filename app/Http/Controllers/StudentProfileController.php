@@ -57,11 +57,12 @@ class StudentProfileController extends Controller
      */
     public function verifyEmail(Request $request)
     {
+        $user = Student::find(Auth::guard('student')->user()->id);
+
         $request->validate([
-            'email' => 'required|email|unique:users,email|unique:students,email',
+            'email' => 'required|email|unique:users,email|unique:students,email,' . $user->id,
         ]);
 
-        $user = Student::find(Auth::guard('student')->user()->id);
         $token = random_int(100000, 999999);
 
         try {
