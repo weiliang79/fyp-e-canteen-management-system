@@ -40,6 +40,6 @@ class ResetPasswordController extends Controller
             return new JsonResponse(['message' => trans($response)], 200);
         }
 
-        return redirect()->route('student.login')->with('swal-success', 'Password reset successful, please proceed to login.');
+        return redirect()->route('admin.login')->with('swal-success', 'Password reset successful, please proceed to login.');
     }
 }
