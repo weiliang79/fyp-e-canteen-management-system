@@ -48,7 +48,7 @@ class UserManagementController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'username' => 'required',
-            'email' => 'unique:users,email|unique:students,email',
+            'email' => 'unique:users,email|unique:students,email|nullable',
             'password' => ['required', Rules\Password::defaults()],
             'role' => 'required|integer|gt:0'
         ],
