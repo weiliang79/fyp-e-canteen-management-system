@@ -104,8 +104,10 @@
                                           @foreach($old_dayId as $key => $value)
                                           <div class="card mb-4 day_group">
                                                 <div class="card-body">
+                                                      @if($old_restTimeId !== null)
                                                       @if(array_key_exists($key, $old_restTimeId))
                                                       <input type="hidden" name="rest_time_id[]" value="{{ $old_restTimeId[$key]  }}">
+                                                      @endif
                                                       @endif
                                                       <div class="row mb-3 justify-content-center">
                                                             <div class="col-md-4">
