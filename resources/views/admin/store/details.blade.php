@@ -68,7 +68,7 @@
                                                 <td>{{ $product->description }}</td>
                                                 <td>{{ $product->price }}</td>
                                                 <td>
-                                                    <span class="badge {{ $product->status ? 'bg-success' : 'bg-error' }}" style="font-size: 0.8rem;">
+                                                    <span class="badge {{ $product->status ? 'bg-success' : 'bg-danger' }}" style="font-size: 0.8rem;">
                                                         {{ $product->status ? 'Available' : 'Not Available' }}
                                                     </span>
                                                 </td>

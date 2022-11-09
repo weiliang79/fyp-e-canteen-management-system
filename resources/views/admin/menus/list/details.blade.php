@@ -44,7 +44,7 @@
                                 <li class="list-group-item d-flex justify-content-between">
                                     <p class="mb-0">{{ __('Status') }}</p>
                                     <p class="mb-0">
-                                        <span class="badge {{ $product->status ? 'bg-success' : 'bg-error' }}" style="font-size: 0.8rem;">
+                                        <span class="badge {{ $product->status ? 'bg-success' : 'bg-danger' }}" style="font-size: 0.8rem;">
                                             {{ $product->status ? 'Available' : 'Not Available' }}
                                         </span>
                                     </p>
