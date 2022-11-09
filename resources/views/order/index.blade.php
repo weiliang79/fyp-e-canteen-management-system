@@ -39,7 +39,7 @@
                                         <div class="accordion-body">
 
                                             @if(($orders[$i]->status === \App\Models\Order::PAYMENT_PENDING || $orders[$i]->status === \App\Models\Order::PAYMENT_FAILURE))
-                                            @if($orders[$i]->pick_up_start->gt(\Carbon\Carbon::today()))
+                                            @if(\Carbon\Carbon::today()->gt($orders[$i]->pick_up_start))
                                             <div class="text-danger text-center mb-4">
                                                 <i class="fa-solid fa-circle-exclamation fa-lg"></i> {{ __('The payment is not complete and cannot be repay anymore.') }}
                                             </div>
