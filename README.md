@@ -38,6 +38,7 @@ Edit the necessary variables in `.env` file.
       APP_ENV=[choose one local, testing, or production]
       APP_DEBUG=[true if needed to deploy]
       APP_URL=[the app's url address]
+      APP_TIMEZONE=[the local timezone]
 
       DB_CONNECTION=[database type, e.g. mysql, sqlite, etc]
       DB_HOST=[database address]
@@ -54,6 +55,8 @@ Edit the necessary variables in `.env` file.
       MAIL_ENCRYPTION=null          //any encryption if needed
       MAIL_FROM_ADDRESS=[mail sender address]
       MAIL_FROM_NAME=[mail sender name]
+
+The timezone can referred to [PHP documentation](https://www.php.net/manual/en/timezones.php). 
 
 Optional: Edit the variables in `.env` file, these can edit in UI after system is finished setup.
 
@@ -132,6 +135,16 @@ Edit the necessary variables in `.env` file.
       DB_DATABASE=[same schema name from main system]
       DB_USERNAME=[same db username from main system]
       DB_PASSWORD=[same db password from main system]
+
+Edit the timezone in `/config/app.php` file. 
+
+      return [
+            ...
+
+            'timezone' => '[local timezone]',
+
+            ...
+      ]
 
 ### Run Server
 To run the server in development: 
