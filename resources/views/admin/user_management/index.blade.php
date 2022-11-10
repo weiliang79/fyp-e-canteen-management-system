@@ -39,8 +39,8 @@
                                                       @endif
                                                 </td>
                                                 <td>{{ $user->email ?: 'None' }}</td>
-                                                <td>{{ $user->created_at->format('Y/m/d h:ia') }}</td>
-                                                <td>{{ $user->updated_at->format('Y/m/d h:ia') }}</td>
+                                                <td>{{ $user->created_at->format('Y-m-d h:ia') }}</td>
+                                                <td>{{ $user->updated_at->format('Y-m-d h:ia') }}</td>
                                                 <td><button type="button" class="btn btn-danger" onclick="promptDeleteWarning(this)" data-id="{{ $user->id }}">{{ __('Delete') }}</button></td>
                                           </tr>
                                           @endforeach

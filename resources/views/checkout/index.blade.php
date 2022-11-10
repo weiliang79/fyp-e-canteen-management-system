@@ -19,7 +19,7 @@
 
                                           <p class="mb-1">{{ 'Student Name: ' . $order->student->first_name . ' ' . $order->student->last_name }}</p>
                                           <p class="mb-1">{{ 'Total Price: ' . config('payment.currency_symbol') . $order->total_price }}</p>
-                                          <p class="mb-1">{{ 'Pick-Up Date: ' . $order->pick_up_start->format('Y/m/d h:ia') . ' to ' . $order->pick_up_end->format('Y/m/d h:ia') }}</p>
+                                          <p class="mb-1">{{ 'Pick-Up Date: ' . $order->pick_up_start->format('Y-m-d h:ia') . ' to ' . $order->pick_up_end->format('Y-m-d h:ia') }}</p>
 
                                           <table class="dataTable-cart table table-striped" style="width: 100%;">
                                                 <thead>

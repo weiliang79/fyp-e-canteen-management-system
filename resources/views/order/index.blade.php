@@ -24,7 +24,7 @@
                                         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse{{ $i }}" aria-expanded="false" aria-controls="collapse{{ $i }}">
 
                                             <div class="d-flex justify-content-between mx-4" style="width: 100%;">
-                                                <div class="align-items-start">{{ __('Pick Up Time: ') }}{{ $orders[$i]->pick_up_start->format('Y-m-d H:i A') }}{{ __(' to ') }}{{ $orders[$i]->pick_up_end->format('Y-m-d H:i A') }}</div>
+                                                <div class="align-items-start">{{ __('Pick Up Time: ') }}{{ $orders[$i]->pick_up_start->format('Y-m-d h:i A') }}{{ __(' to ') }}{{ $orders[$i]->pick_up_end->format('Y-m-d h:i A') }}</div>
                                                 <div class="align-items-center ms-5">{{ config('payment.currency_symbol') }}{{ $orders[$i]->total_price }}</div>
                                                 <div class="align-items-end ms-auto">
                                                     <span class="badge {{ $orders[$i]->getStatusBg() }}" style="font-size:0.8rem;">
