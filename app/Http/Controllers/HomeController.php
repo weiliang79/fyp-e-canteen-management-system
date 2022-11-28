@@ -41,7 +41,7 @@ class HomeController extends Controller
                 ->count();
 
             $sales = Order::whereBetween('created_at', [$startDate, $endDate])
-            ->where('status', Order::PAYMENT_SUCCESS)
+            ->where('status', '>=', Order::PAYMENT_SUCCESS)
             ->sum('total_price');
 
             return view('admin.home', compact('orderCount', 'allOrderCount', 'sales'));
@@ -65,7 +65,7 @@ class HomeController extends Controller
             })->count();
 
             $sales = OrderDetail::whereHas('order', function ($query) use ($startDate, $endDate) {
-                $query->where('status', Order::PAYMENT_SUCCESS)
+                $query->where('status', '>=', Order::PAYMENT_SUCCESS)
                     ->whereBetween('created_at', [$startDate, $endDate]);
             })->sum('price');
 
