@@ -29,6 +29,9 @@ class LandingController extends Controller
     public function information(Request $request)
     {
         $info = InformationPageDesign::find($request->id);
+        if($info === null){
+            return redirect()->route('landing');
+        }
         return view('information', compact('info'));
     }
 }

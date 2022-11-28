@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\User;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class HomeController extends Controller
                 ->count();
 
             $sales = Order::whereBetween('created_at', [$startDate, $endDate])
-            ->where('status', Order::PAYMENT_SUCCESS)
+            ->where('status', '>=', Order::PAYMENT_SUCCESS)
             ->sum('total_price');
 
             return view('admin.home', compact('orderCount', 'allOrderCount', 'sales'));
@@ -56,20 +57,20 @@ class HomeController extends Controller
             $endTime = $startTime->copy();
             $endTime->endOfDay();
 
-            $orderCount = OrderDetail::whereHas('order', function ($query) use ($startTime, $endTime) {
-                $query->whereBetween('pick_up_start', [$startTime, $endTime]);
-            })->where('is_pickup', true)->count();
+            $user = User::find(Auth::user()->id);
+            $products = $user->store->products()->pluck('id')->toArray();
 
-            $allOrderCount = OrderDetail::whereHas('order', function ($query) use ($startTime, $endTime) {
-                $query->whereBetween('pick_up_start', [$startTime, $endTime]);
-            })->count();
+            $orderCount = Order::whereHas('orderDetails', function ($query) use ($products) {
+                $query->whereIn('product_id', $products)->where('is_pickup', true);
+            })->whereBetween('pick_up_start', [$startTime, $endTime])->count();
+
+            $allOrderCount = Order::whereHas('orderDetails', function ($query) use ($products) {
+                $query->whereIn('product_id', $products);
+            })->whereBetween('pick_up_start', [$startTime, $endTime])->count();
 
             $sales = OrderDetail::whereHas('order', function ($query) use ($startDate, $endDate) {
-                $query->where('status', Order::PAYMENT_SUCCESS)
-                    ->whereBetween('created_at', [$startDate, $endDate]);
-            })->sum('price');
-
-            //dd($startTime, $endTime, $orderCount, $allOrderCount);
+                $query->where('status', '>=', Order::PAYMENT_SUCCESS)->whereBetween('created_at', [$startDate, $endDate]);
+            })->whereIn('product_id', $products)->sum('price');
 
             return view('food_seller.home', compact('orderCount', 'allOrderCount', 'sales'));
         }
